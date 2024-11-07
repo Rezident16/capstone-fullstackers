@@ -1,5 +1,11 @@
 # FullStackers Proposal - Project Stock Connect
 
+## Team 
+    - Andrei Vorobev
+    - Mely Espino
+    - Lance Jabril Tero
+    - Shilpa Sivarajan
+
 # Problem Statement
 People interested in stock trading often struggle to stay informed about the stocks they care about and to communicate effectively with others about those stocks. Information is scattered across multiple apps, sites, and social media platforms, making it difficult to have a focused, real-time discussion or exchange valuable insights about stocks without distraction.
 
@@ -296,11 +302,6 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 - `public Like findByMessageId(int)` 
 - `public Like updateLike(int)`
 
-
-
-
-
-
 ### domain.Result
 - `private ArrayList<String> messages` -- error messages
 - `private Panel panel` -- an optional Panel
@@ -429,7 +430,11 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 - `private int readInt(String, int min, int max)` -- general-purpose console method for reading an integer with a min and max
 - `private Material readMaterial()` -- domain-specific console method for choosing a Material
 
-## Steps
+
+# Steps
+
+## Backend
+
 ### Monday
 
 - Set Up Maven Project (~30 min)
@@ -526,11 +531,57 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 ### Tuesday
 
 - Create Service (up to 2 hours per service)
-    - Stock
-    - Messages
-    - Likes/Dislikes
-    - UserStock
-    - User
+    #### User Service
+    - add a `UserRepository` (interface) field with a corresponding constructor
+    - generate tests for `UserService`
+    - create `UserRepositoryTestDouble` to support service testing, this test class implements `UserRepository`
+    - implement `findById` and test, implement just enough code in `UserRepositoryTestDouble` to enable service testing
+    - implement `findByUsername` and test
+    - implement `findByEmail` and test
+    - implement `add` and test, requires validation
+    - implement `update` and test, requires validation
+    - implement `deleteById` and test
+
+
+    #### Message Service
+    - add a `MessageRepository` (interface) field with a corresponding constructor
+    - generate tests for `MessageService`
+    - create `MessageRepositoryTestDouble` to support service testing, this test class implements `MessageRepository`
+    - implement `findById` and test, implement just enough code in `MessageRepositoryTestDouble` to enable service testing
+    - implement `findByUserId` and test
+    - implement `findByStockId` and test
+    - implement `add` and test, requires validation
+    - implement `update` and test, requires validation
+    - implement `deleteById` and test
+
+
+    #### Stock Service
+    - add a `StockRepository` (interface) field with a corresponding constructor
+    - generate tests for `StockService`
+    - create `StockRepositoryTestDouble` to support service testing, this test class implements `StockRepository`
+    - implement `findById` and test, implement just enough code in `StockRepositoryTestDouble` to enable service testing
+    - implement `findByTicker` and test
+    - implement `add` and test, requires validation
+    - implement `update` and test, requires validation
+    - implement `deleteById` and test
+
+    #### Like Service
+    - add a `LikeRepository` (interface) field with a corresponding constructor
+    - generate tests for `LikeService`
+    - create `LikeRepositoryTestDouble` to support service testing, this test class implements `LikeRepository`
+    - implement `findById` and test, implement just enough code in `LikeRepositoryTestDouble` to enable service testing
+    - implement `findByUserId` and test
+    - implement `findByMessageId` and test
+    - implement `update` and test, requires validation
+    - implement `deleteById` and test
+
+    #### UserStock Service
+    - add a `UserStockRepository` (interface) field with a corresponding constructor
+    - generate tests for `UserStockService`
+    - create `UserStockRepositoryTestDouble` to support service testing, this test class implements `UserStockRepository`
+    - implement `findById` and test, implement just enough code in `UserStockRepositoryTestDouble` to enable service testing
+    - implement `add` and test, requires validation
+    - implement `deleteById` and test
 
 - Create Result (up to 1 hour per result)
     - Stock
@@ -548,9 +599,9 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
     - Implement websockets on the backend(up to 2 hours) for the messages
 
 ### Backend should be complete by Tuesday
-==========
+==================================================================================
 
-### Frontend
+## Frontend
 ### Wednesday
 - Set Up websockets front end (1 hour)
 1. Set up index.js and Main.js
@@ -575,3 +626,23 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 
     - Navigation - 1 hour
     - Stock Chart - 1 hour
+
+### FrontEnd Perspectives
+
+- ** Sign In Page **
+    - Display sign in form on this page
+    - Collect user info from user through the displayed input fields
+    - Validate the info entered by the user and show errors on top if any
+    - Take the user to the Stock Chat Page if there are no errors
+
+- ** Stock Chat Page **
+    - Display the navigation bar on the left for the user to navigate through different stocks
+    - Display the current status of the stock on top through a moving graph
+    - Display a posts from other users that have been already posted below the graph
+    - Display an input field for the user to enter new posts along with the post button
+    - Collect the user input and display it as a post along with the previous posts
+    - Display edit and delete button options for the user to edit or delete the message post posted by the user
+    - Edit button takes the user to the form with his post in the input field where the user can edit the message
+    - Delete button will confirm with the user id the message should be deleted and then deletes it if the user clicks okay
+
+    
