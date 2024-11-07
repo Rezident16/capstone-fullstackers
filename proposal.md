@@ -1,8 +1,91 @@
-# FullStackers Proposal
+# FullStackers Proposal - Project Stock Connect
 
-## Project Stock Connect
+# Problem Statement
+People interested in stock trading often struggle to stay informed about the stocks they care about and to communicate effectively with others about those stocks. Information is scattered across multiple apps, sites, and social media platforms, making it difficult to have a focused, real-time discussion or exchange valuable insights about stocks without distraction.
 
-### High Level Requirements
+# Technical Solution
+Anna is a new investor interested in technology stocks. She uses the Stock Connect app to create a watchlist of her favorite stocks and receives real-time updates and joins a chat group within the app, dedicated solely to one of her stocks, where experienced investors share tips and analysis. This focused space helps her learn without the distraction of irrelevant discussions or spam, allowing her to gain confidence and connect with knowledgeable investors who share her goals.
+
+# Glossary
+- User
+    - Anyone using the app
+- Admin
+    - Specific users who have more power on the app. They can add a stock channel and delete other users messages.
+- Stock
+    - A channel that will be showcased on the left side of the screen that contains a stocks name and will have discussion about that stock
+- Likes
+    - A reaction to a message someone can anyone can like a message and a message will show how many people have liked it
+- Messages
+    - A text that user can send in chat for a specific stock and will be displayed.
+
+# User Stories
+
+## Messages
+
+### User wants to send a message
+ - Suggested data:
+    - Apple has been killing it lately! HODL!!
+
+- Precondition:
+    - The User must be logged in
+
+### Edit a message
+- Suggested data:
+    - Apple has been killing it today! HODL!!
+- Precondition:
+    - The User must be logged in
+    - The user must be the owner of the message
+
+### Delete a message
+- Precondition:
+    - The user must be logged in
+    - The user must be an owner of the message or ADMIN
+
+## Stocks
+
+### User want to add a stock
+- Suggested Data:
+    - Ticker: AAPL
+    - Name: Apple
+    - Descirption: generic description for the stock
+- Precondition:
+    - The user must be logged in
+    - The Ticker can't be duplicate
+- Postcondition:
+    - The admin must first approve the stock. Once approved, the stock is created and users are able to navigate to it.
+
+### User want to update the stock
+- Suggested Data:
+    - Name: Apple Inc.
+    - Description: Updated Descirption
+- Precondition:
+    - The user must be an admin
+
+### Delete a stock
+- Precondition:
+    - The user must be an admin
+
+## Likes
+
+### User wants to like a message:
+- Precondition:
+    - The user must be logged in
+    - The message must exist
+    - The user can't have like for that specific message
+
+### User wants to change like to dislike
+- Precondition:
+    - The like should exist
+    - The user must be logged in
+    - The user must be the one who liked the message
+
+### User wants to delete a like
+- Precondition:
+    - The like should exist
+    - The user must be logged in
+    - The user must be the one who liked the message
+
+# High Level Requirements
 
 - Create a message by the user
 - Edit the message by the user
@@ -443,65 +526,50 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 9. Create `UserResult`.
 10. Create `UserService`.
 
-    - add a `PanelRepository` (interface) field with a corresponding constructor
-    - generate tests for `PanelService`
-    - create `PanelRepositoryTestDouble` to support service testing, this test class implements `PanelRepository`
-    - implement `findBySection` and test, implement just enough code in `PanelRepositoryTestDouble` to enable service testing
-    - implement `add` and test, requires validation
-    - implement `update` and test, requires validation
-    - implement `deleteById` and test
+11. Create Service
+    - Stock
+    - Messages
+    - Likes/Dislikes
+    - UserStock
 
-11. Create `View`
+12. Create Result
+    - Stock
+    - Messages
+    - Likes/Dislikes
+    - UserStock
 
-    - add `Scanner` field
-    - create read* methods: `readString`, `readRequiredString`, `readInt`, `readInt` (with min/max)
+13. Controller
+    - Security Controller (Monday)
+    - Mappers (30 mins per person)
+    - Controller per each of the tables (1 hour per person)
 
-12. Create `Controller`
+### Backend should be complete by Tuesday
+==========
 
-    - add fields for service and view with corresponding constructor
-    - add a `run` method
+### Frontend
+### Wednesday
+1. Set up index.js and Main.js
+2. Set up fetch functions:
+    - Users - 1 hour
+    - Stocks - 1 hour
+    - UserStocks - 30 mins
+    - Messages - 1 hour
+    - Likes - 30 mins
 
-13. Create `App` and the `main` method.
+3. Set up components
+    - Create Update Forms
+        - User - 1 hour
+        - Stock - 1 hour
+        - Messages - 1 hour
+        - UserStocks/Likes - just a button to add/remove or like/dislike/remove - 1 hour
 
-    - instantiate all required objects: repository, service, view, and controller
-    - run the controller
+    - Display User - 1 hour
+    - Display Stock Chat - 1 hour
+        -  Display Messages - 1 hour
+            - Display Likes - 1 hour
 
-14. Work back and forth between controller and view.
+    - Navigation - 1 hour
+    - Stock Chart - 1 hour
 
-    Run early and often. Add `System.out.println`s as breadcrumbs in controller, but don't forget to remove them when development is complete.
-
-    Determine the correct sequence for service calls and view calls. What is the order?
-
-    - implement `chooseOptionFromMenu` and `printHeader` in view
-    - use them in the controller's `run`
-    - implement `viewBySection` in controller, complete required view methods: `readSection`, `printPanels`
-    - implement `addPanel` in controller, complete required view methods: `makePanel`, `readMaterial`, `printResult`
-    - implement `updatePanel` in controller, complete required view methods: `choosePanel`, `update`
-    - implement `deletePanel` in controller, complete required view methods (`deletePanel` can re-use `choosePanel`)
-
-## Controller Perspectives
-
-### View Panels by Section
-1. collect section name from the view
-2. use the name to fetch panels from the service
-3. use the view to display panels
-
-### Add a Panel
-1. collect a complete and new panel from the view
-2. use the service to add the panel and grab its result
-3. display the result in the view
-
-### Update a Panel
-1. collect section name from the view
-2. use the name to fetch panels from the service
-3. display the panels in the view and allow the user to choose a panel (if no panel selected, abort)
-4. update panel properties (setters) in the view
-5. use the service to update/save the panel and grab its result
-6. display the result in the view
-
-### Delete a Panel
-1. collect section name from the view
-2. use the name to fetch panels from the service
-3. display the panels in the view and allow the user to choose a panel (if no panel selected, abort)
-4. use the service to delete the panel by its identifier
-5. display success or failure in the view
+### Thursday
+    - Websockets - 2 hours
