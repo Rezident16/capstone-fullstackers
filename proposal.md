@@ -1,5 +1,7 @@
 # FullStackers Proposal
 
+## Project Stock Connect
+
 ### High Level Requirements
 
 - Create a message by the user
@@ -55,7 +57,7 @@ src
 ├───main
 │   └───java
 │       └───learn
-│           └───solar
+│           └───stockConnect
 │               │   App.java                      -- app entry point
 │               │
 │               ├───data
@@ -93,7 +95,7 @@ src
 └───test
     └───java
         └───learn
-            └───solar
+            └───stockConnect
                 ├───data
                 │       UserFileRepositoryTest.java
                 │       UserRepositoryTestDouble.java
@@ -336,22 +338,26 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 - `private Material readMaterial()` -- domain-specific console method for choosing a Material
 
 ## Steps
+### Monday
+
 
 1. Create a Maven project.
 2. Add jUnit 5, Jupiter, as a Maven dependency and refresh Maven
 3. Create packages.
-4. Create the `Panel` model.
-5. Create the `Material` enum.
-6. Create the data layer's custom `DataException`
-7. Create the `PanelFileRepository` class.
+4. Create the `User` model.
+5. Create the `Stocks` model.
+6. Create the `Likes` model.
+7. Create the `Message` model.
+8. Create the data layer's custom `DataException`
+9. Create the `UserFileRepository` class.
 
     All methods should catch IOExceptions and throw `DataException`.
 
     - add the filePath field and create a constructor to initialize the field
-    - generate tests for `PanelFileRepository`, should be located in `src/test/java/learn/solar/data/PanelFileRepositoryTest`
+    - generate tests for `UserFileRepository`, should be located in `src/test/java/learn/stockConnect/data/UserFileRepositoryTest`
     - create a `data` directory in the project root. add test, seed, and production data files
-    - implement `findAll`, `serialize`, and `deserialize`. these are all private method. may be useful to make `findAll` public temporarily and test it quick.
-    - implement `findBySection`, it uses `findAll`. test it naively (no known-good-state for now)
+    - implement `serialize`, and `deserialize`. these are all private method. 
+    - implement `findById`, `findAll`, `findByUsername`, `findByEmail` 
     - implement `add`
     - improve tests by establishing known-good-state with `@BeforeAll`
     - test `add`
@@ -360,9 +366,82 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
     - implement `deleteById`
     - test `deleteById`
 
-8. Extract the `PanelRepository` interface (IntelliJ: Refactor -> Extract Interface) from `PanelFileRepository`.
-9. Create `PanelResult`.
-10. Create `PanelService`.
+10. Extract the `UserRepository` interface (IntelliJ: Refactor -> Extract Interface) from `UserFileRepository`.
+11. Implement `Security`.
+12. Create the `MessageFileRepository` class.
+
+    All methods should catch IOExceptions and throw `DataException`.
+
+    - add the filePath field and create a constructor to initialize the field
+    - generate tests for `MessageFileRepository`, should be located in `src/test/java/learn/stockConnect/data/MessageFileRepositoryTest`
+    - create a `data` directory in the project root. add test, seed, and production data files
+    - implement `serialize`, and `deserialize`. these are all private method. 
+    - implement `findById`, `findByStockId`, `findByUserId` 
+    - implement `add`
+    - improve tests by establishing known-good-state with `@BeforeAll`
+    - test `add`
+    - implement `update`
+    - test `update`
+    - implement `deleteById`
+    - test `deleteById`
+
+13. Extract the `MessageRepository` interface (IntelliJ: Refactor -> Extract Interface) from `MessageFileRepository`.
+14. Create the `StockFileRepository` class.
+
+    All methods should catch IOExceptions and throw `DataException`.
+
+    - add the filePath field and create a constructor to initialize the field
+    - generate tests for `StockFileRepository`, should be located in `src/test/java/learn/stockConnect/data/StockFileRepositoryTest`
+    - create a `data` directory in the project root. add test, seed, and production data files
+    - implement `serialize`, and `deserialize`. these are all private method. 
+    - implement `findById`, `findByTicker`
+    - implement `add`
+    - improve tests by establishing known-good-state with `@BeforeAll`
+    - test `add`
+    - implement `update`
+    - test `update`
+    - implement `deleteById`
+    - test `deleteById`
+
+15. Extract the `MessageRepository` interface (IntelliJ: Refactor -> Extract Interface) from `MessageFileRepository`.
+16. Create the `UserStockFileRepository` class.
+
+    All methods should catch IOExceptions and throw `DataException`.
+
+    - add the filePath field and create a constructor to initialize the field
+    - generate tests for `UserStockFileRepository`, should be located in `src/test/java/learn/stockConnect/data/UserStockFileRepositoryTest`
+    - create a `data` directory in the project root. add test, seed, and production data files
+    - implement `serialize`, and `deserialize`. these are all private method. 
+    - implement `findById`
+    - implement `add`
+    - improve tests by establishing known-good-state with `@BeforeAll`
+    - test `add`
+    - implement `update`
+    - test `update`
+    - implement `deleteById`
+    - test `deleteById`
+
+17. Extract the `UserStockRepository` interface (IntelliJ: Refactor -> Extract Interface) from `UserStockFileRepository`.
+
+18. Create the `LikeFileRepository` class.
+
+    All methods should catch IOExceptions and throw `DataException`.
+
+    - add the filePath field and create a constructor to initialize the field
+    - generate tests for `LikeFileRepository`, should be located in `src/test/java/learn/stockConnect/data/LikeFileRepositoryTest`
+    - create a `data` directory in the project root. add test, seed, and production data files
+   
+    - implement `findById`, `findByUserId`, `findByMessageId`
+    - implement `updateLike`
+    - improve tests by establishing known-good-state with `@BeforeAll`
+    - test `updateLike`
+
+19. Extract the `LikeRepository` interface (IntelliJ: Refactor -> Extract Interface) from `LikeFileRepository`.
+
+### Tuesday
+
+9. Create `UserResult`.
+10. Create `UserService`.
 
     - add a `PanelRepository` (interface) field with a corresponding constructor
     - generate tests for `PanelService`
