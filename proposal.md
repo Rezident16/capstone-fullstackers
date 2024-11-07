@@ -97,7 +97,8 @@ Anna is a new investor interested in technology stocks. She uses the Stock Conne
 
 # Database
 
-![image](https://github.com/user-attachments/assets/e50130bc-51cc-4853-82a4-ae284becaeda)
+![image](https://github.com/user-attachments/assets/6937751a-4c41-49bf-bd3c-66064e70c5d5)
+
 
 ## Validation
 
