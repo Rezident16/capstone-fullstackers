@@ -1,5 +1,20 @@
 # FullStackers Proposal
 
+### High Level Requirements
+
+- Create a message by the user
+- Edit the message by the user
+- Delete the message by the user
+- Display the messages by the user
+- Display the stocks for that specific chat
+- Display likes/dislikes for the message post
+- Add a like/dislike to
+
+# Database
+
+
+
+
 
 # Class Diagram
 ```
