@@ -12,6 +12,13 @@
 
 # Database
 
+![image](https://github.com/user-attachments/assets/e50130bc-51cc-4853-82a4-ae284becaeda)
+
+### Validation
+
+- **user_email** is required and cannot be blank.
+- **user_password** is required and cannot be blank.
+
 
 
 
