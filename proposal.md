@@ -394,15 +394,35 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 - `private int user_id`
 - `private int message_id`
 
-### ui.Controller
-- `private View view` -- required View dependency
-- `private PanelService service` -- required service dependency
-- `public Controller(View, PanelService)` -- constructor with dependencies
-- `public void run()` -- kicks off the whole app, menu loop
-- `private void viewBySection()` -- coordinates between service and view to display panels in a section
-- `private void addPanel()` -- coordinates between service and view to add a new panel
-- `private void updatePanel()` -- coordinates between service and view to update a panel
-- `private void deletePanel()` -- coordinates between service and view to delete a panel
+### controllers.User
+- `addUser(User user)`
+- `updateUser(User user)`
+- `deleteUserById(int userId)`
+- `findUserByUsername(String username)`
+- `findUserByEmail(String email)`
+
+### controllers.Messages
+- `addMessage(Message message)`
+- `findMessagesByUserId(int userId)`
+- `findMessagesByStockId(int stockId)`
+
+
+### controllers.Stocks
+- `addStock(Stock stock)`
+- `updateStock(Stock stock)`
+- `deleteStockById(int stockId)`
+- `findStockByTicker(String ticker)`
+
+### controllers.Likes
+- `addLike(Like like)`
+- `updateLike(Like like)`
+- `findLikesByUserId(int userId)`
+- `findLikesByMessageId(int messageId)`
+
+### controllers.UserStock
+- `addUserStock(UserStock userStock)`
+- `deleteUserStockById(int userStockId)`
+- `findUserStocksByUserId(int userId)` (edited) 
 
 ### ui.View
 - `private Scanner console` -- a Scanner to be used across all methods
