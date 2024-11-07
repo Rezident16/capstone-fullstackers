@@ -436,7 +436,7 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 
 ## Backend
 
-### Monday
+### Monday Data Layer and Security
 
 - Set Up Maven Project (~30 min)
     - Create a Maven project.
@@ -448,7 +448,16 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
     - Create the `Likes` model.
     - Create the `Message` model.
 
-- Implement `Security`(1 hour)
+- Implement `Security`(1-2 hours)
+    - JWT converter
+    - JWT request Filter
+    - Security config
+    - User Service
+    - Security Controller(AUTH Controller)
+        - `GetCurrentUser`
+        - `authenticate`
+        - `createAccount`
+
 - Create Repositories:
     - All methods should catch IOExceptions and throw `DataException`.
     
@@ -529,7 +538,7 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
     - improve tests by establishing known-good-state with `@BeforeAll`
     - test `updateLike`
 
-### Tuesday
+### Tuesday Domain and Controllers
 
 - Create Service (up to 2 hours per service)
     #### User Service
@@ -584,19 +593,26 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
     - implement `add` and test, requires validation
     - implement `deleteById` and test
 
-- Create Result (up to 1 hour per result)
-    - Stock
-    - Messages
-    - Likes/Dislikes
-    - UserStock
-    - User
+    #### Create Result (20-30mins)
+    - `ResultType getType()`
+    - `boolean isSuccess()`
+    - `T getPayload()`
+    - `void setPayload(T payload)`
+    - `List<String> getMessages()`
+    - `void addMessage(String message, ResultType type)`
 
-- Controller
-    - Security Controller (Monday)
-    - Mappers (30 mins per person)
-    - Controller per each of the tables (1 hour per person)
+    #### Validations (10-20mins)
+    - `isNullOrBlank()`
 
-- Websockets
+    #### Controller
+    - Error Response - 20 mins
+    - Global Exception Handler - 20mins-1hour
+    - Stock Controller - 1 hour
+    - Messages Controller - 1 hour
+    - Like Controller - 1 hour
+    - UserStock Controller - 30 mins
+
+    #### Websockets
     - Implement websockets on the backend(up to 2 hours) for the messages
 
 ### Backend should be complete by Tuesday
@@ -604,8 +620,14 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 
 ## Frontend
 ### Wednesday
+
+#### HTTP
+- Set up http requests - 30mins - 1hour
+
+#### Front-end Websockets(if time allows)
 - Set Up websockets front end (1 hour)
-1. Set up index.js and Main.js
+
+
 2. Set up fetch functions:
     - Users - 1 hour
     - Stocks - 1 hour
