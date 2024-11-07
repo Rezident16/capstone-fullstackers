@@ -1,11 +1,12 @@
 # FullStackers Proposal - Project Stock Connect
 
 ## Team 
-    - Andrei Vorobev
-    - Mely Espino
-    - Lance Jabril Tero
-    - Shilpa Sivarajan
+- Andrei Vorobev
+- Mely Espino
+- Lance Jabril Tero
+- Shilpa Sivarajan
 
+  
 # Problem Statement
 People interested in stock trading often struggle to stay informed about the stocks they care about and to communicate effectively with others about those stocks. Information is scattered across multiple apps, sites, and social media platforms, making it difficult to have a focused, real-time discussion or exchange valuable insights about stocks without distraction.
 
@@ -629,13 +630,13 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 
 ### FrontEnd Perspectives
 
-- ** Sign In Page **
+- **Sign In Page**
     - Display sign in form on this page
     - Collect user info from user through the displayed input fields
     - Validate the info entered by the user and show errors on top if any
     - Take the user to the Stock Chat Page if there are no errors
 
-- ** Stock Chat Page **
+- **Stock Chat Page**
     - Display the navigation bar on the left for the user to navigate through different stocks
     - Display the current status of the stock on top through a moving graph
     - Display a posts from other users that have been already posted below the graph
