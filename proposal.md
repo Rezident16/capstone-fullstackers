@@ -18,6 +18,19 @@ Anna is a new investor interested in technology stocks. She uses the Stock Conne
 - Messages
     - A text that user can send in chat for a specific stock and will be displayed.
 
+# High Level Requirements
+
+- Create a message by the user (USER)
+- Edit the message by the user (USER)
+- Delete the message by the user (USER/ADMIN)
+- Display the stocks for that specific chat (authenticated)
+- Display likes/dislikes for the message post (authenticated)
+- Add a like/dislike to (USER)
+- Update Like/Dislike (user)
+- Create Stock(User/Admin)
+- Update Stock(Admin)
+- Delete Stock(Admin)
+
 # User Stories
 
 ## Messages
@@ -85,16 +98,6 @@ Anna is a new investor interested in technology stocks. She uses the Stock Conne
     - The user must be logged in
     - The user must be the one who liked the message
 
-# High Level Requirements
-
-- Create a message by the user
-- Edit the message by the user
-- Delete the message by the user
-- Display the messages by the user
-- Display the stocks for that specific chat
-- Display likes/dislikes for the message post
-- Add a like/dislike to
-
 # Database
 
 ![image](https://github.com/user-attachments/assets/6937751a-4c41-49bf-bd3c-66064e70c5d5)
@@ -119,21 +122,6 @@ Anna is a new investor interested in technology stocks. She uses the Stock Conne
 
 ### Likes/Dislikes
 - **isLiked** is required and cannot be blank.
-
-# Technical Requirements
-
-- Three layer architecture
-- Data stored in a delimited file.
-- Repositories should throw a custom exception, never file-specific exceptions.
-- Repository and service classes must be fully tested with both negative and positive cases. Do not use your "production" data file to test your repository.
-- Must have at least 2 roles (example User and Admin)
-- Sensible layering and pattern choices
-- Spring Boot, MVC, JDBC, Testing, React
-- An HTML and CSS UI that's built with React
-- MySQL for data management
-- Manage 4-7 database tables (entities) that are independent concepts. A simple bridge table doesn't count.
-
-
 
 # Class Diagram
 ```
@@ -444,38 +432,37 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 ## Steps
 ### Monday
 
+- Set Up Maven Project (~30 min)
+    - Create a Maven project.
+    - Add jUnit 5, Jupiter, as a Maven dependency and refresh Maven
+    - Create packages.
+- Create Models (30min - 1hour per model; Up to 2 hours)
+    - Create the `User` model.
+    - Create the `Stocks` model.
+    - Create the `Likes` model.
+    - Create the `Message` model.
 
-1. Create a Maven project.
-2. Add jUnit 5, Jupiter, as a Maven dependency and refresh Maven
-3. Create packages.
-4. Create the `User` model.
-5. Create the `Stocks` model.
-6. Create the `Likes` model.
-7. Create the `Message` model.
-8. Create the data layer's custom `DataException`
-9. Create the `UserFileRepository` class.
+- Implement `Security`(1 hour)
+- Create Repositories:
+    - All methods should catch IOExceptions and throw `DataException`.
+    
+    - Create the `UserFileRepository` class. (2 hours)
+        - Create the data layer's custom `DataException`
+        - add the filePath field and create a constructor to initialize the field
+        - generate tests for `UserFileRepository`, should be located in `src/test/java/learn/stockConnect/data/UserFileRepositoryTest`
+        - create a `data` directory in the project root. add test, seed, and production data files
+        - implement `serialize`, and `deserialize`. these are all private method. 
+        - implement `findById`, `findAll`, `findByUsername`, `findByEmail` 
+        - implement `add`
+        - improve tests by establishing known-good-state with `@BeforeAll`
+        - test `add`
+        - implement `update`
+        - test `update`
+        - implement `deleteById`
+        - test `deleteById`
 
+- Create the `MessageFileRepository` class. (2 hours)
     All methods should catch IOExceptions and throw `DataException`.
-
-    - add the filePath field and create a constructor to initialize the field
-    - generate tests for `UserFileRepository`, should be located in `src/test/java/learn/stockConnect/data/UserFileRepositoryTest`
-    - create a `data` directory in the project root. add test, seed, and production data files
-    - implement `serialize`, and `deserialize`. these are all private method. 
-    - implement `findById`, `findAll`, `findByUsername`, `findByEmail` 
-    - implement `add`
-    - improve tests by establishing known-good-state with `@BeforeAll`
-    - test `add`
-    - implement `update`
-    - test `update`
-    - implement `deleteById`
-    - test `deleteById`
-
-10. Extract the `UserRepository` interface (IntelliJ: Refactor -> Extract Interface) from `UserFileRepository`.
-11. Implement `Security`.
-12. Create the `MessageFileRepository` class.
-
-    All methods should catch IOExceptions and throw `DataException`.
-
     - add the filePath field and create a constructor to initialize the field
     - generate tests for `MessageFileRepository`, should be located in `src/test/java/learn/stockConnect/data/MessageFileRepositoryTest`
     - create a `data` directory in the project root. add test, seed, and production data files
@@ -489,8 +476,7 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
     - implement `deleteById`
     - test `deleteById`
 
-13. Extract the `MessageRepository` interface (IntelliJ: Refactor -> Extract Interface) from `MessageFileRepository`.
-14. Create the `StockFileRepository` class.
+- Create the `StockFileRepository` class. (2 hours)
 
     All methods should catch IOExceptions and throw `DataException`.
 
@@ -507,8 +493,7 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
     - implement `deleteById`
     - test `deleteById`
 
-15. Extract the `MessageRepository` interface (IntelliJ: Refactor -> Extract Interface) from `MessageFileRepository`.
-16. Create the `UserStockFileRepository` class.
+- Create the `UserStockFileRepository` class. (2 hours)
 
     All methods should catch IOExceptions and throw `DataException`.
 
@@ -525,9 +510,7 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
     - implement `deleteById`
     - test `deleteById`
 
-17. Extract the `UserStockRepository` interface (IntelliJ: Refactor -> Extract Interface) from `UserStockFileRepository`.
-
-18. Create the `LikeFileRepository` class.
+- Create the `LikeFileRepository` class. (2 hours)
 
     All methods should catch IOExceptions and throw `DataException`.
 
@@ -540,35 +523,36 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
     - improve tests by establishing known-good-state with `@BeforeAll`
     - test `updateLike`
 
-19. Extract the `LikeRepository` interface (IntelliJ: Refactor -> Extract Interface) from `LikeFileRepository`.
-
 ### Tuesday
 
-9. Create `UserResult`.
-10. Create `UserService`.
-
-11. Create Service
+- Create Service (up to 2 hours per service)
     - Stock
     - Messages
     - Likes/Dislikes
     - UserStock
+    - User
 
-12. Create Result
+- Create Result (up to 1 hour per result)
     - Stock
     - Messages
     - Likes/Dislikes
     - UserStock
+    - User
 
-13. Controller
+- Controller
     - Security Controller (Monday)
     - Mappers (30 mins per person)
     - Controller per each of the tables (1 hour per person)
+
+- Websockets
+    - Implement websockets on the backend(up to 2 hours) for the messages
 
 ### Backend should be complete by Tuesday
 ==========
 
 ### Frontend
 ### Wednesday
+- Set Up websockets front end (1 hour)
 1. Set up index.js and Main.js
 2. Set up fetch functions:
     - Users - 1 hour
@@ -591,6 +575,3 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 
     - Navigation - 1 hour
     - Stock Chart - 1 hour
-
-### Thursday
-    - Websockets - 2 hours
