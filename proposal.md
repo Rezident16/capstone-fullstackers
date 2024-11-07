@@ -627,28 +627,59 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 #### Front-end Websockets(if time allows)
 - Set Up websockets front end (1 hour)
 
+#### App.js
+- Authenticate user and pass the user as context to the children (Create User Provider) - 1 hour
+- Set Up App.js by surrounding APP with User Provider - 30 mins
 
-2. Set up fetch functions:
-    - Users - 1 hour
-    - Stocks - 1 hour
-    - UserStocks - 30 mins
-    - Messages - 1 hour
-    - Likes - 30 mins
+#### Index.js
+- Set up index.js - should take around 10-15 mins
 
-3. Set up components
-    - Create Update Forms
-        - User - 1 hour
-        - Stock - 1 hour
-        - Messages - 1 hour
-        - UserStocks/Likes - just a button to add/remove or like/dislike/remove - 1 hour
+#### User Components
+- LogIn + authenticate
+    - Form (2 hour)
+- SignUp - (2-3 hours - shares components with update)
+    - LogIn/Signup Form
+- Update
+    - LogIn/Signup Form
+- Delete
+    - 1 hour
 
-    - Display User - 1 hour
-    - Display Stock Chat - 1 hour
-        -  Display Messages - 1 hour
-            - Display Likes - 1 hour
+#### Stock Components
+- Add Update + Form (1-2 hours)
+- Get All - 1-2 hour
+- Get one - 1-2 hour
+- Delete - 1-2 hour
 
-    - Navigation - 1 hour
-    - Stock Chart - 1 hour
+#### Message Components
+- Add Message - 1-2 hour
+- Read Message - 1 hour
+- Update Message - Shares form with Add Message (20-30 mins)
+- Delete Message - 1 hour
+
+#### UserStocks
+- See User Stocks - 1 hour
+- Add User Stock - 1 hour
+- Delete User Stock - 1 hour
+
+#### Likes
+- See All likes and dislikes for a message - 2 hours
+- Add a like - 1 hour
+- Update a like - 1 hour
+- Remove a like - 1 hour
+
+
+#### Chart
+- See chart on a stock
+    - set up Alpaca API to get trading bars - 20 mins
+    - set up chart - 1 hour
+
+#### Navigation
+- Include a drop down menu for the user to login/logout - 1-2 hours
+
+#### Home Page (user enters site first time)
+- Lead users to log in/sign up - 1-2 hours
+- Home Page when user is logged in - 1-2 hours 
+
 
 ### FrontEnd Perspectives
 
