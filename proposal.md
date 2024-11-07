@@ -204,23 +204,30 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 - `private String serialize(UserStock)` -- convert a UserStock into a String (a line) in the file
 - `private UserStock deserialize(UserStock)` -- convert a String into a UserStock
 
-
 ### data.UserStockRepository.java
 - `public UserStock findById(int)`
 - `public boolean deleteById(int)`
 - `public UserStock add(UserStock)`
 
 ### data.LikeFileRepository.java
+- `private String filePath`
+- `public Like findById(int)` - find by id
+- `public Like findByUserId(int)` - findy by user id
+- `public Like findByMessageId(int)` - findy by message id
+- `public Like updateLike(int)` - update the Like by id
 
 ### data.LikeRepository.java
+- `public Like findById(int)` 
+- `public Like findByUserId(int)` 
+- `public Like findByMessageId(int)` 
+- `public Like updateLike(int)`
 
 
 
 
 
 
-
-### domain.PanelResult
+### domain.Result
 - `private ArrayList<String> messages` -- error messages
 - `private Panel panel` -- an optional Panel
 - `public boolean isSuccess()` -- calculated getter, true if no error messages
@@ -229,29 +236,78 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 - `public void setPanel(Panel)` -- Panel setter
 - `public void addMessage(String)` -- adds an error message to messages
 
-### domain.PanelService
--  `private PanelRepository repository` -- required data dependency
--  `public PanelService(PanelRepository)` -- constructor
--  `public List<Panel> findBySection(String)` -- pass-through to repository
--  `public PanelResult add(Panel)` -- validate, then add via repository
--  `public PanelResult update(Panel)` -- validate, then update via repository
--  `public PanelResult deleteById(int)` -- pass-through to repository
--  `private PanelResult validate(Panel)` -- general-purpose validation routine
 
-### models.Material
 
-An enum with five values: multicrystalline silicon, monocrystalline silicon, amorphous silicon, cadmium telluride, copper indium gallium selenide. Can use industry abbreviations or full names.
+### domain.UserService
+-  `private UserRepository repository` -- required data dependency
+-  `public UserService(UserRepository)` -- constructor
+-  `public Result add(User)` -- validate, then add via repository
+-  `public Result update(User)` -- validate, then update via repository
+-  `public Result deleteById(int)` -- pass-through to repository
+-  `private Result validate(User)` -- general-purpose validation routine
 
-### models.Panel
-- `private int id`
-- `private String section`
-- `private int row`
-- `private int column`
-- `private int installationYear`
-- `private Material material`
-- `private boolean tracking`
-- Full getters and setters
-- override `equals` and `hashCode`
+### domain.Message
+-  `private MessageRepository repository` -- required data dependency
+-  `public MessageService(MessageRepository)` -- constructor
+-  `public List<Message> findByStockId()` -- pass-through to repository
+-  `public Result add(Message)` -- validate, then add via repository
+-  `public Result update(Message)` -- validate, then update via repository
+-  `public Result deleteById(int)` -- pass-through to repository
+-  `private Result validate(Message)` -- general-purpose validation routine
+
+
+### domain.Stock
+-  `private StockRepository repository` -- required data dependency
+-  `public StockService(StockRepository)` -- constructor
+-  `public Result add(Stock)` -- validate, then add via repository
+-  `public Result update(Stock)` -- validate, then update via repository
+-  `public Result deleteById(int)` -- pass-through to repository
+-  `private Result validate(Stock)` -- general-purpose validation routine
+
+### domain.UserStocksService
+- `public Result findById(int)`
+- `public boolean deleteById(int)`
+- `public Result add(UserStock)`
+- `private Result validate(UserStock)` -- general-purpose validation routine
+
+### domain.LikeService
+-  `public Result add(Like)` -- validate, then add via repository
+-  `public Result update(Like)` -- validate, then update via repository
+-  `public Result deleteById(int)` -- pass-through to repository
+-  `private Result validate(Like)` -- general-purpose validation routine (edited) 
+
+
+### models.User
+- `private int user_id`
+- `private String user_first_name`
+- `private String user_last_name`
+- `private String username`
+- `private String email`
+- `private String password`
+
+### models.Message
+- `private int message_id`
+- `private int user_id`
+- `private int stock_id`
+- `private String content`
+- `private date date_of_post`
+
+### models.Stock
+- `private int stock_id`
+- `private String stock_name`
+- `private String description`
+- `private String ticker`
+
+### models.UserStock
+- `private int user_stock_id`
+- `private int user_id`
+- `private int stock_id`
+
+### models.Like
+- `private int like_id`
+- `private boolean isliked`
+- `private int user_id`
+- `private int message_id`
 
 ### ui.Controller
 - `private View view` -- required View dependency
