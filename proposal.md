@@ -143,16 +143,22 @@ src
 │               │   App.java                      -- app entry point
 │               │
 │               ├───data
+│               │    └───mappers
+│               │           UserMapper.java
+│               │           MessageMapper.java
+│               │           StockMaper.java
+│               │           UserStockMapper.java
+│               │           LikeMapper.java
 │               │       DataException.java
-│               │       UserFileRepository.java
+│               │       UserJdbcTemplateRepository.java
 │               │       UserRepository.java
-│               │       MessageFileRepository.java
+│               │       MessageJdbcTemplateRepository.java
 │               │       MessageRepository.java
-│               │       StockFileRepository.java
+│               │       StockJdbcTemplateRepository.java
 │               │       StockRepository.java
-│               │       UserStockFileRepository.java
+│               │       UserStockJdbcTemplateRepository.java
 │               │       UserStockRepository.java
-│               │       LikeFileRepository.java
+│               │       LikeJdbcTemplateRepository.java
 │               │       LikeRepository.java
 │               │
 │               ├───domain
@@ -179,15 +185,15 @@ src
         └───learn
             └───stockConnect
                 ├───data
-                │       UserFileRepositoryTest.java
+                │       UserJdbcTemplateRepositoryTest.java
                 │       UserRepositoryTestDouble.java
-                │       MessageFileRepositoryTest.java
+                │       MessageJdbcTemplateRepositoryTest.java
                 │       MessageRepositoryTestDouble.java
-                │       StockFileRepositoryTest.java
+                │       StockJdbcTemplateRepositoryTest.java
                 │       StockRepositoryTestDouble.java
-                │       UserStockFileRepositoryTest.java
+                │       UserJdbcTemplateRepositoryTest.java
                 │       UserStockRepositoryTestDouble.java
-                │       LikeFileRepositoryTest.java
+                │       LikeJdbcTemplateRepositoryTest.java
                 │       LikeRepositoryTestDouble.java
                 │
                 └───domain
@@ -215,8 +221,8 @@ Custom data layer exception.
 
 ## Repositories
 
-### data.UserFileRepository
-- `private String filePath`
+### data.UserJdbcTemplateRepository
+- `private final JdbcTemplate jdbcTemplate`
 - `public List<User> findById(int)` -- finds the user by id
 - `public List<User> findAll()` -- finds all users
 - `public User findByUsername()` -- finds user by username
@@ -232,7 +238,7 @@ Custom data layer exception.
 
 ### data.UserRepository (interface)
 
-Contract for UserFileRepository and UserRepositoryTestDouble.
+Contract for UserJdbcTemplateRepository and UserRepositoryTestDouble.
 
 - `public List<User> findById(int)`
 - `public List<User> findAll()`
@@ -243,8 +249,8 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 - `public boolean deleteById(int)`
 
 
-### data.MessageFileRepository
-- `private String filePath`
+### data.MessageJdbcTemplateRepository
+- `private final JdbcTemplate jdbcTemplate`
 - `public Message findById(int)` -- finds the Message by id
 - `public List<Message> findByUserId(int)` -- finds the Messages by userId
 - `public List<Message> findByStockId(int)` -- finds the Messages by stockId
@@ -262,8 +268,8 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 - `public boolean update(message)`
 - `public boolean deleteById(int)`
 
-### data.StockFileRepository
-- `private String filePath`
+### data.StockJdbcTemplateRepository
+- `private final JdbcTemplate jdbcTemplate`
 - `public Stock findById(int)` -- find by id
 - `public Stock findByTicker(String)` -- find By Ticker
 - `public Stock add(Stock)` -- add Stock
@@ -280,8 +286,8 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 - `public boolean update(Stock)` 
 - `public boolean deleteById(int)`
 
-### data.UserStockFileRepository (Favorite Stocks/Watchlist)
-- `private String filePath`
+### data.UserStockJdbcTemplateRepository (Favorite Stocks/Watchlist)
+- `private final JdbcTemplate jdbcTemplate`
 - `public UserStock findById(int)` - find by id
 - `public boolean deleteById(int)` -- delete UserStock by id
 - `public UserStock add(UserStock)` -- add UserStock
@@ -293,8 +299,8 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 - `public boolean deleteById(int)`
 - `public UserStock add(UserStock)`
 
-### data.LikeFileRepository.java
-- `private String filePath`
+### data.LikeJdbcTemplateRepository.java
+- `private final JdbcTemplate jdbcTemplate`
 - `public Like findById(int)` - find by id
 - `public Like findByUserId(int)` - findy by user id
 - `public Like findByMessageId(int)` - findy by message id
@@ -306,6 +312,8 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 - `public Like findByMessageId(int)` 
 - `public Like updateLike(int)`
 
+
+
 ### domain.Result
 - `private ArrayList<String> messages` -- error messages
 - `private Panel panel` -- an optional Panel
@@ -314,8 +322,6 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 - `public Panel getPanel()` -- Panel getter
 - `public void setPanel(Panel)` -- Panel setter
 - `public void addMessage(String)` -- adds an error message to messages
-
-
 
 ### domain.UserService
 -  `private UserRepository repository` -- required data dependency
@@ -464,10 +470,10 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
 - Create Repositories:
     - All methods should catch IOExceptions and throw `DataException`.
     
-    - Create the `UserFileRepository` class. (2 hours)
+    - Create the `UserJdbcTemplateRepository` class. (2 hours)
         - Create the data layer's custom `DataException`
         - add the filePath field and create a constructor to initialize the field
-        - generate tests for `UserFileRepository`, should be located in `src/test/java/learn/stockConnect/data/UserFileRepositoryTest`
+        - generate tests for `UserJdbcTemplateRepository`, should be located in `src/test/java/learn/stockConnect/data/UserJdbcTemplateRepositoryTest`
         - create a `data` directory in the project root. add test, seed, and production data files
         - implement `serialize`, and `deserialize`. these are all private method. 
         - implement `findById`, `findAll`, `findByUsername`, `findByEmail` 
@@ -479,10 +485,10 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
         - implement `deleteById`
         - test `deleteById`
 
-- Create the `MessageFileRepository` class. (2 hours)
+- Create the `MessageJdbcTemplateRepository` class. (2 hours)
     All methods should catch IOExceptions and throw `DataException`.
     - add the filePath field and create a constructor to initialize the field
-    - generate tests for `MessageFileRepository`, should be located in `src/test/java/learn/stockConnect/data/MessageFileRepositoryTest`
+    - generate tests for `MessageJdbcTemplateRepository`, should be located in `src/test/java/learn/stockConnect/data/MessageJdbcTemplateRepositoryTest`
     - create a `data` directory in the project root. add test, seed, and production data files
     - implement `serialize`, and `deserialize`. these are all private method. 
     - implement `findById`, `findByStockId`, `findByUserId` 
@@ -494,12 +500,12 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
     - implement `deleteById`
     - test `deleteById`
 
-- Create the `StockFileRepository` class. (2 hours)
+- Create the `StockJdbcTemplateRepository` class. (2 hours)
 
     All methods should catch IOExceptions and throw `DataException`.
 
     - add the filePath field and create a constructor to initialize the field
-    - generate tests for `StockFileRepository`, should be located in `src/test/java/learn/stockConnect/data/StockFileRepositoryTest`
+    - generate tests for `StockJdbcTemplateRepository`, should be located in `src/test/java/learn/stockConnect/data/StockJdbcTemplateRepositoryTest`
     - create a `data` directory in the project root. add test, seed, and production data files
     - implement `serialize`, and `deserialize`. these are all private method. 
     - implement `findById`, `findByTicker`
@@ -511,12 +517,12 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
     - implement `deleteById`
     - test `deleteById`
 
-- Create the `UserStockFileRepository` class. (2 hours)
+- Create the `UserStockJdbcTemplateRepository` class. (2 hours)
 
     All methods should catch IOExceptions and throw `DataException`.
 
     - add the filePath field and create a constructor to initialize the field
-    - generate tests for `UserStockFileRepository`, should be located in `src/test/java/learn/stockConnect/data/UserStockFileRepositoryTest`
+    - generate tests for `UserStockJdbcTemplateRepository`, should be located in `src/test/java/learn/stockConnect/data/UserStockJdbcTemplateRepositoryTest`
     - create a `data` directory in the project root. add test, seed, and production data files
     - implement `serialize`, and `deserialize`. these are all private method. 
     - implement `findById`
@@ -528,12 +534,12 @@ Contract for UserFileRepository and UserRepositoryTestDouble.
     - implement `deleteById`
     - test `deleteById`
 
-- Create the `LikeFileRepository` class. (2 hours)
+- Create the `LikeJdbcTemplateRepository` class. (2 hours)
 
     All methods should catch IOExceptions and throw `DataException`.
 
     - add the filePath field and create a constructor to initialize the field
-    - generate tests for `LikeFileRepository`, should be located in `src/test/java/learn/stockConnect/data/LikeFileRepositoryTest`
+    - generate tests for `LikeJdbcTemplateRepository`, should be located in `src/test/java/learn/stockConnect/data/LikeJdbcTemplateRepositoryTest`
     - create a `data` directory in the project root. add test, seed, and production data files
    
     - implement `findById`, `findByUserId`, `findByMessageId`
