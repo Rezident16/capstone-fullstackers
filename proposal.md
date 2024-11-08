@@ -115,7 +115,7 @@ Anna is a new investor interested in technology stocks. She uses the Stock Conne
 ![wireFrameImage](wireframes/Login.png)
 
 ## Sign Up
-![wireFrameImage](wireframes/Sign Up.png)
+![wireFrameImage](wireframes/Sign_Up.png)
 
 ## Main
 ![wireFrameImage](wireframes/Main.png)
