@@ -3,7 +3,7 @@ package stocks.models;
 public class Stock {
     private int stockId;
     private String stockName;
-    private String description;
+    private String stock_description;
     private String ticker;
 
 
@@ -24,11 +24,11 @@ public class Stock {
     }
 
     public String getDescription() {
-        return description;
+        return stock_description;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.stock_description = description;
     }
 
     public String getTicker() {
