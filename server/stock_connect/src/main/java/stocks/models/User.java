@@ -1,18 +1,59 @@
 package stocks.models;
 
-import java.util.ArrayList;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-public class User {
+public class User implements UserDetails {
+
+//    FIELDS
+
     private int userId;
+
+    @NotBlank(message = "First name is required")
+    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
     private String firstName;
+
+    @NotBlank(message = "Last name is required")
+    @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
     private String lastName;
+
+    @NotBlank(message = "Username is required")
+    @Size(min = 3, max = 30, message = "Username must be between 3 and 20 characters")
     private String username;
+
+    @NotBlank(message = "Password is required")
+    @Size(min = 8, message = "Password must be at least 8 characters")
+    private String password;
+
+    @NotBlank(message = "Email is required")
     private String email;
+
     private int roleId;
 
+
+
+//    CONSTRUCTOR
+
     public User() {}
+
+    public User(String email, String firstName, String lastName, String password, int roleId, int userId, String username) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.roleId = roleId;
+        this.userId = userId;
+        this.username = username;
+    }
+
 
     public int getUserId() {
         return userId;
@@ -38,27 +79,78 @@ public class User {
         this.lastName = lastName;
     }
 
+    
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public int getRoleId() {
+        return roleId;
+    }
+    
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public void setPassword(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.password = passwordEncoder.encode(password);
+    }
+
+    // MIGHT NEED TO CHANGE THIS based on roleId
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(roleId == 1 ? "ROLE_ADMIN" : "ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
     }
 
-    public String getEmail() {
-        return email;
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
     }
 
-    public int getRoleId() {
-        return roleId;
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return userId == user.userId && roleId == user.roleId && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(email, user.email);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, firstName, lastName, username, password, email, roleId);
+    }
+
 }
