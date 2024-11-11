@@ -3,8 +3,13 @@ package stocks.data;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import stocks.data.mappers.StockMapper;
 import stocks.data.mappers.UserMapper;
+import stocks.data.mappers.UserStocksMapper;
+import stocks.models.Stock;
 import stocks.models.User;
+import stocks.models.UserStock;
 
 import java.util.List;
 
@@ -34,8 +39,16 @@ public class UserJdbcTemplateRepository implements UserRepository{
                 + "FROM user "
                 + "WHERE user_id = ?;";
 
-        return jdbcTemplate.query(sql, new UserMapper(), userId).stream()
+        
+
+        User user =  jdbcTemplate.query(sql, new UserMapper(), userId).stream()
                 .findAny().orElse(null);
+
+        if (user != null) {
+            addUserStock(user);
+        }
+
+        return user;
     }
 
 
@@ -115,5 +128,17 @@ public class UserJdbcTemplateRepository implements UserRepository{
         return jdbcTemplate.update("DELETE FROM user WHERE user_id = ?", userId) > 0;
     }
 
+
+    // update to include user stocks
+
+    private void addUserStock(User user) {
+        final String sql = "SELECT s.stock_id, s.stock_name, s.stock_description, s.ticker " +
+                           "FROM stocks s " +
+                           "INNER JOIN user_stocks us ON s.stock_id = us.stock_id " +
+                           "WHERE us.user_id = ?";
+
+        List<Stock> userStocks = jdbcTemplate.query(sql, new StockMapper(), user.getUserId());
+        user.setUserStocks(userStocks);
+    }
 
 }

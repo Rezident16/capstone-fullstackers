@@ -87,4 +87,6 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
         // Finally, delete the message
         return jdbcTemplate.update("DELETE FROM message WHERE message_id = ?", messageId) > 0;
     }
+
+    // Need to add likes to the messages
 }

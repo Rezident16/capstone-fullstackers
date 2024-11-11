@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +39,7 @@ public class User implements UserDetails {
 
     private int roleId;
 
-
+    private List<Stock> userStocks = new ArrayList<>();
 
 //    CONSTRUCTOR
 
@@ -91,7 +92,15 @@ public class User implements UserDetails {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
+    public List<Stock> getUserStocks() {
+        return userStocks;
+    }
+
+    public void setUserStocks(List<Stock> userStocks) {
+        this.userStocks = userStocks;
+    }
+
     public int getRoleId() {
         return roleId;
     }
@@ -100,10 +109,13 @@ public class User implements UserDetails {
         this.roleId = roleId;
     }
 
+
+
     public void setPassword(String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         this.password = passwordEncoder.encode(password);
     }
+
 
     // MIGHT NEED TO CHANGE THIS based on roleId
     @Override
