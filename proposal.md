@@ -110,8 +110,18 @@ Anna is a new investor interested in technology stocks. She uses the Stock Conne
 ![DataBaseImage](https://github.com/user-attachments/assets/6937751a-4c41-49bf-bd3c-66064e70c5d5)
 
 
-# Wire Frame
-![wireFrameImage](wireframe.png)
+# Wire Frames
+## Sign In
+![wireFrameImage](wireframes/Login.png)
+
+## Sign Up
+![wireFrameImage](wireframes/Sign_Up.png)
+
+## Main
+![wireFrameImage](wireframes/Main.png)
+
+## Admin
+![wireFrameImage](wireframes/Admin.png)
 
 ## Validation
 
