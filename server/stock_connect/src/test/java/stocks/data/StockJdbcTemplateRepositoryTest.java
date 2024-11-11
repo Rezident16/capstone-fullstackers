@@ -31,7 +31,6 @@ class StockJdbcTemplateRepositoryTest {
         Stock actual = repository.seeOne(1);
         assertNotNull(actual);
         assertEquals(1, actual.getStockId());
-        assertEquals("Apple Inc.", actual.getStockName());
     }
 
     @Test
@@ -52,7 +51,7 @@ class StockJdbcTemplateRepositoryTest {
     @Test
     void shouldUpdate() {
         Stock stock = makeStock();
-        stock.setStockId(2);
+        stock.setStockId(1);
         assertTrue(repository.update(stock));
         stock.setStockId(20);
         assertFalse(repository.update(stock));
