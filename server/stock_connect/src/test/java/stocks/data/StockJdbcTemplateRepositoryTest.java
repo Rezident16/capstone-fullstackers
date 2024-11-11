@@ -27,7 +27,7 @@ class StockJdbcTemplateRepositoryTest {
     }
 
     @Test
-    void shouldFindApple() {
+    void shouldFind() {
         Stock actual = repository.seeOne(1);
         assertNotNull(actual);
         assertEquals(1, actual.getStockId());
