@@ -23,7 +23,7 @@ create table user (
 );
 
 -- Create stock table
-create table stock (
+create table stocks (
     stock_id int primary key auto_increment,
     stock_name varchar(50),
     stock_description varchar(255),
@@ -38,7 +38,7 @@ create table message (
     stock_id int,
     constraint fk_message_stock_id
         foreign key (stock_id)
-        references stock(stock_id),
+        references stocks(stock_id),
     user_id int,
     constraint fk_message_user_id
         foreign key (user_id)
@@ -55,7 +55,7 @@ create table user_stocks (
     stock_id int,
     constraint fk_user_stock_stock_id
         foreign key (stock_id)
-        references stock(stock_id)
+        references stocks(stock_id)
 );
 
 -- Create likes table
@@ -83,8 +83,8 @@ begin
     alter table user_stocks auto_increment = 1;
     delete from message where message_id > 0;
     alter table message auto_increment = 1;
-    delete from stock where stock_id > 0;
-    alter table stock auto_increment = 1;
+    delete from stocks where stock_id > 0;
+    alter table stocks auto_increment = 1;
     delete from user where user_id > 0;
     alter table user auto_increment = 1;
     delete from roles where role_id > 0;
@@ -98,8 +98,8 @@ begin
     ('John', 'Doe', 'password123', 'johndoe', 'john.doe@example.com', 1),
     ('Jane', 'Smith', 'password123', 'janesmith', 'jane.smith@example.com', 2);
 
-    -- Insert seed data into stock table
-    insert into stock (stock_name, stock_description, ticker) values
+    -- Insert seed data into stocks table
+    insert into stocks (stock_name, stock_description, ticker) values
     ('Apple Inc.', 'Technology company', 'AAPL'),
     ('Tesla Inc.', 'Electric vehicle manufacturer', 'TSLA');
 
@@ -120,3 +120,6 @@ begin
 end //
 
 delimiter ;
+
+-- Call the procedure to set the known good state
+call set_known_good_state();
