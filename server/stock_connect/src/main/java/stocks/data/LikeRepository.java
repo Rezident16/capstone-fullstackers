@@ -3,7 +3,7 @@ package stocks.data;
 import stocks.models.Like;
 
 public interface LikeRepository {
-    boolean add(Like like);
+    Like add(Like like);
 
     boolean update(int likeId);
 

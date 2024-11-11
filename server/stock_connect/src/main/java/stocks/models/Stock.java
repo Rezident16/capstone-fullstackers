@@ -1,6 +1,6 @@
 package stocks.models;
 
-public class Stocks {
+public class Stock {
     private int stockId;
     private String stockName;
     private String description;
