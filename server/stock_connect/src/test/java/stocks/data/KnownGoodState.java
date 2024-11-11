@@ -18,4 +18,5 @@ public class KnownGoodState {
             jdbcTemplate.update("call set_known_good_state();");
         }
     }
+
 }

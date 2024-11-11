@@ -1,8 +1,10 @@
 package stocks.data;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import stocks.models.Like;
 
+@Repository
 public class LikeJdbcTemplateRepository implements LikeRepository{
     private final JdbcTemplate jdbcTemplate;
 
