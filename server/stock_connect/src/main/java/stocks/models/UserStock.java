@@ -1,6 +1,6 @@
 package stocks.models;
 
-public class UserStocks {
+public class UserStock {
     private int userStockId;
     private int userId;
     private int stockId;
