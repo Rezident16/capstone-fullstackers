@@ -11,8 +11,8 @@ public class LikeJdbcTemplateRepository implements LikeRepository{
     }
 
     @Override
-    public boolean add(Like like) {
-        return false;
+    public Like add(Like like) {
+        return null;
     }
 
     @Override
