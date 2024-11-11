@@ -1,16 +1,13 @@
 package stocks.data;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import stocks.data.mappers.StockMapper;
 import stocks.models.Stock;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
@@ -51,15 +48,12 @@ public class StockJdbcTemplateRepository {
         final String sql = "INSERT INTO stocks (stock_name, stock_description, ticker) VALUES (?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        int rowsAffected = jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, stock.getStockName());
-                ps.setString(2, stock.getDescription());
-                ps.setString(3, stock.getTicker());
-                return ps;
-            }
+        int rowsAffected = jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, stock.getStockName());
+            ps.setString(2, stock.getDescription());
+            ps.setString(3, stock.getTicker());
+            return ps;
         }, keyHolder);
 
         if (rowsAffected <= 0) {
