@@ -18,50 +18,53 @@ public class UserJdbcTemplateRepository implements UserRepository{
 
     @Override
     public List<User> findAll() {
-        // limit until we develop a paging solution
-        final String sql = "select user_id, first_name, last_name, username, email, role_id from user limit 1000;";
-        return jdbcTemplate.query(sql, new UserMapper());
+        // The SQL query now needs to include all columns mapped by the UserMapper.
+        final String sql = "SELECT user_id, first_name, last_name, password, username, email, role_id FROM user LIMIT ?";
+
+        int limit = 1000;  // Default limit (this can be adjusted or parameterized)
+
+        return jdbcTemplate.query(sql, new UserMapper(), limit);
     }
 
-    @Transactional
+
     @Override
     public User findById(int userId) {
 
-        final String sql = "select user_id, first_name, last_name, username "
-                + "from user "
-                + "where user_id = ?;";
+        final String sql = "SELECT user_id, first_name, last_name, password, username, email, role_id "
+                + "FROM user "
+                + "WHERE user_id = ?;";
 
         return jdbcTemplate.query(sql, new UserMapper(), userId).stream()
                 .findAny().orElse(null);
     }
 
-    @Transactional
+
+
     @Override
     public User findByUsername(String username) {
 
-        final String sql = "select user_id, first_name, last_name, username "
-                + "from user "
-                + "where username = ?;";
+        final String sql = "select user_id, first_name, last_name, username, password, email, role_id from user where username = ?;";
 
         return jdbcTemplate.query(sql, new UserMapper(), username).stream()
                 .findAny().orElse(null);
     }
 
-    @Transactional
+
     @Override
     public User findByEmail(String email) {
 
-        final String sql = "select user_id, first_name, last_name, username, email"
-                + "from user "
-                + "where email = ?;";
+        final String sql = "SELECT user_id, first_name, last_name, password, username, email, role_id "
+                + "FROM user "
+                + "WHERE email = ?;";
 
         return jdbcTemplate.query(sql, new UserMapper(), email).stream()
                 .findAny().orElse(null);
     }
 
+
     @Override
     public boolean add(User user) {
-        final String sql = "insert into user (first_name, last_name, `password`, username, email, role_id) values "
+        final String sql = "insert into user (first_name, last_name, password, username, email, role_id) values "
                 + "(?,?,?,?,?,?);";
 
         return jdbcTemplate.update(sql,
@@ -79,7 +82,7 @@ public class UserJdbcTemplateRepository implements UserRepository{
         final String sql = "update user set "
                 + "first_name = ?, "
                 + "last_name = ?, "
-                + "`password` = ?, "
+                + "password = ?, "
                 + "username = ?, "
                 + "email = ?, "
                 + "role_id = ? "
@@ -97,8 +100,20 @@ public class UserJdbcTemplateRepository implements UserRepository{
 
     @Override
     public boolean deleteById(int userId) {
-        return jdbcTemplate.update(
-                "delete from user where user_id = ?", userId) > 0;
+        // First, delete all dependent records in related tables
+
+        // Delete likes associated with the user
+        jdbcTemplate.update("DELETE FROM likes WHERE user_id = ?", userId);
+
+        // Delete user_stocks associated with the user
+        jdbcTemplate.update("DELETE FROM user_stocks WHERE user_id = ?", userId);
+
+        // Delete messages associated with the user
+        jdbcTemplate.update("DELETE FROM message WHERE user_id = ?", userId);
+
+        // Finally, delete the user
+        return jdbcTemplate.update("DELETE FROM user WHERE user_id = ?", userId) > 0;
     }
+
 
 }
