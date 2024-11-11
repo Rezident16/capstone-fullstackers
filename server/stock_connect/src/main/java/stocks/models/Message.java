@@ -1,5 +1,7 @@
 package stocks.models;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class Message {
@@ -7,7 +9,7 @@ public class Message {
     private int userId;
     private int stockId;
     private String content;
-    private Date dateOfPost;
+    private Timestamp dateOfPost;
 
     public int getMessageId() {
         return messageId;
@@ -41,11 +43,11 @@ public class Message {
         this.content = content;
     }
 
-    public Date getDateOfPost() {
+    public Timestamp getDateOfPost() {
         return dateOfPost;
     }
 
-    public void setDateOfPost(Date dateOfPost) {
+    public void setDateOfPost(Timestamp dateOfPost) {
         this.dateOfPost = dateOfPost;
     }
 }
