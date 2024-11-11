@@ -5,7 +5,7 @@ import stocks.models.Like;
 public interface LikeRepository {
     boolean add(Like like);
 
-    boolean update(int likeId);
+    boolean update(Like like);
 
     boolean delete(int likeId);
 }

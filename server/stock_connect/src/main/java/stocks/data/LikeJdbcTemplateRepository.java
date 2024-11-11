@@ -12,16 +12,24 @@ public class LikeJdbcTemplateRepository implements LikeRepository{
 
     @Override
     public boolean add(Like like) {
-        return false;
+
+        final String sql = "insert into likes(likes_id, isliked, user_id, message_id) values (?, ?, ?, ?);";
+
+        return jdbcTemplate.update(sql, like.getLikeId(), like.isLiked(), like.getUser().getUserId(), like.getMessage().getMessageId()) > 0;
     }
 
     @Override
-    public boolean update(int likeId) {
-        return false;
+    public boolean update(Like like) {
+        final String sql = "update likes set isliked = ? where likes_id = ? and user_id = ? and message_id = ?;";
+
+        return jdbcTemplate.update(sql, like.isLiked(), like.getLikeId(), like.getUser().getUserId(), like.getMessage().getMessageId()) > 0;
     }
 
     @Override
     public boolean delete(int likeId) {
-        return false;
+
+        final String sql = "delete from likes where likes_id = ?; ";
+
+        return jdbcTemplate.update(sql, likeId) > 0;
     }
 }
