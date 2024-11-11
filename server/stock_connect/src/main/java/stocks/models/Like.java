@@ -6,6 +6,13 @@ public class Like {
     private int userId;
     private int messageId;
 
+    public Like(int likeId, boolean isLiked, int userId, int messageId) {
+        this.likeId = likeId;
+        this.isLiked = isLiked;
+        this.userId = userId;
+        this.messageId = messageId;
+    }
+
     public int getLikeId() {
         return likeId;
     }
