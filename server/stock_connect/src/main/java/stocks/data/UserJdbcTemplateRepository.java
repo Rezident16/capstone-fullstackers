@@ -127,7 +127,7 @@ public class UserJdbcTemplateRepository implements UserRepository{
 
     private void addUserStock(User user) {
         final String sql = "SELECT s.stock_id, s.stock_name, s.stock_description, s.ticker " +
-                           "FROM stocks s " +
+                           "FROM stock s " +
                            "INNER JOIN user_stocks us ON s.stock_id = us.stock_id " +
                            "WHERE us.user_id = ?;";
 
