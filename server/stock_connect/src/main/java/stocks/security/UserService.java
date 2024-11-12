@@ -15,6 +15,8 @@ import stocks.models.AppUser;
 
 import java.util.List;
 
+import javax.validation.ValidationException;
+
 @Service
 public class UserService implements UserDetailsService {
 
@@ -117,11 +119,11 @@ public class UserService implements UserDetailsService {
             result.addMessage("User cannot be null", ResultType.INVALID);
             return result;
         }
-        if (user.getFirstName().length() > 30) {
+        if (user.getFirstName() != null && user.getFirstName().length() > 30) {
             result.addMessage("First Name should be 30 characters long or less", ResultType.INVALID);
         }
 
-        if (user.getLastName().length() > 30) {
+        if (user.getLastName() != null && user.getLastName().length() > 30) {
             result.addMessage("Last Name should be 30 characters long or less", ResultType.INVALID);
         }
 
@@ -138,11 +140,25 @@ public class UserService implements UserDetailsService {
             result.addMessage("Email is required", ResultType.INVALID);
         }
 
-        if (Validations.isValidEmail(user.getEmail())) {
-            result.addMessage("Email is not valid", ResultType.INVALID);
+        if (!user.getEmail().matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")) {
+            result.addMessage("Invalid email format", ResultType.INVALID);
         }
 
+//        Validate duplicate username
+        if (!user.getUsername().isEmpty()) {
+            AppUser exists = repository.findByUsername(user.getUsername());
+            if (exists != null && (user.getUserId() != exists.getUserId())) {
+                result.addMessage("Username already exists", ResultType.INVALID);
+            }
+        }
 
+//        Validate duplicate email
+        if (!user.getEmail().isEmpty()) {
+            AppUser exists = repository.findByUsername(user.getEmail());
+            if (exists != null && (user.getUserId() != exists.getUserId())) {
+                result.addMessage("Email already exists", ResultType.INVALID);
+            }
+        }
 
         return result;
     }
