@@ -4,7 +4,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import stocks.data.mappers.LikeMapper;
 import stocks.data.mappers.MessageMapper;
+import stocks.models.Like;
 import stocks.models.Message;
 
 import java.sql.PreparedStatement;
@@ -47,7 +49,15 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
                 + "from message "
                 + "where stock_id = ?;";
 
-        return jdbcTemplate.query(sql, new MessageMapper(), stockId);
+        List<Message> messages = jdbcTemplate.query(sql, new MessageMapper(), stockId);
+
+        if(!messages.isEmpty()) {
+            for (Message message: messages) {
+                addLikes(message);
+            }
+        }
+
+        return messages;
     }
 
 
@@ -104,4 +114,13 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
     }
 
     // Need to add likes to the messages
+    private void addLikes(Message message) {
+        final String sql = "select l.like_id, l.isliked, l.user_id, l.message_id " +
+                "from likes l " +
+                "inner join message m on m.message_id = l.message_id " +
+                "where m.message_id = ?;";
+
+        List<Like> messageLikes = jdbcTemplate.query(sql, new LikeMapper(), message.getMessageId());
+        message.setLikes(messageLikes);
+    }
 }
