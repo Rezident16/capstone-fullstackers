@@ -13,7 +13,7 @@ public interface UserRepository {
 
     AppUser findByEmail(String email);
 
-    boolean add(AppUser user);
+    AppUser add(AppUser user);
 
     boolean update(AppUser user);
 

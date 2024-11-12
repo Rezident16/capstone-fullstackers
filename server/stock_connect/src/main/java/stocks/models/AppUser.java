@@ -120,7 +120,7 @@ public class AppUser implements UserDetails {
     // MIGHT NEED TO CHANGE THIS based on roleId
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(roleId == 1 ? "ROLE_ADMIN" : "ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority(roleId == 1 ? "ADMIN" : "USER"));
     }
 
     @Override

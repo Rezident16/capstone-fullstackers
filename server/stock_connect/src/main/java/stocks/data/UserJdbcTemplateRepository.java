@@ -1,6 +1,8 @@
 package stocks.data;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +13,8 @@ import stocks.models.AppUser;
 import stocks.models.Stock;
 import stocks.models.UserStock;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -76,17 +80,27 @@ public class UserJdbcTemplateRepository implements UserRepository{
 
 
     @Override
-    public boolean add(AppUser user) {
+    public AppUser add(AppUser user) {
         final String sql = "insert into user (first_name, last_name, password, username, email, role_id) values "
                 + "(?,?,?,?,?,?);";
 
-        return jdbcTemplate.update(sql,
-                user.getFirstName(),
-                user.getLastName(),
-                user.getPassword(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRoleId()) > 0;
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int rowsAffected = jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getUsername());
+            ps.setString(5, user.getEmail());
+            ps.setInt(6, user.getRoleId());
+            return ps;
+        }, keyHolder);
+
+        if (rowsAffected <= 0) {
+            return null;
+        }
+        user.setUserId(keyHolder.getKey().intValue());
+        return user;
     }
 
     @Override
