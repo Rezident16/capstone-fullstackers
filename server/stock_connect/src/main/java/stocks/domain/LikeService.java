@@ -5,10 +5,6 @@ import stocks.data.LikeRepository;
 import stocks.data.MessageRepository;
 import stocks.data.UserRepository;
 import stocks.models.Like;
-import stocks.models.Message;
-import stocks.models.User;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
