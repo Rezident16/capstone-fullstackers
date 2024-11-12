@@ -35,14 +35,12 @@ public class MessageSockets extends TextWebSocketHandler {
         System.out.println("Disconnected: " + session.getId());
     }
 
-    public void broadcastMessage(String message) {
-        synchronized (sessions) {
-            for (WebSocketSession session : sessions) {
-                try {
-                    session.sendMessage(new TextMessage(message));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+    public void sendMessageToAll(String message) {
+        for (WebSocketSession session : sessions) {
+            try {
+                session.sendMessage(new TextMessage(message));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

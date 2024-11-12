@@ -126,6 +126,7 @@ public class UserJdbcTemplateRepository implements UserRepository{
     }
 
     @Override
+    @Transactional
     public boolean deleteById(int userId) {
         jdbcTemplate.update("DELETE FROM likes WHERE user_id = ?;", userId);
 
@@ -148,5 +149,4 @@ public class UserJdbcTemplateRepository implements UserRepository{
         List<Stock> userStocks = jdbcTemplate.query(sql, new StockMapper(), user.getUserId());
         user.setUserStocks(userStocks);
     }
-
 }
