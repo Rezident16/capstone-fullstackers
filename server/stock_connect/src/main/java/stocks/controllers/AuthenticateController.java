@@ -89,9 +89,9 @@ public class AuthenticateController {
     @PreAuthorize("#userId == principal.id")
     public ResponseEntity<Object> update(@PathVariable int userId, @RequestBody AppUser appUser) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser curr = (AppUser) authentication.getPrincipal();
+        AppUser currentUser = (AppUser) authentication.getPrincipal();
 
-        if (curr.getUserId() == userId) {
+        if (currentUser.getUserId() == userId) {
             Result<AppUser> result = userService.update(appUser);
             if (result.isSuccess()) {
                 return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
