@@ -5,7 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import stocks.models.User;
+import stocks.models.AppUser;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest // Ensure Spring Boot context is loaded for tests
@@ -28,14 +31,14 @@ public class UserJdbcTemplateRepositoryTest {
 
     @Test
     void shouldFindAllUsers() {
-        var users = userRepository.findAll();
+        List<AppUser> users = userRepository.findAll();
         assertNotNull(users);
         assertTrue(users.size() > 0, "The user list should not be empty.");
     }
 
     @Test
     void shouldFindUserById() {
-        User user = userRepository.findById(1);
+        AppUser user = userRepository.findById(1);
         assertNotNull(user, "User should be found.");
         assertEquals(1, user.getUserId(), "User ID should match.");
         assertEquals("John", user.getFirstName(), "First name should match.");
@@ -43,7 +46,7 @@ public class UserJdbcTemplateRepositoryTest {
 
     @Test
     void shouldFindUserByUsername() {
-        User user = userRepository.findByUsername("johndoe");
+        AppUser user = userRepository.findByUsername("johndoe");
         assertNotNull(user, "User should be found by username.");
         assertEquals("johndoe", user.getUsername(), "Username should match.");
         assertEquals("John", user.getFirstName(), "First name should match.");
@@ -51,7 +54,7 @@ public class UserJdbcTemplateRepositoryTest {
 
     @Test
     void shouldFindUserByEmail() {
-        User user = userRepository.findByEmail("janesmith@example.com");
+        AppUser user = userRepository.findByEmail("janesmith@example.com");
         assertNotNull(user, "User should be found by email.");
         assertEquals("janesmith@example.com", user.getEmail(), "Email should match.");
         assertEquals("Jane", user.getFirstName(), "First name should match.");
@@ -59,7 +62,7 @@ public class UserJdbcTemplateRepositoryTest {
 
     @Test
     void shouldAddUser() {
-        User newUser = new User();
+        AppUser newUser = new AppUser();
         newUser.setFirstName("Alice");
         newUser.setLastName("Johnson");
         newUser.setPassword("password123");
@@ -73,24 +76,24 @@ public class UserJdbcTemplateRepositoryTest {
 
     @Test
     void shouldUpdateUser() {
-        User existingUser = userRepository.findByUsername("johndoe");
+        AppUser existingUser = userRepository.findByUsername("johndoe");
         existingUser.setEmail("updatedemail@example.com");
 
         boolean updated = userRepository.update(existingUser);
         assertTrue(updated, "User should be updated successfully.");
 
-        User updatedUser = userRepository.findByUsername("johndoe");
+        AppUser updatedUser = userRepository.findByUsername("johndoe");
         assertEquals("updatedemail@example.com", updatedUser.getEmail(), "Email should be updated.");
     }
 
     @Test
     void shouldDeleteUser() {
-        User existingUser = userRepository.findByUsername("alicejohnson");
+        AppUser existingUser = userRepository.findByUsername("alicejohnson");
         boolean deleted = userRepository.deleteById(existingUser.getUserId());
         assertTrue(deleted);
 
         // Verify the user is deleted
-        User deletedUser = userRepository.findByUsername("alicejohnson");
+        AppUser deletedUser = userRepository.findByUsername("alicejohnson");
         assertNull(deletedUser);
     }
 }

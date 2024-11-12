@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-public class User implements UserDetails {
+public class AppUser implements UserDetails {
 
 //    FIELDS
 
@@ -43,9 +43,9 @@ public class User implements UserDetails {
 
 //    CONSTRUCTOR
 
-    public User() {}
+    public AppUser() {}
 
-    public User(String email, String firstName, String lastName, String password, int roleId, int userId, String username) {
+    public AppUser(String email, String firstName, String lastName, String password, int roleId, int userId, String username) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -80,15 +80,15 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    
+
     public void setUsername(String username) {
         this.username = username;
     }
-    
+
     public String getEmail() {
         return email;
     }
-    
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -104,7 +104,7 @@ public class User implements UserDetails {
     public int getRoleId() {
         return roleId;
     }
-    
+
     public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
@@ -156,7 +156,7 @@ public class User implements UserDetails {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        AppUser user = (AppUser) o;
         return userId == user.userId && roleId == user.roleId && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(email, user.email);
     }
 

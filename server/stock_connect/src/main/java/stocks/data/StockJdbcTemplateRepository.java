@@ -21,19 +21,19 @@ public class StockJdbcTemplateRepository {
     }
 
     public Stock seeOne(int stockId) {
-        final String sql = "SELECT * FROM stocks WHERE stock_id = ?";
+        final String sql = "SELECT * FROM stock WHERE stock_id = ?";
         return jdbcTemplate.query(sql, new StockMapper(), stockId).stream()
                 .findFirst()
                 .orElse(null);
     }
 
     public List<Stock> seeAll() {
-        final String sql = "SELECT * FROM stocks";
+        final String sql = "SELECT * FROM stock";
         return jdbcTemplate.query(sql, new StockMapper());
     }
 
     public boolean update(Stock stock) {
-        final String sql = "UPDATE stocks SET stock_name = ?, stock_description = ?, ticker = ? WHERE stock_id = ?";
+        final String sql = "UPDATE stock SET stock_name = ?, stock_description = ?, ticker = ? WHERE stock_id = ?";
         return jdbcTemplate.update(sql, stock.getStockName(), stock.getDescription(), stock.getTicker(), stock.getStockId()) > 0;
     }
 
@@ -41,11 +41,11 @@ public class StockJdbcTemplateRepository {
         jdbcTemplate.update("DELETE FROM likes WHERE message_id IN (SELECT message_id FROM message WHERE stock_id = ?)", stockId);
         jdbcTemplate.update("DELETE FROM message WHERE stock_id = ?", stockId);
         jdbcTemplate.update("DELETE FROM user_stocks WHERE stock_id = ?", stockId);
-        return jdbcTemplate.update("DELETE FROM stocks WHERE stock_id = ?", stockId) > 0;
+        return jdbcTemplate.update("DELETE FROM stock WHERE stock_id = ?", stockId) > 0;
     }
 
     public Stock add(Stock stock) {
-        final String sql = "INSERT INTO stocks (stock_name, stock_description, ticker) VALUES (?, ?, ?)";
+        final String sql = "INSERT INTO stock (stock_name, stock_description, ticker) VALUES (?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         int rowsAffected = jdbcTemplate.update(con -> {

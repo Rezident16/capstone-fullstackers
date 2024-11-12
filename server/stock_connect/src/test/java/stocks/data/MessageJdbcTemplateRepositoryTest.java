@@ -32,7 +32,7 @@ public class MessageJdbcTemplateRepositoryTest {
         var message = messageRepository.findById(1);
         assertNotNull(message, "Message should be found.");
         assertEquals(1, message.getMessageId(), "Message ID should match.");
-        assertEquals("Great stock!", message.getContent(), "Content should match.");
+        assertEquals("I think Apple stock will go up!", message.getContent(), "Content should match.");
     }
 
     @Test
