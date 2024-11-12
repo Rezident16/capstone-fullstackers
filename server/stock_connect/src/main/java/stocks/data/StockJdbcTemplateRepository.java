@@ -12,7 +12,7 @@ import java.sql.Statement;
 import java.util.List;
 
 @Repository
-public class StockJdbcTemplateRepository {
+public class StockJdbcTemplateRepository implements StockRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
