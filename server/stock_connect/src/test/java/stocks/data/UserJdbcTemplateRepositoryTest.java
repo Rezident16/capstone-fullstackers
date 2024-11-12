@@ -70,8 +70,8 @@ public class UserJdbcTemplateRepositoryTest {
         newUser.setEmail("alice.johnson@example.com");
         newUser.setRoleId(2);
 
-        boolean added = userRepository.add(newUser);
-        assertTrue(added, "User should be added successfully.");
+        AppUser added = userRepository.add(newUser);
+        assertNotNull(added);
     }
 
     @Test
