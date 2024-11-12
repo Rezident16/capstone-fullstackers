@@ -10,7 +10,7 @@ public class Message {
     private int stockId;
     private String content;
     private Timestamp dateOfPost;
-
+    
     public Message() {
     }
 

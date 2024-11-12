@@ -13,7 +13,7 @@ public interface LikeRepository {
 
     List<Like> findByMessageId(int messageId);
 
-    boolean add(Like like);
+    Like add(Like like);
 
     boolean update(Like like);
 

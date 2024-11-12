@@ -3,16 +3,16 @@ package stocks.models;
 public class Like {
     private int likeId;
     private boolean isLiked;
-    private User user;
-    private Message message;
+    private int userId;
+    private int messageId;
 
     public Like(){}
 
-    public Like(int likeId, boolean isLiked, User user, Message message) {
+    public Like(int likeId, boolean isLiked, int userId, int messageId) {
         this.likeId = likeId;
         this.isLiked = isLiked;
-        this.user = user;
-        this.message = message;
+        this.userId = userId;
+        this.messageId = messageId;
     }
 
     public int getLikeId() {
@@ -31,19 +31,19 @@ public class Like {
         isLiked = liked;
     }
 
-    public User getUser() {
-        return user;
+    public int getMessageId() {
+        return messageId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setMessageId(int messageId) {
+        this.messageId = messageId;
     }
 
-    public Message getMessage() {
-        return message;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setMessage(Message message) {
-        this.message = message;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

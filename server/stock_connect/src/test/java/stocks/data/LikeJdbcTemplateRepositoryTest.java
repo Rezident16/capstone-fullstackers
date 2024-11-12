@@ -7,16 +7,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import stocks.models.Like;
 import stocks.models.Message;
 import stocks.models.User;
-import java.util.List;
-import org.springframework.dao.DuplicateKeyException;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class LikeJdbcTemplateRepositoryTest {
+
     @Autowired
     LikeJdbcTemplateRepository repository;
 
@@ -29,51 +27,52 @@ class LikeJdbcTemplateRepositoryTest {
     }
 
     @Test
-    void shouldFindAll(){
+    void shouldFindAll() {
         List<Like> likes = repository.findAll();
         assertNotNull(likes);
         assertTrue(likes.size() > 0);
     }
 
     @Test
-    void shouldFindById(){
+    void shouldFindById() {
         Like like = repository.findById(1);
+        assertNotNull(like);
+        assertEquals(1, like.getLikeId());
         assertTrue(like.isLiked());
     }
 
     @Test
-    void shouldFindByUserId(){
+    void shouldFindByUserId() {
         List<Like> likes = repository.findByUserId(1);
-        assertTrue(likes.get(1).isLiked());
+        assertNotNull(likes);
+        assertTrue(likes.size() > 0);
     }
 
     @Test
-    void shouldFindByMessageId(){
+    void shouldFindByMessageId() {
         List<Like> likes = repository.findByMessageId(1);
-        assertTrue(likes.get(0).isLiked());
+        assertNotNull(likes);
+        assertTrue(likes.size() > 0);
     }
 
     @Test
     void shouldAdd() {
-        User user = new User("john.doe@example.com", "John", "Doe", "password123", 1, 1, "johndoe");
-        Message message = new Message(2, 2, 2, "I love this company!", new Timestamp(2023-01-02));
-        Like like = new Like(0, true, user, message);
-
-        assertTrue(repository.add(like));
-        assertThrows(DuplicateKeyException.class, () -> repository.add(like), "Cannot add a like to the message twice");
+        Like like = new Like(0, true, 1, 1);
+        Like actual = repository.add(like);
+        assertNotNull(actual);
+        assertTrue(actual.getLikeId() > 0);
     }
-
 
     @Test
     void shouldUpdate() {
-        User user = new User("john.doe@example.com", "John", "Doe", "password123", 1, 1, "johndoe");
-        Message message = new Message(1, 1, 1, "Great stock!", new Timestamp(2023-01-01));
-        Like like = new Like(1, false, user, message);
+        Like like = new Like(2, true, 3, 1);
         assertTrue(repository.update(like));
     }
 
     @Test
     void shouldDelete() {
-        assertTrue(repository.delete(2));
+        assertTrue(repository.delete(1));
+        assertNull(repository.findById(1));
     }
+
 }

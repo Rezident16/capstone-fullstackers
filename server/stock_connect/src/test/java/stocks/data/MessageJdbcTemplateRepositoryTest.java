@@ -60,8 +60,8 @@ public class MessageJdbcTemplateRepositoryTest {
         newMessage.setUserId(1);   // John Doe
         newMessage.setDateOfPost(new Timestamp(System.currentTimeMillis()));
 
-        boolean added = messageRepository.add(newMessage);
-        assertTrue(added, "Message should be added successfully.");
+        Message added = messageRepository.add(newMessage);
+        assertNotNull(added);
     }
 
     @Test
