@@ -3,6 +3,7 @@ package stocks.domain;
 import org.springframework.stereotype.Service;
 import stocks.data.MessageRepository;
 import stocks.models.Message;
+import stocks.websockets.MessageSockets;
 
 import java.util.List;
 
@@ -10,9 +11,11 @@ import java.util.List;
 public class MessageService {
 
     private final MessageRepository repository;
+    private final MessageSockets webSocketHandler;
 
-    public MessageService(MessageRepository repository) {
+    public MessageService(MessageRepository repository, MessageSockets webSocketHandler) {
         this.repository = repository;
+        this.webSocketHandler = webSocketHandler;
     }
 
     public Message findById(int messageId) {
@@ -35,6 +38,7 @@ public class MessageService {
 
         message = repository.add(message);
         result.setPayload(message);
+        webSocketHandler.sendMessageToAll("New message created " + message.getContent());
         return result;
     }
 
@@ -54,11 +58,19 @@ public class MessageService {
             result.addMessage(msg, ResultType.NOT_FOUND);
         }
 
+        webSocketHandler.sendMessageToAll("Message updated: " + message.getContent());
+
         return result;
     }
 
     public boolean deleteById(int messageId) {
-        return repository.deleteById(messageId);
+        boolean result = repository.deleteById(messageId);
+        if (result) {
+            webSocketHandler.sendMessageToAll("Message " + messageId + " deleted");
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private Result<Message> validate(Message message) {
