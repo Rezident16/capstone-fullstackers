@@ -23,10 +23,10 @@ public class UserJdbcTemplateRepository implements UserRepository{
 
     @Override
     public List<User> findAll() {
-        // The SQL query now needs to include all columns mapped by the UserMapper.
+
         final String sql = "SELECT user_id, first_name, last_name, password, username, email, role_id FROM user LIMIT ?";
 
-        int limit = 1000;  // Default limit (this can be adjusted or parameterized)
+        int limit = 1000;
 
         return jdbcTemplate.query(sql, new UserMapper(), limit);
     }
@@ -113,19 +113,13 @@ public class UserJdbcTemplateRepository implements UserRepository{
 
     @Override
     public boolean deleteById(int userId) {
-        // First, delete all dependent records in related tables
+        jdbcTemplate.update("DELETE FROM likes WHERE user_id = ?;", userId);
 
-        // Delete likes associated with the user
-        jdbcTemplate.update("DELETE FROM likes WHERE user_id = ?", userId);
+        jdbcTemplate.update("DELETE FROM user_stocks WHERE user_id = ?;", userId);
 
-        // Delete user_stocks associated with the user
-        jdbcTemplate.update("DELETE FROM user_stocks WHERE user_id = ?", userId);
+        jdbcTemplate.update("DELETE FROM message WHERE user_id = ?;", userId);
 
-        // Delete messages associated with the user
-        jdbcTemplate.update("DELETE FROM message WHERE user_id = ?", userId);
-
-        // Finally, delete the user
-        return jdbcTemplate.update("DELETE FROM user WHERE user_id = ?", userId) > 0;
+        return jdbcTemplate.update("DELETE FROM user WHERE user_id = ?;", userId) > 0;
     }
 
 
@@ -135,7 +129,7 @@ public class UserJdbcTemplateRepository implements UserRepository{
         final String sql = "SELECT s.stock_id, s.stock_name, s.stock_description, s.ticker " +
                            "FROM stocks s " +
                            "INNER JOIN user_stocks us ON s.stock_id = us.stock_id " +
-                           "WHERE us.user_id = ?";
+                           "WHERE us.user_id = ?;";
 
         List<Stock> userStocks = jdbcTemplate.query(sql, new StockMapper(), user.getUserId());
         user.setUserStocks(userStocks);
