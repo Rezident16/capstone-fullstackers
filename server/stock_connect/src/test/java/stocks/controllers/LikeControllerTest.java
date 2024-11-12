@@ -3,6 +3,7 @@ package stocks.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import stocks.data.LikeRepository;
 import stocks.data.MessageRepository;
 import stocks.data.UserRepository;
+import stocks.domain.LikeService;
+import stocks.domain.Result;
+import stocks.domain.ResultType;
 import stocks.models.AppUser;
 import stocks.models.Like;
 import stocks.models.Message;
@@ -20,7 +24,7 @@ import stocks.security.JwtConverter;
 import java.sql.Timestamp;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import static org.mockito.Mockito.when;
@@ -40,6 +44,11 @@ class LikeControllerTest {
 
     @Autowired
     MockMvc mvc;
+
+    @MockBean
+    LikeService service;
+
+    ObjectMapper jsonMapper = new ObjectMapper();
 
     @Autowired
     JwtConverter jwtConverter;
@@ -120,6 +129,74 @@ class LikeControllerTest {
         mvc.perform(request)
                 .andExpect(status().isCreated())
                 .andExpect(content().json(expectedJson));
+    }
+
+
+    // Update
+    @Test
+    void updateShouldReturn204WhenSuccessful() throws Exception {
+        Like updatedLike = new Like(1, true, 2, 1);
+        Result<Like> result = new Result<>();
+        result.setPayload(updatedLike);
+
+        when(service.update(any(Like.class))).thenReturn(result);
+
+        var request = put("/api/message/like/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(updatedLike));
+
+        mvc.perform(request)
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void updateShouldReturn404WhenLikeNotFound() throws Exception {
+        Like updatedLike = new Like(999, true, 2, 1);
+        Result<Like> result = new Result<>();
+        result.addMessage("Like not found", ResultType.NOT_FOUND);
+
+        when(service.update(any(Like.class))).thenReturn(result);
+
+        var request = put("/api/message/like/999")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(updatedLike));
+
+        mvc.perform(request)
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateShouldReturn400WhenIdMismatch() throws Exception {
+        Like updatedLike = new Like(2, true, 2, 1);
+
+        var request = put("/api/message/like/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(updatedLike));
+
+        mvc.perform(request)
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void deleteShouldReturn204WhenSuccessful() throws Exception {
+        Result<Void> result = new Result<>();
+        result.setPayload(null);
+
+        when(service.delete(1)).thenReturn(result.isSuccess());
+
+        mvc.perform(delete("/api/message/like/1"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteShouldReturn404WhenNotFound() throws Exception {
+        Result<Void> result = new Result<>();
+        result.addMessage("Like not found", ResultType.NOT_FOUND);
+
+        when(service.delete(999)).thenReturn(result.isSuccess());
+
+        mvc.perform(delete("/api/message/like/999"))
+                .andExpect(status().isNotFound());
     }
 
 }
