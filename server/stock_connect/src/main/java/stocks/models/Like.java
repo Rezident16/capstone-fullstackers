@@ -6,6 +6,8 @@ public class Like {
     private User user;
     private Message message;
 
+    public Like(){}
+
     public Like(int likeId, boolean isLiked, User user, Message message) {
         this.likeId = likeId;
         this.isLiked = isLiked;

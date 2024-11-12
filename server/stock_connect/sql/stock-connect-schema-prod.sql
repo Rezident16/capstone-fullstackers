@@ -63,5 +63,6 @@ create table likes (
 	message_id int,
 	constraint fk_likes_message_id
 		foreign key(message_id)
-        references message(message_id)
+        references message(message_id),
+	CONSTRAINT unique_user_message UNIQUE (user_id, message_id)
 );
