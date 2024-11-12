@@ -11,6 +11,17 @@ public class Message {
     private int stockId;
     private String content;
     private Timestamp dateOfPost;
+    
+    public Message() {
+    }
+
+    public Message(int messageId, int userId, int stockId, String content, Date dateOfPost) {
+        this.messageId = messageId;
+        this.userId = userId;
+        this.stockId = stockId;
+        this.content = content;
+        this.dateOfPost = (Timestamp) dateOfPost;
+    }
 
     private List<Like> likes;
 

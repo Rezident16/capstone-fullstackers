@@ -54,7 +54,7 @@ create table user_stocks (
 );
 
 create table likes (
-	likes_id int primary key auto_increment,
+	like_id int primary key auto_increment,
     isliked boolean not null,
     user_id int,
     constraint fk_likes_user_id
@@ -63,5 +63,6 @@ create table likes (
 	message_id int,
 	constraint fk_likes_message_id
 		foreign key(message_id)
-        references message(message_id)
+        references message(message_id),
+	CONSTRAINT unique_user_message UNIQUE (user_id, message_id)
 );
