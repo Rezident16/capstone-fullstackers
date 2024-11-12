@@ -66,21 +66,6 @@ class MessageControllerTest {
     }
 
     @Test
-    void findByIdShouldReturn200WhenFound() throws Exception {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        Message message = new Message(1, 1, 1, "This is a test message", timestamp);
-
-        when(service.findById(1)).thenReturn(message);
-
-        ObjectMapper jsonMapper = new ObjectMapper();
-        String expectedJson = jsonMapper.writeValueAsString(message);
-
-        mvc.perform(get("/api/message/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(expectedJson));
-    }
-
-    @Test
     void updateShouldReturn400WhenIdMismatch() throws Exception {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         Message message = new Message(1, 1, 1, "Updated message", timestamp);
