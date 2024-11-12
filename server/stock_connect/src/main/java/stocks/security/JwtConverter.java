@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.userdetails.User;
+import stocks.models.AppUser;
 
 import java.security.Key;
 import java.util.Arrays;
@@ -20,7 +21,7 @@ public class JwtConverter {
     private final int EXPIRATION_MINUTES = 15;
     private final int EXPIRATION_MILLIS = EXPIRATION_MINUTES * 60 * 1000;
 
-    public String getTokenFromUser(User user) {
+    public String getTokenFromUser(AppUser user) {
 
         String authorities = user.getAuthorities().stream()
                 .map(i -> i.getAuthority())
