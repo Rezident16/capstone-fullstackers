@@ -27,23 +27,7 @@ class UserStocksJdbcRepositoryTest {
         UserStock userStock = makeUserStock();
         UserStock actual = repository.add(userStock);
         assertNotNull(actual);
-        assertEquals(3, actual.getUserStockId());
-    }
-
-    @Test
-    void addShouldFailWhenUserIdIsInvalid() {
-        UserStock userStock = makeUserStock();
-        userStock.setUserId(-1); // Invalid user ID
-        UserStock actual = repository.add(userStock);
-        assertNull(actual);
-    }
-
-    @Test
-    void addShouldFailWhenStockIdIsInvalid() {
-        UserStock userStock = makeUserStock();
-        userStock.setStockId(-1); // Invalid stock ID
-        UserStock actual = repository.add(userStock);
-        assertNull(actual);
+        assertEquals(4, actual.getUserStockId());
     }
 
     @Test

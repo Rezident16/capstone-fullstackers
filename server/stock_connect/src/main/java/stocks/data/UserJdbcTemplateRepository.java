@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import stocks.data.mappers.StockMapper;
 import stocks.data.mappers.UserMapper;
 import stocks.data.mappers.UserStocksMapper;
+import stocks.models.AppUser;
 import stocks.models.Stock;
-import stocks.models.User;
 import stocks.models.UserStock;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class UserJdbcTemplateRepository implements UserRepository{
     }
 
     @Override
-    public List<User> findAll() {
+    public List<AppUser> findAll() {
 
         final String sql = "SELECT user_id, first_name, last_name, password, username, email, role_id FROM user LIMIT ?";
 
@@ -33,7 +33,7 @@ public class UserJdbcTemplateRepository implements UserRepository{
 
 
     @Override
-    public User findById(int userId) {
+    public AppUser findById(int userId) {
 
         final String sql = "SELECT user_id, first_name, last_name, password, username, email, role_id "
                 + "FROM user "
@@ -41,7 +41,7 @@ public class UserJdbcTemplateRepository implements UserRepository{
 
         
 
-        User user =  jdbcTemplate.query(sql, new UserMapper(), userId).stream()
+        AppUser user =  jdbcTemplate.query(sql, new UserMapper(), userId).stream()
                 .findAny().orElse(null);
 
         if (user != null) {
@@ -54,7 +54,7 @@ public class UserJdbcTemplateRepository implements UserRepository{
 
 
     @Override
-    public User findByUsername(String username) {
+    public AppUser findByUsername(String username) {
 
         final String sql = "select user_id, first_name, last_name, username, password, email, role_id from user where username = ?;";
 
@@ -64,7 +64,7 @@ public class UserJdbcTemplateRepository implements UserRepository{
 
 
     @Override
-    public User findByEmail(String email) {
+    public AppUser findByEmail(String email) {
 
         final String sql = "SELECT user_id, first_name, last_name, password, username, email, role_id "
                 + "FROM user "
@@ -76,7 +76,7 @@ public class UserJdbcTemplateRepository implements UserRepository{
 
 
     @Override
-    public boolean add(User user) {
+    public boolean add(AppUser user) {
         final String sql = "insert into user (first_name, last_name, password, username, email, role_id) values "
                 + "(?,?,?,?,?,?);";
 
@@ -90,7 +90,7 @@ public class UserJdbcTemplateRepository implements UserRepository{
     }
 
     @Override
-    public boolean update(User user) {
+    public boolean update(AppUser user) {
 
         final String sql = "update user set "
                 + "first_name = ?, "
@@ -125,9 +125,9 @@ public class UserJdbcTemplateRepository implements UserRepository{
 
     // update to include user stocks
 
-    private void addUserStock(User user) {
+    private void addUserStock(AppUser user) {
         final String sql = "SELECT s.stock_id, s.stock_name, s.stock_description, s.ticker " +
-                           "FROM stocks s " +
+                           "FROM stock s " +
                            "INNER JOIN user_stocks us ON s.stock_id = us.stock_id " +
                            "WHERE us.user_id = ?;";
 
