@@ -14,17 +14,14 @@ public class StockService {
         this.repository = repository;
     }
 
-    // Get a single stock by ID
     public Stock seeOne(int stockId) {
         return repository.seeOne(stockId);
     }
 
-    // Get all stocks
     public List<Stock> seeAll() {
         return repository.seeAll();
     }
 
-    // Add a stock
     public Result<Stock> add(Stock stock) {
         Result<Stock> result = validate(stock);
         if (!result.isSuccess()) {
@@ -36,7 +33,6 @@ public class StockService {
         return result;
     }
 
-    // Update a stock
     public Result<Stock> update(Stock stock) {
         Result<Stock> result = validate(stock);
         if (!result.isSuccess()) {
@@ -62,12 +58,10 @@ public class StockService {
         return result;
     }
 
-    // Delete a stock
     public boolean delete(int stockId) {
         return repository.delete(stockId);
     }
 
-    // Validate stock data
     public Result<Stock> validate(Stock stock) {
         Result<Stock> result = new Result<>();
         if (stock.getStockName() == null || stock.getStockName().isBlank()) {

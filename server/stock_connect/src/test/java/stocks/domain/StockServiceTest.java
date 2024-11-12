@@ -21,19 +21,16 @@ class StockServiceTest {
 
     @Test
     void shouldNotAddWhenInvalid() {
-        // Test when stock name is blank
         Stock stock = makeStock();
         stock.setStockName("   ");
         Result<Stock> result = service.add(stock);
         assertEquals(ResultType.INVALID, result.getType());
 
-        // Test when description is null
         stock = makeStock();
         stock.setDescription(null);
         result = service.add(stock);
         assertEquals(ResultType.INVALID, result.getType());
 
-        // Test when ticker is blank
         stock = makeStock();
         stock.setTicker("   ");
         result = service.add(stock);
@@ -96,7 +93,7 @@ class StockServiceTest {
 
         boolean result = service.delete(1);
         assertTrue(result);
-        verify(repository).delete(1); // Verify repository delete was called
+        verify(repository).delete(1);
     }
 
     @Test
