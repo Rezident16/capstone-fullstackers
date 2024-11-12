@@ -38,15 +38,15 @@ public class AuthenticateController {
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@RequestBody Map<String, String> userInfo) {
         AppUser appUser = new AppUser();
-        String password = securityConfig.getEncoder().encode(userInfo.get("password"));
 
         appUser.setFirstName(userInfo.get("firstName"));
         appUser.setLastName(userInfo.get("lastName"));
         appUser.setUsername(userInfo.get("username"));
-        appUser.setPassword(password);
+        appUser.setPassword(userInfo.get("password"));
         appUser.setEmail(userInfo.get("email"));
         appUser.setRoleId(2);
 
+        System.out.println(userInfo.get("password"));
         Result<AppUser> result = userService.add(appUser);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
