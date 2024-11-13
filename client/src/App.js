@@ -4,9 +4,11 @@ import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import Home from "./Home";
 import './App.css';
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar/Navbar";
 import Graph from "./components/graph/Graph";
 import { UserContextProvider } from "./components/context/UserContext";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import Stock from "./components/stock/Stock";
 
 function App() {

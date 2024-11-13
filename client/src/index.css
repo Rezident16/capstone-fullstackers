@@ -32,3 +32,14 @@ nav a:hover{
   text-decoration: none;  
 }
 
+
+.dropdown-toggle-custom {
+  min-width: 150px; 
+}
+
+.dropdown-menu-custom {
+  min-width: 150px; 
+  text-align: center; 
+}
+
+
