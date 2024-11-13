@@ -1,109 +1,216 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useUser } from "./components/context/UserContext"; 
 
-const SignUp = () => {
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+const DEFAULT_USER = {
+  firstName: "",
+  lastName: "",
+  username: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
+
+function SignUp() {
+  const [user, setUser] = useState(DEFAULT_USER);
+  const [errors, setErrors] = useState({});
+  
+  const { login } = useUser(); // Get the login function from UserContext
+  const url = "http://localhost:8080/api/user/signup";
+  const authUrl = "http://localhost:8080/api/user/authenticate";
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const newUser = { ...user };
+    newUser[e.target.name] = e.target.value;
+    setUser(newUser);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    addUser();
+  }
 
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
+  const authenticateUser = async () => {
+    const authUser = {
+      username: user.username,
+      password: user.password
+    }
+    const init = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(authUser),
     }
 
-    console.log('SignUp successful');
-    console.log('Email:', email);
-    console.log('Name:', name);
-    console.log('Username:', username);
-    console.log('Password:', password);
+    const response = await fetch(authUrl, init);
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem("jwt_token", data.jwt_token);
+      login(data.user_id, data.jwt_token)
+      navigate("/");
+    } else {
+      setErrors({ message: "Invalid username or password" });
+    }
+  }
+
+  const addUser = async () => {
+    const init = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    };
+
+    const response = await fetch(url, init);
+    if (response.ok) {
+      const data = await response.json();
+      if (data) {
+        await authenticateUser();
+      } 
+    } else {
+      const data = await response.json();
+      updateErrorText(data);
+    }
+  };
+
+  const updateErrorText = (errors) => {
+    const errorMessages = {
+      username: "Username",
+      email: "Email",
+      password: "Password",
+      firstName: "First Name",
+      lastName: "Last Name",
+    };
+
+    const newErrors = errors.map((error) => {
+      for (const key in errorMessages) {
+        if (error.includes(key)) {
+          return error.replace(key, errorMessages[key]);
+        }
+      }
+      return error;
+    });
+    setErrors(newErrors);
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center vh-100">
+    <div className="d-flex align-items-center justify-content-center">
       <div className="col-md-4">
         <h3 className="text-center">Sign Up</h3>
-        {error && <div className="alert alert-danger">{error}</div>}
+        {errors.length && (
+        <div className="alert alert-danger">
+          <p>The following Errors were found:</p>
+          <ul>
+            {errors.map((error) => (
+              <li key={error}>{error}</li>
+            ))}
+          </ul>
+        </div>
+      )}
         <form onSubmit={handleSubmit} className="border p-4 shadow-sm">
           <div className="mb-3">
-            <label htmlFor="name" className="form-label">Name</label>
+            <label htmlFor="firstName" className="form-label">
+              First Name
+            </label>
             <input
               type="text"
               className="form-control"
-              id="name"
-              placeholder="Enter your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              id="firstName"
+              name="firstName"
+              placeholder="Enter your first name"
+              value={user.firstName}
+              onChange={handleChange}
               required
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email</label>
+            <label htmlFor="lastName" className="form-label">
+              Last Name
+            </label>
             <input
-              type="email"
+              type="text"
               className="form-control"
-              id="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id="lastName"
+              name="lastName"
+              placeholder="Enter your last name"
+              value={user.lastName}
+              onChange={handleChange}
               required
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="username" className="form-label">Username</label>
+            <label htmlFor="username" className="form-label">
+              Username
+            </label>
             <input
               type="text"
               className="form-control"
               id="username"
+              name="username"
               placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={user.username}
+              onChange={handleChange}
               required
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="password" className="form-label">Password</label>
+            <label htmlFor="email" className="form-label">
+              Email
+            </label>
+            <input
+              type="email"
+              className="form-control"
+              id="email"
+              name="email"
+              placeholder="Enter your email"
+              value={user.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
             <input
               type="password"
               className="form-control"
               id="password"
+              name="password"
               placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={user.password}
+              onChange={handleChange}
               required
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+            <label htmlFor="confirmPassword" className="form-label">
+              Confirm Password
+            </label>
             <input
               type="password"
               className="form-control"
               id="confirmPassword"
+              name="confirmPassword"
               placeholder="Confirm your password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={user.confirmPassword}
+              onChange={handleChange}
               required
             />
           </div>
-          {/*
-          <button type="submit" className="btn btn-primary w-100">Sign Up</button>
-          */}
-
-          <Link to="/" className="btn btn-primary w-100">
-                        Sign Up
-            </Link>
+          <button type="submit" className="btn btn-primary w-100">
+            Sign Up
+          </button>
         </form>
         <div className="text-center mt-3">
-          <span>Have an account? <Link to="/login">Sign In</Link></span>
+          <Link to="/login">Already have an account? Log in</Link>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default SignUp;
