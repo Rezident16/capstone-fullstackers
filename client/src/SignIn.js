@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
-    const url = "http://localhost:8080/api/auth/authenticate";
+    const url = "http://localhost:8080/api/user/authenticate";
     const navigate = useNavigate();
     const [errors, setErrors] = useState(null);
     const [user, setUser] = useState({
