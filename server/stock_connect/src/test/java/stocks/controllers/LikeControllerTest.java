@@ -118,7 +118,7 @@ class LikeControllerTest {
         String likeJson = jsonMapper.writeValueAsString(like);
         String expectedJson = jsonMapper.writeValueAsString(expected);
 
-        var request = post("/api/message/like")
+        var request = post("/api/message")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
                 .content(likeJson);
