@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "./components/context/UserContext"; // Import the useUser hook to access the login function
 
 const SignIn = () => {
     const url = "http://localhost:8080/api/user/authenticate";
     const navigate = useNavigate();
+    const { login } = useUser(); // Get the login function from UserContext
     const [errors, setErrors] = useState(null);
     const [user, setUser] = useState({
         username: "",
         password: ""
     });
 
+    // Handle input changes
     const handleChange = (e) => {
         setUser({
             ...user,
@@ -17,6 +20,7 @@ const SignIn = () => {
         });
     };
 
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -30,7 +34,11 @@ const SignIn = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                localStorage.setItem('jwt_token', data.jwt_token);
+                
+                // Use the login function from context to store user info in context and localStorage
+                login(data.user_id, data.jwt_token); // Store userId and jwt_token in context
+
+                // Navigate to home page after successful login
                 navigate('/');
             } else {
                 setErrors('Invalid username or password');

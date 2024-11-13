@@ -1,27 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useUser } from "../context/UserContext";
 
 function MessageInput({ stockId, onMessagePosted }) {
   const [messageContent, setMessageContent] = useState("");
-  const [userId, setUserId] = useState(null);
+  const { userId, jwtToken } = useUser(); 
 
-  // Extract userId from JWT token in localStorage or context
-  useEffect(() => {
-    const token = localStorage.getItem("jwt_token"); // Assuming token is stored in localStorage
-    if (token) {
-      const userIdFromToken = extractUserIdFromToken(token);
-      setUserId(userIdFromToken); // Set userId
-    }
-  }, []);
 
-  // Extract userId from JWT token
-  const extractUserIdFromToken = (token) => {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const decodedData = JSON.parse(atob(base64));
-    return decodedData.user_id; // Return the user_id as a string
-  };
-
-  // Handle change in input field
   const handleChange = (event) => {
     setMessageContent(event.target.value);
   };
@@ -29,15 +13,15 @@ function MessageInput({ stockId, onMessagePosted }) {
   // Handle form submission to post a new message
   const handleSubmit = (event) => {
     event.preventDefault();
-
+  
     if (messageContent.trim() && userId) {
       const newMessage = {
         content: messageContent,
         stockId,
-        userId,
-        dateOfPost: new Date().toISOString(), // Timestamp of the post
+        userId, 
+        dateOfPost: new Date().toISOString(), 
       };
-
+  
       // Send POST request to the backend to create a new message
       fetch("http://localhost:8080/api/message", {
         method: "POST",
@@ -49,13 +33,16 @@ function MessageInput({ stockId, onMessagePosted }) {
         .then((response) => response.json())
         .then((data) => {
           if (onMessagePosted) {
-            onMessagePosted(data); // Notify parent component (MessageList) of the new message
+            onMessagePosted(data); 
           }
-          setMessageContent(""); // Clear the input after posting
+          setMessageContent(""); 
         })
         .catch(console.error);
     }
   };
+  
+
+  console.log("User Context: ", { userId, jwtToken });
 
   return (
     <div className="message-input-container">

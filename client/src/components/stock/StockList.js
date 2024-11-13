@@ -16,7 +16,6 @@ function StockList({ onSelectStock }) {
     <ul className="list-group">
       {stocks.map(stock => (
         <li key={stock.stockId} className="list-group-item d-flex justify-content-between align-items-center">
-          {/* Make the stock name a clickable button */}
           <button
             onClick={() => onSelectStock(stock.stockId)}
             className="btn btn-primary btn-block text-left"
