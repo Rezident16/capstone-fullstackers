@@ -58,8 +58,8 @@ class UserStocksControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userStockJson))
                 .andExpect(status().isInternalServerError());
+        System.out.println();
     }
-
     @Test
     void deleteShouldReturn204WhenSuccessful() throws Exception {
         when(repository.delete(1)).thenReturn(true);
