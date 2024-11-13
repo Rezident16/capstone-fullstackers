@@ -53,12 +53,12 @@ class LikeControllerTest {
 
     String token;
 
-    @BeforeEach
-    void setup(){
-        AppUser appUser = new AppUser("johndoe@example.com", "John", "Doe", "password@2024", 1, 1, "johndoe");
-        when(userRepository.findByUsername("johndoe")).thenReturn(appUser);
-        token = jwtConverter.getTokenFromUser(AppUser);
-    }
+//    @BeforeEach
+//    void setup(){
+//        AppUser appUser = new AppUser("johndoe@example.com", "John", "Doe", "password@2024", 1, 1, "johndoe");
+//        when(userRepository.findByUsername("johndoe")).thenReturn(appUser);
+//        token = jwtConverter.getTokenFromUser(appUser);
+//    }
 
     @Test
     void addShouldReturn400WhenEmpty() throws Exception{
@@ -118,7 +118,7 @@ class LikeControllerTest {
         String likeJson = jsonMapper.writeValueAsString(like);
         String expectedJson = jsonMapper.writeValueAsString(expected);
 
-        var request = post("/api/message")
+        var request = post("/api/message/like")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
                 .content(likeJson);
