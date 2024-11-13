@@ -32,10 +32,10 @@ const Home = () => {
 
         {/* Stock Chart Section*/}
         <div className="stock-chart mb-4">
-          <img 
-            src="https://www.investopedia.com/thmb/5DuVJbOwz12uf88m9DdyTJ-My-k=/750x0/filters:no_upscale():max_bytes(150000):strip_icc()/ScreenShot2019-08-28at1.59.03PM-2e8cb1195471423392644ee65bf2ca31.png" 
-            alt="Stock 1 Chart Placeholder" 
-            className="img-fluid" 
+          <img
+            src="https://www.investopedia.com/thmb/5DuVJbOwz12uf88m9DdyTJ-My-k=/750x0/filters:no_upscale():max_bytes(150000):strip_icc()/ScreenShot2019-08-28at1.59.03PM-2e8cb1195471423392644ee65bf2ca31.png"
+            alt="Stock 1 Chart Placeholder"
+            className="img-fluid"
           />
         </div>
 
@@ -48,10 +48,10 @@ const Home = () => {
                 <li key={index} className="list-group-item border-bottom py-3">
                   {/* Posts*/}
                   <div className="d-flex">
-                  <img 
-                      src="https://media.tenor.com/Ucg45NFV8XkAAAAM/ducks-funny-ducks.gif" 
-                      alt="Avatar" 
-                      className="rounded-circle mr-3" 
+                    <img
+                      src="https://media.tenor.com/Ucg45NFV8XkAAAAM/ducks-funny-ducks.gif"
+                      alt="Avatar"
+                      className="rounded-circle mr-3"
                       style={{ width: '50px', height: '50px' }}
                     />
                     <div>
