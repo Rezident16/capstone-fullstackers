@@ -71,6 +71,7 @@ public class UserService implements UserDetailsService {
 
     // create
     public Result<AppUser> add(AppUser appUser) {
+        System.out.println(appUser.getPassword() + " Password from service");
         Result<AppUser> result = validate(appUser);
         if (!result.isSuccess()) {
             return result;
@@ -81,6 +82,8 @@ public class UserService implements UserDetailsService {
             return result;
         }
 
+
+        appUser.setPassword(encoder.encode(appUser.getPassword()));
         appUser = repository.add(appUser);
         result.setPayload(appUser);
         return result;

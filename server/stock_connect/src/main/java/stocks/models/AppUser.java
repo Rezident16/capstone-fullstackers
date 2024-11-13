@@ -112,12 +112,9 @@ public class AppUser implements UserDetails {
 
 
     public void setPassword(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        this.password = passwordEncoder.encode(password);
+        this.password = password;
     }
 
-
-    // MIGHT NEED TO CHANGE THIS based on roleId
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(roleId == 1 ? "ADMIN" : "USER"));
