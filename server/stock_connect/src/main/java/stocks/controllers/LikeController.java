@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000"})
-@RequestMapping("/api/message")
+@RequestMapping("/api/message/like")
 public class LikeController {
     private final LikeService service;
     public LikeController(LikeService service) {
@@ -23,7 +23,7 @@ public class LikeController {
         return service.findAll();
     }
 
-    @GetMapping("/like/{likeId}")
+    @GetMapping("/{likeId}")
     public ResponseEntity<Like> findById(@PathVariable int likeId){
         Like like = service.findById(likeId);
         if(like == null){
@@ -39,13 +39,13 @@ public class LikeController {
     }
 
 
-    @GetMapping("/like/{messageId}")
+    @GetMapping("/{messageId}")
     public List<Like> findByMessageId(@PathVariable int messageId){
         List<Like> likes = service.findByMessageId(messageId);
         return likes;
     }
 
-    @PostMapping("/like")
+    @PostMapping
     public ResponseEntity<Object> add(@RequestBody Like like){
         Result<Like> result = service.add(like);
         if(result.isSuccess()){
@@ -54,7 +54,7 @@ public class LikeController {
         return ErrorResponse.build(result);
     }
 
-    @PutMapping("/like/{likeId}")
+    @PutMapping("/{likeId}")
     public ResponseEntity<Object> update(@PathVariable int likeId, @RequestBody Like like){
         if(likeId != like.getLikeId()){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -66,7 +66,7 @@ public class LikeController {
         return ErrorResponse.build(result);
     }
 
-    @DeleteMapping("/like/{likeId}")
+    @DeleteMapping("/{likeId}")
     public ResponseEntity<Void> delete(@PathVariable int likeId){
         if(service.delete(likeId)){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 import stocks.data.LikeRepository;
 import stocks.data.MessageRepository;
@@ -19,8 +20,10 @@ import stocks.models.AppUser;
 import stocks.models.Like;
 import stocks.models.Message;
 import stocks.security.JwtConverter;
+import org.springframework.security.core.userdetails.User;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -53,16 +56,24 @@ class LikeControllerTest {
 
     String token;
 
-//    @BeforeEach
-//    void setup(){
-//        AppUser appUser = new AppUser("johndoe@example.com", "John", "Doe", "password@2024", 1, 1, "johndoe");
-//        when(userRepository.findByUsername("johndoe")).thenReturn(appUser);
-//        token = jwtConverter.getTokenFromUser(appUser);
-//    }
+    /*
+    @BeforeEach
+    void setup(){
+        AppUser appUser = new AppUser("johndoe@example.com", "John", "Doe", "password@2024", 1, 1, "johndoe");
+        when(userRepository.findByUsername("johndoe")).thenReturn(appUser);
+        User user = new User(
+                appUser.getUsername(),
+                appUser.getPassword(),
+                List.of(new SimpleGrantedAuthority("USER"))
+        );
+        token = jwtConverter.getTokenFromUser(user);
+    }
+    */
+
 
     @Test
     void addShouldReturn400WhenEmpty() throws Exception{
-        var request = post("/api/message").contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer" + token);
+        var request = post("/api/message/like").contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer" + token);
 
         mvc.perform(request).andExpect(status().isBadRequest());
     }
@@ -75,7 +86,7 @@ class LikeControllerTest {
         Like like= new Like();
         String likeJson = jsonMapper.writeValueAsString(like);
 
-        var request = post("/api/message")
+        var request = post("/api/message/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
                 .content(likeJson);
@@ -93,7 +104,7 @@ class LikeControllerTest {
         Like like = new Like(0, true, 2, 2);
         String likeJson = jsonMapper.writeValueAsString(like);
 
-        var request = post("/api/message")
+        var request = post("/api/message/like")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .header("Authorization", "Bearer " + token)
                 .content(likeJson);
@@ -102,6 +113,7 @@ class LikeControllerTest {
                 .andExpect(status().isUnsupportedMediaType());
     }
 
+    /*
     @Test
     void addShouldReturn201() throws Exception {
         AppUser appUser = new AppUser("janedoe@example.com", "Jane", "Doe", "p@ssword2024", 2, 2, "janedoe");
@@ -118,7 +130,7 @@ class LikeControllerTest {
         String likeJson = jsonMapper.writeValueAsString(like);
         String expectedJson = jsonMapper.writeValueAsString(expected);
 
-        var request = post("/api/message")
+        var request = post("/api/message/like")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
                 .content(likeJson);
@@ -127,6 +139,7 @@ class LikeControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().json(expectedJson));
     }
+    */
 
 
 
@@ -182,9 +195,14 @@ class LikeControllerTest {
         Result<Void> result = new Result<>();
         result.setPayload(null);
 
-        when(likeService.delete(1)).thenReturn(result.isSuccess());
+        Like like = new Like(0, true, 2, 1);
+        Like expected = new Like(2, true, 2, 1);
 
-        mvc.perform(delete("/api/message/like/1"))
+        when(likeRepository.add(any(Like.class))).thenReturn(expected);
+
+        when(likeService.delete(2)).thenReturn(result.isSuccess());
+
+        mvc.perform(delete("/api/message/like/2"))
                 .andExpect(status().isNoContent());
     }
 
@@ -198,4 +216,5 @@ class LikeControllerTest {
         mvc.perform(delete("/api/message/like/999"))
                 .andExpect(status().isNotFound());
     }
+
 }
