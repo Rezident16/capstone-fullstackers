@@ -7,6 +7,8 @@ import stocks.domain.MessageService;
 import stocks.models.Message;
 import stocks.domain.Result;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/api/message")
@@ -25,6 +27,15 @@ public class MessageController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(message);
+    }
+
+    @GetMapping("/stock/{stockId}")
+    public ResponseEntity<List<Message>> findByStockId(@PathVariable int stockId) {
+        List<Message> messages = service.findByStockId(stockId);
+        if (messages == null || messages.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(messages);
     }
 
     @PostMapping

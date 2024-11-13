@@ -55,30 +55,30 @@ public class AuthenticateController {
     }
 
 //    login
-    @PostMapping("/authenticate")
-    public ResponseEntity<Map<String, String>> authenticate(@RequestBody Map<String, String> credentials) {
-
-        UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(credentials.get("username"), credentials.get("password"));
-
-        try {
-            Authentication authentication = authenticationManager.authenticate(authToken);
-
-            if (authentication.isAuthenticated()) {
-                String jwtToken = jwtConverter.getTokenFromUser((User) authentication.getPrincipal());
-
-                HashMap<String, String> map = new HashMap<>();
-                map.put("jwt_token", jwtToken);
-
-                return new ResponseEntity<>(map, HttpStatus.OK);
-            }
-
-        } catch (AuthenticationException ex) {
-            System.out.println(ex);
-        }
-
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-    }
+//    @PostMapping("/authenticate")
+//    public ResponseEntity<Map<String, String>> authenticate(@RequestBody Map<String, String> credentials) {
+//
+//        UsernamePasswordAuthenticationToken authToken =
+//                new UsernamePasswordAuthenticationToken(credentials.get("username"), credentials.get("password"));
+//
+//        try {
+//            Authentication authentication = authenticationManager.authenticate(authToken);
+//
+//            if (authentication.isAuthenticated()) {
+////                String jwtToken = jwtConverter.getTokenFromUser((User) authentication.getPrincipal());
+//
+//                HashMap<String, String> map = new HashMap<>();
+//                map.put("jwt_token", jwtToken);
+//
+//                return new ResponseEntity<>(map, HttpStatus.OK);
+//            }
+//
+//        } catch (AuthenticationException ex) {
+//            System.out.println(ex);
+//        }
+//
+//        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//    }
 
     @GetMapping("/{userId}")
     public AppUser findById(@PathVariable int userId) {
