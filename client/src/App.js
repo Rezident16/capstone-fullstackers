@@ -7,6 +7,7 @@ import './App.css';
 import Navbar from "./components/Navbar";
 import Graph from "./components/graph/Graph";
 import { UserContextProvider } from "./components/context/UserContext";
+import Stock from "./components/stock/Stock";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/register" element={<SignUp />} />
           <Route path="/" element={<Home />} />
           <Route path="/graph" element={<Graph />} />
+          <Route path="/stock/:stockId" element={<Stock/>} />
         </Routes>
       </Router>
     </UserContextProvider>
