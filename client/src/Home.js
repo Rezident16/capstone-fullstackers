@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MessageList from './components/messages/MessageList';
 import StockList from './components/stock/StockList';
+import AddStocks from './components/AddStock';
 
 const Home = () => {
   const [stockPrice, setStockPrice] = useState(150);
@@ -20,6 +21,7 @@ const Home = () => {
     <div className="d-flex">
       {/* Sidebar */}
       <div className="sidebar p-3 bg-light" style={{ width: '200px' }}>
+        <AddStocks />
         <h4>Stocks</h4>
         {/* Pass onSelectStock method to StockList */}
         <StockList onSelectStock={onSelectStock} />
