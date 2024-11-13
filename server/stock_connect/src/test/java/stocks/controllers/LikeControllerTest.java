@@ -3,7 +3,6 @@ package stocks.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +24,7 @@ import java.sql.Timestamp;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import static org.mockito.Mockito.when;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class LikeControllerTest {
     @MockBean
-    LikeRepository repository;
+    LikeRepository likeRepository;
 
     @MockBean
     UserRepository userRepository;
@@ -42,13 +42,11 @@ class LikeControllerTest {
     @MockBean
     MessageRepository messageRepository;
 
+    @MockBean
+    LikeService likeService;
+
     @Autowired
     MockMvc mvc;
-
-    @MockBean
-    LikeService service;
-
-    ObjectMapper jsonMapper = new ObjectMapper();
 
     @Autowired
     JwtConverter jwtConverter;
@@ -106,7 +104,6 @@ class LikeControllerTest {
 
     @Test
     void addShouldReturn201() throws Exception {
-
         AppUser appUser = new AppUser("janedoe@example.com", "Jane", "Doe", "p@ssword2024", 2, 2, "janedoe");
         when(userRepository.findById(2)).thenReturn(appUser);
 
@@ -115,7 +112,7 @@ class LikeControllerTest {
 
         Like like = new Like(0, true, 2, 1);
         Like expected = new Like(1, true, 2, 1);
-        when(repository.add(any(Like.class))).thenReturn(expected);
+        when(likeRepository.add(any(Like.class))).thenReturn(expected);
 
         ObjectMapper jsonMapper = new ObjectMapper();
         String likeJson = jsonMapper.writeValueAsString(like);
@@ -132,14 +129,16 @@ class LikeControllerTest {
     }
 
 
+
     // Update
     @Test
     void updateShouldReturn204WhenSuccessful() throws Exception {
+
         Like updatedLike = new Like(1, true, 2, 1);
         Result<Like> result = new Result<>();
         result.setPayload(updatedLike);
 
-        when(service.update(any(Like.class))).thenReturn(result);
+        when(likeService.update(any(Like.class))).thenReturn(result);
 
         var request = put("/api/message/like/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -155,7 +154,7 @@ class LikeControllerTest {
         Result<Like> result = new Result<>();
         result.addMessage("Like not found", ResultType.NOT_FOUND);
 
-        when(service.update(any(Like.class))).thenReturn(result);
+        when(likeService.update(any(Like.class))).thenReturn(result);
 
         var request = put("/api/message/like/999")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -177,12 +176,13 @@ class LikeControllerTest {
                 .andExpect(status().isConflict());
     }
 
+    // delete
     @Test
     void deleteShouldReturn204WhenSuccessful() throws Exception {
         Result<Void> result = new Result<>();
         result.setPayload(null);
 
-        when(service.delete(1)).thenReturn(result.isSuccess());
+        when(likeService.delete(1)).thenReturn(result.isSuccess());
 
         mvc.perform(delete("/api/message/like/1"))
                 .andExpect(status().isNoContent());
@@ -193,10 +193,9 @@ class LikeControllerTest {
         Result<Void> result = new Result<>();
         result.addMessage("Like not found", ResultType.NOT_FOUND);
 
-        when(service.delete(999)).thenReturn(result.isSuccess());
+        when(likeService.delete(999)).thenReturn(result.isSuccess());
 
         mvc.perform(delete("/api/message/like/999"))
                 .andExpect(status().isNotFound());
     }
-
 }

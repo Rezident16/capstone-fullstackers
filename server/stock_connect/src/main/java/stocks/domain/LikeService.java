@@ -48,6 +48,7 @@ public class LikeService {
         }
 
         like = repository.add(like);
+
         result.setPayload(like);
         return result;
     }
