@@ -15,10 +15,7 @@ function Graph({ stock }) {
   const [bars, setBars] = useState([]);
   const [time, setTime] = useState("1D");
 
-  if (!stock) {
-    return null;
-  }
-
+  
   useEffect(() => {
     async function fetchStockBars(stock, time) {
       const bars = await getStockInfo(stock, time);
@@ -32,8 +29,10 @@ function Graph({ stock }) {
     }
     fetchStockBars(stock, time);
   }, [stock, time]);
-
-  console.log(bars[0]);
+  
+  if (!stock) {
+    return null;
+  }
 
   return (
     <div>
