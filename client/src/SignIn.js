@@ -1,57 +1,72 @@
-import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const url = "http://localhost:8080/api/user/authenticate";
+    const navigate = useNavigate();
+    const [errors, setErrors] = useState(null);
+    const [user, setUser] = useState({
+        username: "",
+        password: ""
+    });
 
-    const handleSubmit = (e) => {
+    const handleChange = (e) => {
+        setUser({
+            ...user,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Username:', username);
-        console.log('Password:', password);
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('jwt_token', data.jwt_token);
+                navigate('/');
+            } else {
+                setErrors('Invalid username or password');
+            }
+        } catch (error) {
+            setErrors('An error occurred. Please try again.');
+        }
     };
 
     return (
-        <div className="d-flex align-items-center justify-content-center vh-100">
-            <div className="col-md-4">
-                <h3 className="text-center">Sign In</h3>
-                <form onSubmit={handleSubmit} className="border p-4 shadow-sm">
-                    <div className="mb-3">
-                        <label htmlFor="username" className="form-label">Username</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="username"
-                            placeholder="Enter your username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="password" className="form-label">Password</label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            id="password"
-                            placeholder="Enter your password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    {/*
-                    <button type="submit" className="btn btn-primary w-100">Sign In</button>
-                    */}
-                    
-                    <Link to="/" className="btn btn-primary w-100">
-                        Sign In
-                    </Link>
-                </form>
-                <div className="text-center mt-3">
-                    <span>Don't have an account? <Link to="/register">Sign Up here</Link></span>
+        <div>
+            <h2>Sign In</h2>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>Username:</label>
+                    <input
+                        type="text"
+                        name="username"
+                        value={user.username}
+                        onChange={handleChange}
+                        required
+                    />
                 </div>
-            </div>
+                <div>
+                    <label>Password:</label>
+                    <input
+                        type="password"
+                        name="password"
+                        value={user.password}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                {errors && <p style={{ color: 'red' }}>{errors}</p>}
+                <button type="submit">Sign In</button>
+            </form>
         </div>
     );
 };

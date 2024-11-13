@@ -80,7 +80,6 @@ public class AppUser implements UserDetails {
         this.lastName = lastName;
     }
 
-
     public void setUsername(String username) {
         this.username = username;
     }
