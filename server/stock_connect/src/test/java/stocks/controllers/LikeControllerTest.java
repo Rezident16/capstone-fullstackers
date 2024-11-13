@@ -46,12 +46,12 @@ class LikeControllerTest {
 
     String token;
 
-    @BeforeEach
-    void setup(){
-        AppUser appUser = new AppUser("johndoe@example.com", "John", "Doe", "password@2024", 1, 1, "johndoe");
-        when(userRepository.findByUsername("johndoe")).thenReturn(appUser);
-        token = jwtConverter.getTokenFromUser(appUser);
-    }
+//    @BeforeEach
+//    void setup(){
+//        AppUser appUser = new AppUser("johndoe@example.com", "John", "Doe", "password@2024", 1, 1, "johndoe");
+//        when(userRepository.findByUsername("johndoe")).thenReturn(appUser);
+//        token = jwtConverter.getTokenFromUser(appUser);
+//    }
 
     @Test
     void addShouldReturn400WhenEmpty() throws Exception{
