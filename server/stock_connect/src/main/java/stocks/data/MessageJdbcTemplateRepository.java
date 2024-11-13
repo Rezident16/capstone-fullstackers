@@ -4,8 +4,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import stocks.data.mappers.LikeMapper;
 import stocks.data.mappers.MessageMapper;
+import stocks.data.mappers.UserMapper;
+import stocks.models.AppUser;
 import stocks.models.Like;
 import stocks.models.Message;
 
@@ -44,6 +48,7 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
 
 
     @Override
+    @Transactional
     public List<Message> findByStockId(int stockId) {
         final String sql = "select message_id, content, date_of_post, stock_id, user_id "
                 + "from message "
@@ -54,6 +59,7 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
         if(!messages.isEmpty()) {
             for (Message message: messages) {
                 addLikes(message);
+                addUser(message);
             }
         }
 
@@ -122,5 +128,16 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
 
         List<Like> messageLikes = jdbcTemplate.query(sql, new LikeMapper(), message.getMessageId());
         message.setLikes(messageLikes);
+    }
+
+    private void addUser(Message message) {
+        final String sql = "select u.user_id, u.username, u.password, u.first_name, u.last_name, u.email, u.role_id " +
+                "from user u " +
+                "inner join message m on m.user_id = u.user_id " +
+                "where m.message_id = ?;";
+
+        AppUser messageUser = jdbcTemplate.query(sql, new UserMapper(), message.getUserId()).stream()
+                .findAny().orElse(null);
+        message.setAppUser(messageUser);
     }
 }
