@@ -1,0 +1,12 @@
+@url = http://localhost:3000/api/message
+
+### Find all likes (Happy Path)
+GET {{url}} HTTP/1.1
+
+###
+
+### Find like by ID (Happy Path)
+GET {{url}}/like/1 HTTP/1.1
+
+### Find like by ID (Unhappy Path - Not Found)
+GET {{url}}/like/999 HTTP/1.1

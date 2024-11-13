@@ -42,14 +42,14 @@ public class LikeController {
         return likes;
     }
 
-    @GetMapping("/{messageId}")
+    @GetMapping("/like/{messageId}")
     public List<Like> findByMessageId(@PathVariable int messageId){
         List<Like> likes = service.findByMessageId(messageId);
 
         return likes;
     }
 
-    @PostMapping
+    @PostMapping("/like")
     public ResponseEntity<Object> add(@RequestBody Like like){
         Result<Like> result = service.add(like);
         if(result.isSuccess()){
