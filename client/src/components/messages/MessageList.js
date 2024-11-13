@@ -39,7 +39,7 @@ function MessageList({ stockId, userId }) {
           <tbody>
             {messages.map(message => (
               <tr key={message.messageId}>
-                <td>{message.userId}</td>
+                <td>{message.userid}</td>
                 <td>{message.content}</td>
                 <td>{new Date(message.dateOfPost).toLocaleString()}</td>
                 <td>{message.likes ? message.likes.length : 0}</td>
