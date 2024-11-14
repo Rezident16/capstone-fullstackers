@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 const MessageList = ({ stockId }) => {
   const [messages, setMessages] = useState([]);
   const [userLikes, setUserLikes] = useState([]);
+  const [messageLikes, setMessageLikes] = useState({});
   const [received, setReceived] = useState(null);
   const [isUpdate, setIsUpdate] = useState(false);
   const [updateMessageId, setupdateMessageId] = useState(0);
@@ -47,6 +48,27 @@ const MessageList = ({ stockId }) => {
         .catch(console.error);
     }
   }, [userId, jwtToken]);
+
+    // Fetch likes count for each message
+    useEffect(() => {
+      const fetchLikesForMessages = async () => {
+        const likesData = {};
+        for (const message of messages) {
+          const response = await fetch(`http://localhost:8080/api/message/like/${message.messageId}`);
+          if (response.ok) {
+            const data = await response.json();
+            const likeCount = data.filter(like => like.liked).length;
+            const dislikeCount = data.filter(like => !like.liked).length;
+            likesData[message.messageId] = { likeCount, dislikeCount };
+          }
+        }
+        setMessageLikes(likesData);
+      };
+  
+      if (messages.length) {
+        fetchLikesForMessages();
+      }
+    }, [messages]);
 
   const handleNewMessage = (newMessage) => {
     setMessages((prevMessages) => [newMessage, ...prevMessages]);
@@ -143,6 +165,7 @@ const MessageList = ({ stockId }) => {
   
   const toggleLike = async (messageId, likedStatus) => {
     const existingLike = userLikes.find((like) => like.messageId === messageId);
+    let updatedLikesData = { ...messageLikes };
   
     if (existingLike) {
       if (likedStatus === "like") {
@@ -159,13 +182,13 @@ const MessageList = ({ stockId }) => {
           );
   
           if (response.ok) {
-            // Remove the like from frontend state
             setUserLikes((prevLikes) =>
               prevLikes.filter((like) => like.likeId !== existingLike.likeId)
             );
+            updatedLikesData[messageId].likeCount--;
           }
         } else if (existingLike.liked === false) {
-          // If message is disliked, and user clicks like, update the like to true (like the message)
+          // If message is disliked, and user clicks like, update to like
           const updatedLike = { ...existingLike, liked: true };
   
           const response = await fetch(
@@ -181,12 +204,13 @@ const MessageList = ({ stockId }) => {
           );
   
           if (response.ok) {
-            // Update the like status in frontend state
             setUserLikes((prevLikes) =>
               prevLikes.map((like) =>
                 like.likeId === existingLike.likeId ? { ...like, liked: true } : like
               )
             );
+            updatedLikesData[messageId].likeCount++;
+            updatedLikesData[messageId].dislikeCount--;
           }
         }
       } else if (likedStatus === "dislike") {
@@ -203,13 +227,13 @@ const MessageList = ({ stockId }) => {
           );
   
           if (response.ok) {
-            // Remove the dislike from frontend state
             setUserLikes((prevLikes) =>
               prevLikes.filter((like) => like.likeId !== existingLike.likeId)
             );
+            updatedLikesData[messageId].dislikeCount--;
           }
         } else if (existingLike.liked === true) {
-          // If message is liked, and user clicks dislike, update the like to false (dislike the message)
+          // If message is liked, and user clicks dislike, update to dislike
           const updatedLike = { ...existingLike, liked: false };
   
           const response = await fetch(
@@ -225,12 +249,13 @@ const MessageList = ({ stockId }) => {
           );
   
           if (response.ok) {
-            // Update the like status in frontend state
             setUserLikes((prevLikes) =>
               prevLikes.map((like) =>
                 like.likeId === existingLike.likeId ? { ...like, liked: false } : like
               )
             );
+            updatedLikesData[messageId].likeCount--;
+            updatedLikesData[messageId].dislikeCount++;
           }
         }
       }
@@ -254,11 +279,17 @@ const MessageList = ({ stockId }) => {
       if (response.ok) {
         const addedLike = await response.json();
         setUserLikes((prevLikes) => [...prevLikes, addedLike]);
+  
+        if (likedStatus === "like") {
+          updatedLikesData[messageId].likeCount++;
+        } else {
+          updatedLikesData[messageId].dislikeCount++;
+        }
       }
     }
-  };
   
-
+    setMessageLikes(updatedLikesData);
+  };
 
   return (
     <section className="container-fluid pl-0">
@@ -330,37 +361,52 @@ const MessageList = ({ stockId }) => {
                     </div>
                   </div>
   
-                  {/* Subcard section for like and dislike */}
-                  <div
-                    className="subcard d-flex justify-content-start align-items-center p-2"
-                    style={{
-                      borderTop: "1px solid #ddd",
-                      backgroundColor: "#f8f9fa",
-                      borderBottomLeftRadius: "4px",
-                      borderBottomRightRadius: "4px",
-                    }}
-                  >
-                  <img
-                    src={
-                      isLikedByUser(message.messageId) === true
-                        ? thumbsUpF
-                        : thumbsUp
-                    }
-                    alt="Like"
-                    style={{ width: "24px", cursor: "pointer", marginRight: "16px" }}
-                    onClick={() => toggleLike(message.messageId, "like")}
-                  />
-                  <img
-                    src={
-                      isLikedByUser(message.messageId) === false
-                        ? thumbsDownF
-                        : thumbsDown
-                    }
-                    alt="Dislike"
-                    style={{ width: "24px", cursor: "pointer" }}
-                    onClick={() => toggleLike(message.messageId, "dislike")}
-                  />
-                  </div>
+                    {/* Subcard section for like and dislike */}
+                    <div
+                      className="subcard d-flex justify-content-start align-items-center p-2"
+                      style={{
+                        borderTop: "1px solid #ddd",
+                        backgroundColor: "#f8f9fa",
+                        borderBottomLeftRadius: "4px",
+                        borderBottomRightRadius: "4px",
+                      }}
+                    >
+                      <img
+                        src={
+                          isLikedByUser(message.messageId) === true
+                            ? thumbsUpF
+                            : thumbsUp
+                        }
+                        alt="Like"
+                        style={{
+                          width: "24px",
+                          cursor: "pointer",
+                          marginLeft: "16px",
+                          marginRight: "8px",
+                        }}
+                        onClick={() => toggleLike(message.messageId, "like")}
+                      />
+                      <span>{messageLikes[message.messageId]?.likeCount || 0}</span>
+                      
+                      <img
+                        src={
+                          isLikedByUser(message.messageId) === false
+                            ? thumbsDownF
+                            : thumbsDown
+                        }
+                        alt="Dislike"
+                        style={{
+                          width: "24px",
+                          cursor: "pointer",
+                          marginLeft: "16px",
+                        }}
+                        onClick={() => toggleLike(message.messageId, "dislike")}
+                      />
+                      <span style={{ marginLeft: "8px", marginRight: "16px" }}>
+                        {messageLikes[message.messageId]?.dislikeCount || 0}
+                      </span>
+                    </div>
+
                 </>
               )}
             </div>
