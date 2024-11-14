@@ -54,7 +54,7 @@ create table user_stocks (
 );
 
 create table likes (
-	like_id int primary key auto_increment,
+	likes_id int primary key auto_increment,
     isliked boolean not null,
     user_id int,
     constraint fk_likes_user_id
@@ -119,7 +119,7 @@ begin
         (3, 2, 3);
     
     -- Likes
-    insert into likes (like_id, isliked, user_id, message_id) values
+    insert into likes (likes_id, isliked, user_id, message_id) values
         (1, true, 1, 2),
         (2, false, 2, 1),
         (3, true, 3, 3);

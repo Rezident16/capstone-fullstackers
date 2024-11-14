@@ -1,15 +1,15 @@
 package stocks.data.mappers;
 
 import org.springframework.jdbc.core.RowMapper;
-import stocks.models.AppUser;
+import stocks.models.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserMapper implements RowMapper<AppUser> {
+public class UserMapper implements RowMapper<User> {
     @Override
-    public AppUser mapRow(ResultSet resultSet, int i) throws SQLException {
-        AppUser user = new AppUser();
+    public User mapRow(ResultSet resultSet, int i) throws SQLException {
+        User user = new User();
         user.setUserId(resultSet.getInt("user_id"));
         user.setFirstName(resultSet.getString("first_name"));
         user.setLastName(resultSet.getString("last_name"));

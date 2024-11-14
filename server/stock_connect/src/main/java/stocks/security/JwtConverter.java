@@ -6,7 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.userdetails.User;
-import stocks.models.AppUser;
 
 import java.security.Key;
 import java.util.Arrays;
