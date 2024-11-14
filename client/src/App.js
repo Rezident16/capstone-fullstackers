@@ -11,8 +11,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import Stock from "./components/stock/Stock";
 import AddStockForm from "./components/stock/AddStockForm";
+import { useEffect, useState } from "react";
 
 function App() {
+
   return (
     <UserContextProvider>
       <Router>
@@ -24,6 +26,7 @@ function App() {
           <Route path="/graph" element={<Graph />} />
           <Route path="/stock/:stockId" element={<Stock/>} />
           <Route path="/stock/add" element={<AddStockForm />} />
+          <Route path="/stock/:stockId/edit" element={<AddStockForm/>} />
         </Routes>
       </Router>
     </UserContextProvider>

@@ -135,8 +135,8 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
                 "from user u " +
                 "inner join message m on m.user_id = u.user_id " +
                 "where m.message_id = ?;";
-
-        AppUser messageUser = jdbcTemplate.query(sql, new UserMapper(), message.getUserId()).stream()
+    
+        AppUser messageUser = jdbcTemplate.query(sql, new UserMapper(), message.getMessageId()).stream()
                 .findAny().orElse(null);
         message.setAppUser(messageUser);
     }
