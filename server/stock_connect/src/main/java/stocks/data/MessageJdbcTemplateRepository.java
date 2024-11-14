@@ -18,13 +18,13 @@ import java.sql.Statement;
 import java.util.List;
 
 @Repository
-public class MessageJdbcTemplateRepository implements MessageRepository{
+public class MessageJdbcTemplateRepository implements MessageRepository {
 
     private final JdbcTemplate jdbcTemplate;
+
     public MessageJdbcTemplateRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-
 
     @Override
     public Message findById(int messageId) {
@@ -36,7 +36,6 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
                 .findAny().orElse(null);
     }
 
-
     @Override
     public List<Message> findByUserId(int userId) {
         final String sql = "select message_id, content, date_of_post, stock_id, user_id "
@@ -45,7 +44,6 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
 
         return jdbcTemplate.query(sql, new MessageMapper(), userId);
     }
-
 
     @Override
     @Transactional
@@ -56,8 +54,8 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
 
         List<Message> messages = jdbcTemplate.query(sql, new MessageMapper(), stockId);
 
-        if(!messages.isEmpty()) {
-            for (Message message: messages) {
+        if (!messages.isEmpty()) {
+            for (Message message : messages) {
                 addLikes(message);
                 addUser(message);
             }
@@ -65,7 +63,6 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
 
         return messages;
     }
-
 
     @Override
     public Message add(Message message) {
@@ -93,12 +90,7 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
     @Override
     public boolean update(Message message) {
 
-        final String sql = "update message set "
-                + "content = ?, "
-                + "date_of_post = ?, "
-                + "stock_id = ?, "
-                + "user_id = ?, "
-                + "where message_id = ?;";
+        final String sql = "UPDATE message SET content = ?, date_of_post = ?, stock_id = ?, user_id = ? WHERE message_id = ?";
 
         return jdbcTemplate.update(sql,
                 message.getContent(),
@@ -135,7 +127,7 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
                 "from user u " +
                 "inner join message m on m.user_id = u.user_id " +
                 "where m.message_id = ?;";
-    
+
         AppUser messageUser = jdbcTemplate.query(sql, new UserMapper(), message.getMessageId()).stream()
                 .findAny().orElse(null);
         message.setAppUser(messageUser);
