@@ -111,7 +111,12 @@ const handleSumbit = (e) => {
 
   return (
     <div className="container mt-5">
-      <h3 className="text-center">Add New Stock</h3>
+      {stockId ? (
+        <h3 className="text-center">Update Stock</h3>
+      ): (
+        <h3 className="text-center">Add New Stock</h3>
+      )}
+      
       {errors.length > 0 && (
         <div className="alert alert-danger">
           <p>The following errors were found:</p>
