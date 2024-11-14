@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import MessageInput from "./MessageInput"; // Assuming you have a MessageInput component
+import { w3cwebsocket as W3CWebSocket } from "websocket";
+
 
 const MessageList = ({ stockId, userId }) => {
   const [messages, setMessages] = useState([]);
+  const [recieved, setRecieved] = useState(null);
 
   // Fetch messages only if stockId is provided
   useEffect(() => {
@@ -10,25 +13,41 @@ const MessageList = ({ stockId, userId }) => {
       const url = `http://localhost:8080/api/message/stock/${stockId}`;
       fetch(url)
         .then(response => response.json())
-        .then(data => setMessages(data))
+        .then(data => {
+          const sortedMessages = data.sort((a, b) => new Date(b.dateOfPost) - new Date(a.dateOfPost));
+          setMessages(sortedMessages);
+        })
         .catch(console.error);
     }
-  }, [stockId]);
+  }, [stockId, recieved]);
 
-  // Update message list with new message after posting
   const handleNewMessage = (newMessage) => {
-    setMessages(prevMessages => [newMessage, ...prevMessages]); // Add the new message to the top of the list
+    setMessages(prevMessages => [newMessage, ...prevMessages]);
   };
+
+  useEffect(() => {
+    const client = new W3CWebSocket('ws://localhost:8080/stocks');
+
+    client.onopen = () => {
+      console.log("Connected to the WebSocket server");
+    };
+
+    client.onmessage = async (message) => {
+      setRecieved(message)
+    };
+
+    client.onclose = () => {
+      console.log("Disconnected from the WebSocket server");
+    };
+
+    return () => {
+      client.close();
+    };
+  }, [stockId]);
 
   if (!messages) {
     return <div>Loading...</div>;
   }
-
-  if (messages.length) {
-    console.log(messages[0]['appUser']['username'])
-  
-  }
-
 
   return (
     <section className="container-fluid pl-0">
