@@ -33,6 +33,7 @@ function MessageInput({ stockId, onMessagePosted }) {
         .then((response) => response.json())
         .then((data) => {
           if (onMessagePosted) {
+            console.log(data);
             onMessagePosted(data); 
           }
           setMessageContent(""); 
@@ -42,25 +43,28 @@ function MessageInput({ stockId, onMessagePosted }) {
   };
   
 
-  console.log("User Context: ", { userId, jwtToken });
-
   return (
-    <div className="message-input-container">
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <textarea
-            className="form-control"
-            placeholder="Type your message here"
-            value={messageContent}
-            onChange={handleChange}
-            rows="4"
-            required
-          />
+    <div>
+      {jwtToken ? (
+        <div className="message-input-container">
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <textarea
+                className="form-control"
+                placeholder="Post your thoughts here..."
+                value={messageContent}
+                onChange={handleChange}
+                rows="4"
+                required
+              />
+            </div>
+            <button type="submit" className="btn btn-primary mb-5 pl-4 pr-4">
+              Post
+            </button>
+          </form>
         </div>
-        <button type="submit" className="btn btn-primary">
-          Post Message
-        </button>
-      </form>
+      ) : (null)
+      }
     </div>
   );
 }

@@ -23,7 +23,7 @@ public class LikeController {
         return service.findAll();
     }
 
-    @GetMapping("/{likeId}")
+    @GetMapping("/id/{likeId}")
     public ResponseEntity<Like> findById(@PathVariable int likeId){
         Like like = service.findById(likeId);
         if(like == null){
@@ -54,7 +54,7 @@ public class LikeController {
         return ErrorResponse.build(result);
     }
 
-    @PutMapping("/{likeId}")
+    @PutMapping("/id/{likeId}")
     public ResponseEntity<Object> update(@PathVariable int likeId, @RequestBody Like like){
         if(likeId != like.getLikeId()){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -66,7 +66,7 @@ public class LikeController {
         return ErrorResponse.build(result);
     }
 
-    @DeleteMapping("/{likeId}")
+    @DeleteMapping("/id/{likeId}")
     public ResponseEntity<Void> delete(@PathVariable int likeId){
         if(service.delete(likeId)){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

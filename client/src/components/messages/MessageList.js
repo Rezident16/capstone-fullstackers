@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import MessageInput from "./MessageInput";
+import thumbsUp from '../../assets/thumbsUp.png'; 
+import thumbsUpFill from '../../assets/thumbsUpFill.png'; 
+import { useUser } from "../context/UserContext";
 
-function MessageList({ stockId, userId }) {
+function MessageList({ stockId }) {
   const [messages, setMessages] = useState([]);
+  const [userLikes, setUserLikes] = useState([]);
+  const { userId, jwtToken } = useUser();
 
-  // Fetch messages only if stockId is provided
+  // Fetch messages for the stock
   useEffect(() => {
     if (stockId) {
       const url = `http://localhost:8080/api/message/stock/${stockId}`;
@@ -15,9 +20,60 @@ function MessageList({ stockId, userId }) {
     }
   }, [stockId]);
 
-  // Update message list with new message after posting
+  // Fetch user likes on component mount
+  useEffect(() => {
+    if (userId) {
+      const url = `http://localhost:8080/api/message/like/user/${userId}`;
+      fetch(url, {
+        headers: { Authorization: `Bearer ${jwtToken}` }
+      })
+        .then(response => response.json())
+        .then(data => setUserLikes(data))
+        .catch(console.error);
+    }
+  }, [userId, jwtToken]);
+
+  // Handle new message post
   const handleNewMessage = (newMessage) => {
-    setMessages(prevMessages => [newMessage, ...prevMessages]); // Add the new message to the top of the list
+    setMessages(prevMessages => [newMessage, ...prevMessages]);
+  };
+
+  // Check if a message is liked by the user
+  const isLikedByUser = (messageId) => {
+    const like = userLikes.find(like => like.messageId === messageId);
+    return like && like.liked === true;
+  };
+
+
+  // Toggle like status
+  const toggleLike = async (messageId) => {
+    const liked = isLikedByUser(messageId);
+
+    if (liked) {
+      // Remove like
+      const likeToRemove = userLikes.find(like => like.messageId === messageId);
+      if (likeToRemove) {
+        await fetch(`http://localhost:8080/api/message/like/id/${likeToRemove.likeId}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${jwtToken}` }
+        });
+        setUserLikes(prevLikes => prevLikes.filter(like => like.messageId !== messageId));
+      }
+    } else {
+      // Add like
+      const response = await fetch(`http://localhost:8080/api/message/like`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwtToken}`
+        },
+        body: JSON.stringify({ userId, messageId, isliked: true })
+      });
+      if (response.ok) {
+        const newLike = await response.json();
+        setUserLikes(prevLikes => [...prevLikes, newLike]);
+      }
+    }
   };
 
   return (
@@ -31,6 +87,7 @@ function MessageList({ stockId, userId }) {
           <thead>
             <tr>
               <th>User ID</th>
+              <th></th>
               <th>Content</th>
               <th>Date of Post</th>
               <th>Likes</th>
@@ -40,6 +97,14 @@ function MessageList({ stockId, userId }) {
             {messages.map(message => (
               <tr key={message.messageId}>
                 <td>{message.userId}</td>
+                <td>
+                  <img 
+                    src={isLikedByUser(message.messageId) ? thumbsUpFill : thumbsUp} 
+                    alt="like"
+                    style={{ width: '30px', height: '30px' }}
+                    onClick={() => toggleLike(message.messageId)}
+                  />
+                </td>
                 <td>{message.content}</td>
                 <td>{new Date(message.dateOfPost).toLocaleString()}</td>
                 <td>{message.likes ? message.likes.length : 0}</td>
