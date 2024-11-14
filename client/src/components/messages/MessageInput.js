@@ -33,6 +33,7 @@ function MessageInput({ stockId, onMessagePosted }) {
         .then((response) => response.json())
         .then((data) => {
           if (onMessagePosted) {
+            console.log(data);
             onMessagePosted(data); 
           }
           setMessageContent(""); 

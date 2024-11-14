@@ -10,6 +10,7 @@ import { UserContextProvider } from "./components/context/UserContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Stock from "./components/stock/Stock";
+import AddStockForm from "./components/stock/AddStockForm";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/graph" element={<Graph />} />
           <Route path="/stock/:stockId" element={<Stock/>} />
+          <Route path="/stock/add" element={<AddStockForm />} />
         </Routes>
       </Router>
     </UserContextProvider>
