@@ -10,7 +10,6 @@ function MessageInput({ stockId, onMessagePosted }) {
     setMessageContent(event.target.value);
   };
 
-  // Handle form submission to post a new message
   const handleSubmit = (event) => {
     event.preventDefault();
   
@@ -21,8 +20,6 @@ function MessageInput({ stockId, onMessagePosted }) {
         userId, 
         dateOfPost: new Date().toISOString(), 
       };
-  
-      // Send POST request to the backend to create a new message
       fetch("http://localhost:8080/api/message", {
         method: "POST",
         headers: {

@@ -11,6 +11,8 @@ public class Message {
     private int stockId;
     private String content;
     private Timestamp dateOfPost;
+    private AppUser appUser;
+    
     
     public Message() {
     }
@@ -71,5 +73,13 @@ public class Message {
 
     public void setLikes(List<Like> likes) {
         this.likes = likes;
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
     }
 }

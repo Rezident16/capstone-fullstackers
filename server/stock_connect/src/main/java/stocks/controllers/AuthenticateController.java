@@ -49,11 +49,11 @@ public class AuthenticateController {
         appUser.setEmail(userInfo.get("email"));
         appUser.setRoleId(2);
 
-        System.out.println(userInfo.get("password"));
         Result<AppUser> result = userService.add(appUser);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
         }
+        System.out.println(result.getMessages().toString());
         return ErrorResponse.build(result);
     }
 
