@@ -15,7 +15,7 @@ GET {{url}}/user/4 HTTP/1.1
 ###
 
 // get likes by messageId
-GET {{url}}/1 HTTP/1.1
+GET {{url}}/3 HTTP/1.1
 
 ###
 
