@@ -32,3 +32,25 @@ nav a:hover{
   text-decoration: none;  
 }
 
+
+.dropdown-toggle-custom {
+  min-width: 150px; 
+}
+
+.dropdown-menu-custom {
+  min-width: 150px; 
+  text-align: center; 
+}
+
+header{
+  height:85vh;
+  text-align: center;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('https://images.unsplash.com/photo-1535320903710-d993d3d77d29?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Zm9yZXglMjB0cmFkaW5nfGVufDB8fDB8fHww');
+  background-size:cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color:white;
+}

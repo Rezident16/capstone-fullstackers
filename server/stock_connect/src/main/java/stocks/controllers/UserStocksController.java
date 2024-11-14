@@ -4,17 +4,29 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import stocks.data.UserStocksRepository;
+import stocks.models.Stock;
 import stocks.models.UserStock;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/user-stocks")
 @CrossOrigin
+@RequestMapping("/api/user-stocks")
 public class UserStocksController {
 
     private final UserStocksRepository repository;
 
     public UserStocksController(UserStocksRepository repository) {
         this.repository = repository;
+    }
+
+    @GetMapping("/favorites/{userId}")
+    public ResponseEntity<List<Object[]>> getFavoritesByUserId(@PathVariable int userId) {
+        List<Object[]> favorites = repository.findFavoritesByUserId(userId);
+        if (favorites.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(favorites, HttpStatus.OK);
     }
 
     @PostMapping
@@ -28,9 +40,11 @@ public class UserStocksController {
 
     @DeleteMapping("/{userStockId}")
     public ResponseEntity<Void> delete(@PathVariable int userStockId) {
-        if (repository.delete(userStockId)) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        boolean isDeleted = repository.delete(userStockId);
+        if (isDeleted) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Success: Stock unfavorited
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Error: Stock not found
     }
+
 }

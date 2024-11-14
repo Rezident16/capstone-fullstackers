@@ -10,7 +10,6 @@ export const UserContextProvider = ({ children }) => {
   const [userId, setUserId] = useState(null); 
   const [jwtToken, setJwtToken] = useState(null); 
 
-
   useEffect(() => {
     const savedUserId = localStorage.getItem("user_id");
     const savedToken = localStorage.getItem("jwt_token");
@@ -35,7 +34,7 @@ export const UserContextProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ userId, jwtToken, login, logout }}>
+    <UserContext.Provider value={{ userId, jwtToken, login, logout, setUserId }}>
       {children}
     </UserContext.Provider>
   );
