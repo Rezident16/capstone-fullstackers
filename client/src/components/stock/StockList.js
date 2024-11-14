@@ -16,19 +16,21 @@ function StockList({ onSelectStock }) {
   const navigate = useNavigate();
 
   // Fetch user role for admin privileges
+
   useEffect(() => {
     if (userId) {
       fetch(`http://localhost:8080/api/user/${userId}`)
         .then((response) => response.json())
         .then((data) => {
-          setAdmin(data.roleId === 1);
+          console.log(data)
+          if (data.roleId == 1) {
+            setAdmin(true);
+          }
         })
         .catch(console.error);
     }
   }, [userId]);
     
-    console.log(admin)
-  // Fetch all stocks
   useEffect(() => {
     fetch(url)
       .then((response) => response.json())
