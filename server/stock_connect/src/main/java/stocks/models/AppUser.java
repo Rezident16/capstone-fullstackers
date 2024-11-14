@@ -7,11 +7,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-public class User implements UserDetails {
+public class AppUser implements UserDetails {
 
 //    FIELDS
 
@@ -38,13 +39,13 @@ public class User implements UserDetails {
 
     private int roleId;
 
-
+    private List<Stock> userStocks = new ArrayList<>();
 
 //    CONSTRUCTOR
 
-    public User() {}
+    public AppUser() {}
 
-    public User(String email, String firstName, String lastName, String password, int roleId, int userId, String username) {
+    public AppUser(String email, String firstName, String lastName, String password, int roleId, int userId, String username) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -79,36 +80,43 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    
     public void setUsername(String username) {
         this.username = username;
     }
-    
+
     public String getEmail() {
         return email;
     }
-    
+
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
+    public List<Stock> getUserStocks() {
+        return userStocks;
+    }
+
+    public void setUserStocks(List<Stock> userStocks) {
+        this.userStocks = userStocks;
+    }
+
     public int getRoleId() {
         return roleId;
     }
-    
+
     public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
 
+
+
     public void setPassword(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        this.password = passwordEncoder.encode(password);
+        this.password = password;
     }
 
-    // MIGHT NEED TO CHANGE THIS based on roleId
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(roleId == 1 ? "ROLE_ADMIN" : "ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority(roleId == 1 ? "ADMIN" : "USER"));
     }
 
     @Override
@@ -144,7 +152,7 @@ public class User implements UserDetails {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        AppUser user = (AppUser) o;
         return userId == user.userId && roleId == user.roleId && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(email, user.email);
     }
 

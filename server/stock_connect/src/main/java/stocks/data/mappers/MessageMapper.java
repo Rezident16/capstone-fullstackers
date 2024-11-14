@@ -2,7 +2,6 @@ package stocks.data.mappers;
 
 import org.springframework.jdbc.core.RowMapper;
 import stocks.models.Message;
-import stocks.models.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

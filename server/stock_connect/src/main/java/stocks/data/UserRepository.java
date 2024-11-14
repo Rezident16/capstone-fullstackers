@@ -2,20 +2,20 @@ package stocks.data;
 
 
 import org.springframework.transaction.annotation.Transactional;
-import stocks.models.User;
+import stocks.models.AppUser;
 import java.util.List;
 
 public interface UserRepository {
-    List<User> findAll();
-    User findById(int userId);
+    List<AppUser> findAll();
+    AppUser findById(int userId);
 
-    User findByUsername(String username);
+    AppUser findByUsername(String username);
 
-    User findByEmail(String email);
+    AppUser findByEmail(String email);
 
-    boolean add(User user);
+    AppUser add(AppUser user);
 
-    boolean update(User user);
+    boolean update(AppUser user);
 
     boolean deleteById(int locationId);
 }

@@ -54,7 +54,7 @@ create table user_stocks (
 );
 
 create table likes (
-	likes_id int primary key auto_increment,
+	like_id int primary key auto_increment,
     isliked boolean not null,
     user_id int,
     constraint fk_likes_user_id
@@ -63,5 +63,41 @@ create table likes (
 	message_id int,
 	constraint fk_likes_message_id
 		foreign key(message_id)
-        references message(message_id)
+        references message(message_id),
+	CONSTRAINT unique_user_message UNIQUE (user_id, message_id)
 );
+
+
+insert into roles (role_id, role_name) values
+        (1, 'Chatter'),
+        (2, 'Admin');
+    
+    -- Users
+    insert into user (user_id, first_name, last_name, `password`, username, email, role_id) values
+        (1, 'John', 'Doe', 'password123', 'johndoe', 'johndoe@example.com', 1),
+        (2, 'Jane', 'Smith', 'password456', 'janesmith', 'janesmith@example.com', 2),
+        (3, 'Alice', 'Brown', 'password789', 'alicebrown', 'alicebrown@example.com', 1);
+    
+    -- Stocks
+    insert into stock (stock_id, stock_name, stock_description, ticker) values
+        (1, 'Apple Inc.', 'Technology Company', 'AAPL'),
+        (2, 'Tesla Inc.', 'Electric Vehicle Manufacturer', 'TSLA'),
+        (3, 'Amazon.com', 'E-commerce Giant', 'AMZN');
+    
+    -- Messages
+    insert into message (message_id, content, date_of_post, stock_id, user_id) values
+        (1, 'I think Apple stock will go up!', '2024-11-10 10:15:00', 1, 1),
+        (2, 'Tesla is doing great this quarter!', '2024-11-10 11:20:00', 2, 2),
+        (3, 'Amazon sales are booming.', '2024-11-10 12:30:00', 3, 3);
+    
+    -- User Stocks
+    insert into user_stocks (user_stock_id, user_id, stock_id) values
+        (1, 1, 1),
+        (2, 1, 2),
+        (3, 2, 3);
+    
+    -- Likes
+    insert into likes (like_id, isliked, user_id, message_id) values
+        (1, true, 1, 2),
+        (2, false, 2, 1),
+        (3, true, 3, 3);
