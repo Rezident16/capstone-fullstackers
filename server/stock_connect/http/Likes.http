@@ -24,7 +24,7 @@ POST {{url}} HTTP/1.1
 Content-Type: application/json
 
 {
-    "isliked": true,
+    "isliked": false,
     "userId": 4,
     "messageId": 1
 }
@@ -32,17 +32,17 @@ Content-Type: application/json
 ###
 
 // update a like
-PUT {{url}}/id/4 HTTP/1.1
+PUT {{url}}/id/10 HTTP/1.1
 Content-Type: application/json
 
 {
-    "likeId": 4,
+    "likeId": 10,
     "userId": 4,
-    "messageId": 3,
+    "messageId": 1,
     "liked": true
 }
 
 ###
 
 // delete a like
-DELETE {{url}}/id/1 HTTP/1.1
+DELETE {{url}}/id/5 HTTP/1.1

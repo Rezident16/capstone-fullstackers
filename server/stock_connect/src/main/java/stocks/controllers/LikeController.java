@@ -46,13 +46,17 @@ public class LikeController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> add(@RequestBody Like like){
+    public ResponseEntity<Object> add(@RequestBody Like like) {
+        if (!like.isLiked()) {
+            like.setLiked(true);
+        }
         Result<Like> result = service.add(like);
-        if(result.isSuccess()){
+        if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
         }
         return ErrorResponse.build(result);
     }
+
 
     @PutMapping("/id/{likeId}")
     public ResponseEntity<Object> update(@PathVariable int likeId, @RequestBody Like like){

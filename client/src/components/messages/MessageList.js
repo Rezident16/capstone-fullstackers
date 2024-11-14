@@ -46,35 +46,49 @@ function MessageList({ stockId }) {
 
 
   // Toggle like status
-  const toggleLike = async (messageId) => {
-    const liked = isLikedByUser(messageId);
+const toggleLike = async (messageId) => {
+  const existingLike = userLikes.find(like => like.messageId === messageId);
 
-    if (liked) {
-      // Remove like
-      const likeToRemove = userLikes.find(like => like.messageId === messageId);
-      if (likeToRemove) {
-        await fetch(`http://localhost:8080/api/message/like/id/${likeToRemove.likeId}`, {
-          method: 'DELETE',
-          headers: { Authorization: `Bearer ${jwtToken}` }
-        });
-        setUserLikes(prevLikes => prevLikes.filter(like => like.messageId !== messageId));
-      }
-    } else {
-      // Add like
-      const response = await fetch(`http://localhost:8080/api/message/like`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtToken}`
-        },
-        body: JSON.stringify({ userId, messageId, isliked: true })
-      });
-      if (response.ok) {
-        const newLike = await response.json();
-        setUserLikes(prevLikes => [...prevLikes, newLike]);
-      }
+  if (existingLike) {
+    // Toggle the current like status
+    const newLikedStatus = !existingLike.liked;
+
+    // Update the like status in the backend
+    const response = await fetch(`http://localhost:8080/api/message/like/id/${existingLike.likeId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtToken}`
+      },
+      body: JSON.stringify({ ...existingLike, liked: newLikedStatus })
+    });
+
+    if (response.ok) {
+      // Update the like status in the frontend state
+      setUserLikes(prevLikes => 
+        prevLikes.map(like => 
+          like.likeId === existingLike.likeId ? { ...like, liked: newLikedStatus } : like
+        )
+      );
     }
-  };
+  } else {
+    // Add a new like with liked: true
+    const response = await fetch(`http://localhost:8080/api/message/like`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwtToken}`
+      },
+      body: JSON.stringify({ userId, messageId, liked: true })
+    });
+    
+    if (response.ok) {
+      const newLike = await response.json();
+      setUserLikes(prevLikes => [...prevLikes, newLike]);
+    }
+  }
+};
+
 
   return (
     <section className="container-fluid pl-0">
