@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class StockJdbcTemplateRepositoryTest {
 
-    final static int NEXT_STOCK_ID = 4;
+    final static int NEXT_STOCK_ID = 3;
 
     @Autowired
     StockJdbcTemplateRepository repository;
@@ -27,7 +27,7 @@ class StockJdbcTemplateRepositoryTest {
     }
 
     @Test
-    void shouldFind() {
+    void shouldFindApple() {
         Stock actual = repository.seeOne(1);
         assertNotNull(actual);
         assertEquals(1, actual.getStockId());

@@ -11,7 +11,7 @@ public interface MessageRepository {
 
     List<Message> findByStockId(int stockId);
 
-    Message add(Message message);
+    boolean add(Message message);
 
     boolean update(Message message);
 

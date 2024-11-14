@@ -22,9 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf().disable();
+        http.csrf().disable(); // 1
 
-        http.authorizeRequests() 
+        http.authorizeRequests() // 2
                 .antMatchers("/authenticate").permitAll()
                 .antMatchers("/refresh_token").authenticated()
                 .antMatchers(HttpMethod.GET, "/sighting", "/sighting/*").permitAll()
@@ -32,8 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/sighting/*").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/sighting/*").hasRole("ADMIN")
                 .and()
-                .addFilter(new JwtRequestFilter(authenticationManager(), converter))
-                .sessionManagement()
+                .addFilter(new JwtRequestFilter(authenticationManager(), converter)) // 3
+                .sessionManagement() // 4
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 

@@ -1,16 +1,10 @@
 package stocks.data;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import stocks.data.mappers.LikeMapper;
 import stocks.data.mappers.MessageMapper;
-import stocks.models.Like;
 import stocks.models.Message;
 
-import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -49,39 +43,20 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
                 + "from message "
                 + "where stock_id = ?;";
 
-        List<Message> messages = jdbcTemplate.query(sql, new MessageMapper(), stockId);
-
-        if(!messages.isEmpty()) {
-            for (Message message: messages) {
-                addLikes(message);
-            }
-        }
-
-        return messages;
+        return jdbcTemplate.query(sql, new MessageMapper(), stockId);
     }
 
 
     @Override
-    public Message add(Message message) {
+    public boolean add(Message message) {
         final String sql = "insert into message (content, date_of_post, stock_id, user_id) values "
                 + "(?,?,?,?);";
 
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        int rowsAffected = jdbcTemplate.update(con -> {
-            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, message.getContent());
-            ps.setTimestamp(2, message.getDateOfPost());
-            ps.setInt(3, message.getStockId());
-            ps.setInt(4, message.getUserId());
-            return ps;
-        }, keyHolder);
-
-        if (rowsAffected <= 0) {
-            return null;
-        }
-
-        message.setMessageId(keyHolder.getKey().intValue());
-        return message;
+        return jdbcTemplate.update(sql,
+                message.getContent(),
+                message.getDateOfPost(),
+                message.getStockId(),
+                message.getUserId()) > 0;
     }
 
     @Override
@@ -111,16 +86,5 @@ public class MessageJdbcTemplateRepository implements MessageRepository{
 
         // Finally, delete the message
         return jdbcTemplate.update("DELETE FROM message WHERE message_id = ?", messageId) > 0;
-    }
-
-    // Need to add likes to the messages
-    private void addLikes(Message message) {
-        final String sql = "select l.like_id, l.isliked, l.user_id, l.message_id " +
-                "from likes l " +
-                "inner join message m on m.message_id = l.message_id " +
-                "where m.message_id = ?;";
-
-        List<Like> messageLikes = jdbcTemplate.query(sql, new LikeMapper(), message.getMessageId());
-        message.setLikes(messageLikes);
     }
 }
