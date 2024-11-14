@@ -8,6 +8,7 @@ import stocks.models.UserStock;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 
 @Repository
 public class UserStocksJdbcRepository implements UserStocksRepository {
@@ -17,6 +18,28 @@ public class UserStocksJdbcRepository implements UserStocksRepository {
     public UserStocksJdbcRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
+
+    @Override
+    public List<Object[]> findFavoritesByUserId(int userId) {
+        final String sql =
+                "SELECT us.user_stock_id, s.stock_id, s.stock_name, s.stock_description, s.ticker " +
+                        "FROM user_stocks us " +
+                        "INNER JOIN stock s ON us.stock_id = s.stock_id " +
+                        "WHERE us.user_id = ?";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+
+            return new Object[] {
+                    rs.getInt("user_stock_id"),
+                    rs.getInt("stock_id"),
+                    rs.getString("stock_name"),
+                    rs.getString("stock_description"),
+                    rs.getString("ticker")
+            };
+        }, userId);
+    }
+
 
 
     @Override
