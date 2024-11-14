@@ -82,13 +82,29 @@ insert into roles (role_id, role_name) values
     insert into stock (stock_id, stock_name, stock_description, ticker) values
         (1, 'Apple Inc.', 'Technology Company', 'AAPL'),
         (2, 'Tesla Inc.', 'Electric Vehicle Manufacturer', 'TSLA'),
-        (3, 'Amazon.com', 'E-commerce Giant', 'AMZN');
+        (3, 'Amazon.com', 'E-commerce Giant', 'AMZN'),
+        (4, 'Microsoft Corporation', 'Software Company', 'MSFT'),
+        (5, 'Alphabet Inc.', 'Parent Company of Google', 'GOOGL'),
+        (6, 'Facebook, Inc.', 'Social Media Company', 'FB'),
+        (7, 'Netflix, Inc.', 'Streaming Service', 'NFLX'),
+        (8, 'NVIDIA Corporation', 'Graphics Processing Units', 'NVDA'),
+        (9, 'PayPal Holdings, Inc.', 'Online Payments', 'PYPL'),
+        (10, 'Adobe Inc.', 'Software Company', 'ADBE');
     
+    -- Messages
     -- Messages
     insert into message (message_id, content, date_of_post, stock_id, user_id) values
         (1, 'I think Apple stock will go up!', '2024-11-10 10:15:00', 1, 1),
         (2, 'Tesla is doing great this quarter!', '2024-11-10 11:20:00', 2, 2),
-        (3, 'Amazon sales are booming.', '2024-11-10 12:30:00', 3, 3);
+        (3, 'Amazon sales are booming.', '2024-11-10 12:30:00', 3, 3),
+        (4, 'Microsoft is releasing new products.', '2024-11-11 09:00:00', 4, 1),
+        (5, 'Google is investing in AI.', '2024-11-11 10:30:00', 5, 2),
+        (6, 'Facebook is changing its name to Meta.', '2024-11-11 11:45:00', 6, 3),
+        (7, 'Netflix is adding more original content.', '2024-11-12 08:20:00', 7, 1),
+        (8, 'NVIDIA is leading in GPU technology.', '2024-11-12 09:50:00', 8, 2),
+        (9, 'PayPal is expanding its services.', '2024-11-12 11:10:00', 9, 3),
+        (10, 'Adobe is launching new creative tools.', '2024-11-12 12:40:00', 10, 1);
+        (11, 'What do yall think about Apple', '2024-11-10 10:16:00', 1, 2)
     
     -- User Stocks
     insert into user_stocks (user_stock_id, user_id, stock_id) values
