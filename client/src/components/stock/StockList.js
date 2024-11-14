@@ -39,7 +39,6 @@ function StockList({ onSelectStock }) {
       .catch(console.error);
   }, []);
 
-  // Fetch favorited stocks for the logged-in user
   useEffect(() => {
     if (userId) {
       fetch(favoritesUrl)
@@ -56,7 +55,7 @@ function StockList({ onSelectStock }) {
         })
         .catch(console.error);
     }
-  }, [userId]);
+  }, [userId, favoritedStocks]);
 
   // Handle favoriting a stock
   const handleFavorite = (stockId) => {
@@ -76,20 +75,18 @@ function StockList({ onSelectStock }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        setFavoritedStocks((prev) => [...prev, data]); // Add to favorited stocks
+        setFavoritedStocks((prev) => [...prev, data]);
         setStocks((prevStocks) =>
           prevStocks.map((stock) =>
             stock.stockId === data.stockId
               ? { ...stock, isFavorited: true }
               : stock
           )
-        ); // Mark stock as favorited in all stocks
+        );
       })
       .catch(console.error);
-    window.location.reload();
   };
 
-  // Handle unfavoriting a stock
   const handleUnfavorite = (userStockId) => {
     fetch(`${unfavoriteStockUrl}/${userStockId}`, {
       method: "DELETE",
@@ -98,23 +95,21 @@ function StockList({ onSelectStock }) {
         if (response.ok) {
           setFavoritedStocks((prev) =>
             prev.filter((stock) => stock.userStockId !== userStockId)
-          ); // Remove from favorited stocks
+          );
           setStocks((prevStocks) =>
             prevStocks.map((stock) =>
               stock.userStockId === userStockId
                 ? { ...stock, isFavorited: false }
                 : stock
             )
-          ); // Mark stock as unfavorited in all stocks
+          );
         } else {
           console.error("Error unfavoriting stock");
         }
       })
       .catch(console.error);
-    window.location.reload();
   };
 
-  // Combine favorited stocks with all stocks but make sure non-favorited stocks only appear in the "All Stocks" section
   const nonFavoritedStocks = stocks.filter(
     (stock) => !favoritedStocks.some((fav) => fav.stockId === stock.stockId)
   );

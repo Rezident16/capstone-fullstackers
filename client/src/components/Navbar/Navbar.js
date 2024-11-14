@@ -14,7 +14,9 @@ function Navbar() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{borderBottom: 
+      "1px solid grey"
+    }}>
       <div className="container-fluid d-flex justify-content-between">
         <Link to="/" className="navbar-brand">Home</Link>
 
