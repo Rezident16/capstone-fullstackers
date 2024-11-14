@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MessageList from "../messages/MessageList";
 import Graph from "../graph/Graph";
 import { useUser } from "../context/UserContext";
@@ -15,6 +15,7 @@ function Stock() {
 
     const {userId} = useUser();
     const [admin, setAdmin] = useState(false);
+    const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -41,6 +42,17 @@ function Stock() {
 
     if (!stock) {
         return <div>Loading...</div>
+    }
+
+    const handleDelete = async () => {
+        const init = {
+            method: 'DELETE',
+        }
+
+        const response = await fetch(`http://localhost:8080/api/stocks/${stockId}`, init);
+        if (response.ok) {
+            navigate("/stock");
+        }
     }
 
     return(<div className="main-content p-4" style={{ flex: 1 }}>
