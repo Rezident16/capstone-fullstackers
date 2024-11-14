@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import MessageList from "../messages/MessageList";
 import Graph from "../graph/Graph";
 import { useUser } from "../context/UserContext";
-import { useNavigate } from 'react-router-dom';
 
 
 function Stock() {
@@ -17,7 +16,6 @@ function Stock() {
 
     const {userId} = useUser();
     const [admin, setAdmin] = useState(false);
-    const navigate = useNavigate();
 
 
   useEffect(() => {
