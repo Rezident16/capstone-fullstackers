@@ -153,7 +153,7 @@ class LikeControllerTest {
 
         when(likeService.update(any(Like.class))).thenReturn(result);
 
-        var request = put("/api/message/like/1")
+        var request = put("/api/message/like/id/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(updatedLike));
 
@@ -169,7 +169,7 @@ class LikeControllerTest {
 
         when(likeService.update(any(Like.class))).thenReturn(result);
 
-        var request = put("/api/message/like/999")
+        var request = put("/api/message/like/id/999")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(updatedLike));
 
@@ -181,7 +181,7 @@ class LikeControllerTest {
     void updateShouldReturn400WhenIdMismatch() throws Exception {
         Like updatedLike = new Like(2, true, 2, 1);
 
-        var request = put("/api/message/like/1")
+        var request = put("/api/message/like/id/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(updatedLike));
 
@@ -202,7 +202,7 @@ class LikeControllerTest {
 
         when(likeService.delete(2)).thenReturn(result.isSuccess());
 
-        mvc.perform(delete("/api/message/like/2"))
+        mvc.perform(delete("/api/message/like/id/2"))
                 .andExpect(status().isNoContent());
     }
 
@@ -213,7 +213,7 @@ class LikeControllerTest {
 
         when(likeService.delete(999)).thenReturn(result.isSuccess());
 
-        mvc.perform(delete("/api/message/like/999"))
+        mvc.perform(delete("/api/message/like/id/999"))
                 .andExpect(status().isNotFound());
     }
 
