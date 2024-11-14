@@ -6,6 +6,7 @@ import thumbsUp from '../../assets/thumbsUp.png';
 import thumbsUpF from '../../assets/thumbsUpF.png';
 import thumbsDown from '../../assets/thumbsDown.png';
 import thumbsDownF from '../../assets/thumbsDownF.png';
+import { useNavigate } from "react-router-dom";
 
 const MessageList = ({ stockId }) => {
   const [messages, setMessages] = useState([]);
@@ -14,6 +15,7 @@ const MessageList = ({ stockId }) => {
   const [isUpdate, setIsUpdate] = useState(false);
   const [updateMessageId, setupdateMessageId] = useState(0);
   const [messageContent, setMessageContent] = useState("");
+  const navigate = useNavigate();
 
   const { userId, jwtToken } = useUser();
 
@@ -59,6 +61,7 @@ const MessageList = ({ stockId }) => {
 
     client.onmessage = async (message) => {
       setReceived(message);
+      navigate(`/stock/${stockId}`);
     };
 
     client.onclose = () => {

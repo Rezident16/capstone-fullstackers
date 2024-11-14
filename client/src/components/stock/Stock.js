@@ -81,7 +81,7 @@ function Stock() {
 
     return(<div className="main-content p-4" style={{ flex: 1 }}>
         <div className="stock-price mb-4">
-            {admin ? (<button className="btn btn-primary">Edit</button>) : (null)}
+            {admin ? (<button className="btn btn-primary" onClick={() => navigate(`/stock/${stockId}/edit`)}>Edit</button>) : (null)}
             {admin ? (<button className="btn btn-danger ml-2" onClick={() => handleDeleteStock(stockId)}>Delete</button>) : (null)}
         </div>
 
