@@ -47,9 +47,8 @@ public class LikeController {
 
     @PostMapping
     public ResponseEntity<Object> add(@RequestBody Like like) {
-        if (!like.isLiked()) {
-            like.setLiked(true);
-        }
+        like.setLiked(like.isLiked());
+
         Result<Like> result = service.add(like);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
