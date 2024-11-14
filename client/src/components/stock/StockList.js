@@ -30,7 +30,7 @@ function StockList({ onSelectStock }) {
         .catch(console.error);
     }
   }, [userId]);
-    
+
   useEffect(() => {
     fetch(url)
       .then((response) => response.json())
@@ -73,16 +73,16 @@ function StockList({ onSelectStock }) {
       },
       body: JSON.stringify(stockToFavorite),
     })
-    .then(response => response.json())
-    .then(data => {
-      setFavoritedStocks(prev => [...prev, data]); // Add to favorited stocks
-      setStocks(prevStocks => 
-        prevStocks.map(stock => 
-          stock.stockId === data.stockId ? { ...stock, isFavorited: true } : stock
-        )
-      ); // Mark stock as favorited in all stocks
-    })
-    .catch(console.error);
+      .then(response => response.json())
+      .then(data => {
+        setFavoritedStocks(prev => [...prev, data]); // Add to favorited stocks
+        setStocks(prevStocks =>
+          prevStocks.map(stock =>
+            stock.stockId === data.stockId ? { ...stock, isFavorited: true } : stock
+          )
+        ); // Mark stock as favorited in all stocks
+      })
+      .catch(console.error);
     window.location.reload()
   };
 
@@ -91,19 +91,19 @@ function StockList({ onSelectStock }) {
     fetch(`${unfavoriteStockUrl}/${userStockId}`, {
       method: 'DELETE',
     })
-    .then(response => {
-      if (response.ok) {
-        setFavoritedStocks(prev => prev.filter(stock => stock.userStockId !== userStockId)); // Remove from favorited stocks
-        setStocks(prevStocks => 
-          prevStocks.map(stock => 
-            stock.userStockId === userStockId ? { ...stock, isFavorited: false } : stock
-          )
-        ); // Mark stock as unfavorited in all stocks
-      } else {
-        console.error("Error unfavoriting stock");
-      }
-    })
-    .catch(console.error);
+      .then(response => {
+        if (response.ok) {
+          setFavoritedStocks(prev => prev.filter(stock => stock.userStockId !== userStockId)); // Remove from favorited stocks
+          setStocks(prevStocks =>
+            prevStocks.map(stock =>
+              stock.userStockId === userStockId ? { ...stock, isFavorited: false } : stock
+            )
+          ); // Mark stock as unfavorited in all stocks
+        } else {
+          console.error("Error unfavoriting stock");
+        }
+      })
+      .catch(console.error);
     window.location.reload()
   };
 
@@ -137,7 +137,7 @@ function StockList({ onSelectStock }) {
                 {/* Unfavorite Button */}
                 <button
                   onClick={() => handleUnfavorite(stock.userStockId)}
-                  className="btn btn-outline-danger btn-sm ml-2"
+                  className="btn btn-outline-danger btn-sm ml-2 px-0"
                   style={{ width: '15%' }}
                 >
                   ❌
@@ -163,7 +163,7 @@ function StockList({ onSelectStock }) {
                 {/* Favorite Button */}
                 <button
                   onClick={() => handleFavorite(stock.stockId)}
-                  className="btn btn-outline-warning btn-sm ml-2"
+                  className="btn btn-outline-warning btn-sm ml-2 px-0"
                   style={{ width: '15%' }}
                 >
                   ❤️
