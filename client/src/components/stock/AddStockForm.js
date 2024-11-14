@@ -1,15 +1,48 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../context/UserContext';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 const AddStockForm = () => {
   const [stock, setStock] = useState({
+    stockId: 0,
     stockName: '',
-    stockDescription: '',
+    description: '',
     ticker: ''
   });
-  const [errors, setErrors] = useState([]);
+
+  const {userId} = useUser();
   const navigate = useNavigate();
+  const [errors, setErrors] = useState([]);
+
+  useEffect(() => {
+    if (userId) {
+      fetch(`http://localhost:8080/api/user/${userId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.roleId != 1) {
+            // navigate("/");
+          }
+        })
+        .catch(console.error);
+      }
+    }, [userId]);
+    
+
+    const stockId = useParams().stockId;
+
+    useEffect(() => {
+        if (stockId) {
+            fetch(`http://localhost:8080/api/stocks/${stockId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    setStock(data)})
+                .catch(console.error);
+        }
+    }, [stockId])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,29 +52,62 @@ const AddStockForm = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const response = await fetch('http://localhost:8080/api/stocks', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(stock)
-    });
-
-    if (response.ok) {
-      setStock({
-        stockName: '',
-        stockDescription: '',
-        ticker: ''
-      });
-      setErrors([]);
-      navigate('/');
-    } else {
-      const data = await response.json();
-      setErrors([data.message || 'An error occurred while adding the stock']);
+  const addStock = async () => {
+    const init = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(stock),
     }
-  };
+
+    const response = await fetch('http://localhost:8080/api/stocks', init);
+    if (response.ok) {
+        setStock({
+            stockName: '',
+            description: '',
+            ticker: ''
+        });
+        setErrors([]);
+        navigate('/');
+    } else {
+        const data = await response.json();
+        setErrors([data.message || 'An error occurred while adding the stock']);
+    }
+}
+
+const updateStock = async () => {
+    const init = {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(stock),
+    }
+
+    const response = await fetch(`http://localhost:8080/api/stocks/${stockId}`, init);
+    if (response.ok) {
+        setStock({
+            stockName: '',
+            description: '',
+            ticker: ''
+        });
+        setErrors([]);
+        navigate('/');
+    } else {
+        const data = await response.json();
+        setErrors([data.message || 'An error occurred while updating the stock']);
+    }
+}
+
+const handleSumbit = (e) => {
+    e.preventDefault();
+    if (stockId) {
+        updateStock();
+    } else {
+        addStock();
+    }
+}
 
   return (
     <div className="container mt-5">
@@ -56,7 +122,7 @@ const AddStockForm = () => {
           </ul>
         </div>
       )}
-      <form onSubmit={handleSubmit} className="border p-4 shadow-sm">
+      <form onSubmit={handleSumbit} className="border p-4 shadow-sm">
         <div className="mb-3">
           <label htmlFor="stockName" className="form-label">Stock Name</label>
           <input
@@ -71,13 +137,13 @@ const AddStockForm = () => {
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="stockDescription" className="form-label">Stock Description</label>
+          <label htmlFor="description" className="form-label">Stock Description</label>
           <textarea
             className="form-control"
-            id="stockDescription"
-            name="stockDescription"
+            id="description"
+            name="description"
             placeholder="Enter stock description"
-            value={stock.stockDescription}
+            value={stock.description}
             onChange={handleChange}
             rows="3"
             required
@@ -96,7 +162,7 @@ const AddStockForm = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary w-100">Add Stock</button>
+        <button type="submit" className="btn btn-primary w-100">{stockId ? "Update Stock" : "Add Stock"}</button>
       </form>
     </div>
   );

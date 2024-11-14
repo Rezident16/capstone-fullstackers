@@ -10,20 +10,21 @@ function StockList({ onSelectStock }) {
   const {userId} = useUser();
   const [admin, setAdmin] = useState(false);
 
+
   useEffect(() => {
     if (userId) {
       fetch(`http://localhost:8080/api/user/${userId}`)
         .then((response) => response.json())
         .then((data) => {
           console.log(data)
-          setAdmin(data.roleId == 1);
+          if (data.roleId == 1) {
+            setAdmin(true);
+          }
         })
         .catch(console.error);
       }
     }, [userId]);
     
-    console.log(admin)
-  // Fetch all stocks
   useEffect(() => {
     fetch(url)
       .then((response) => response.json())

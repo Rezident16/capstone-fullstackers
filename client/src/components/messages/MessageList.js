@@ -49,6 +49,8 @@ const MessageList = ({ stockId, userId }) => {
     return <div>Loading...</div>;
   }
 
+  console.log(messages)
+
   return (
     <section className="container-fluid pl-0">
       <MessageInput stockId={stockId} userId={userId} onMessagePosted={handleNewMessage} />

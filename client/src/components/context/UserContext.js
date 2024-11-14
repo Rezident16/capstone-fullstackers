@@ -14,7 +14,6 @@ export const UserContextProvider = ({ children }) => {
   useEffect(() => {
     const savedUserId = localStorage.getItem("user_id");
     const savedToken = localStorage.getItem("jwt_token");
-    const savedUserRole = localStorage.getItem("role_id");
     if (savedUserId && savedToken) {
       setUserId(savedUserId);
       setJwtToken(savedToken);
