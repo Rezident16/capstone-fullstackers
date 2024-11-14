@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import './buttons.css'
 
 function StockList({ onSelectStock }) {
   const { userId } = useUser();
@@ -119,7 +120,9 @@ function StockList({ onSelectStock }) {
   );
 
   return (
-    <div>
+    <div className="stock-list-main"
+    style={{height: "100%"}}
+    >
       {admin && (
         <div className="list-group-item nav-item">
           <Link to="/stock/add" className="btn btn-info btn-block text-left">
@@ -128,10 +131,10 @@ function StockList({ onSelectStock }) {
         </div>
       )}
 
-      <ul className="list-group nav nav-pills mb-auto"
+      <ul className="list-group nav nav-pills mb-auto stock-list-inner"
       >
         {/* Favorited Stocks - Displayed Above All Stocks */}
-        {favoritedStocks.length > 0 && (
+        {favoritedStocks.length > 0 && userId ? (
           <>
             <h5>Favorited Stocks</h5>
             {favoritedStocks.map((stock) => (
@@ -141,51 +144,60 @@ function StockList({ onSelectStock }) {
               >
                 <button
                   onClick={() => navigate(`/stock/${stock.stockId}`)}
-                  className="btn btn-primary btn-block text-left"
-                  style={{ textAlign: "left", width: "80%" }}
+                  className="stock-item-button"
+                  // style={{ textAlign: "left", width: "100%" }}
                 >
                   {stock.stockName}
                 </button>
                 {/* Unfavorite Button */}
                 <button
                   onClick={() => handleUnfavorite(stock.userStockId)}
-                  className="btn btn-outline-danger btn-sm ml-2 d-flex align-items-center justify-content-center"
-                  style={{ width: "15%" }}
+                  className="favorite-stock-button"
+                  // style={{ width: "15%" }}
                 >
                   <i className="fas fa-times"></i>
                 </button>
               </li>
             ))}
           </>
-        )}
+        ) : (null)}
 
         {/* All Stocks - Below Favorited Stocks */}
         {nonFavoritedStocks.length > 0 && (
-          <>
+           <ul className="list-group nav nav-pills mb-auto stock-list-inner"
+           >
             <h5>All Stocks</h5>
             {nonFavoritedStocks.map((stock) => (
               <li
                 key={stock.stockId}
-                className="list-group-item d-flex justify-content-between align-items-center mb-3"
+                className="list-group-item d-flex justify-content-between align-items-center mb-3 gap-2"
+                // style={{width: "11rem"}}
               >
                 <button
                   onClick={() => navigate(`/stock/${stock.stockId}`)}
-                  className="btn btn-primary btn-block text-left"
-                  style={{ textAlign: "left", width: "80%" }}
+                  // className="btn btn-primary btn-block text-center"
+                  className="stock-item-button"
+                  // style={{ textAlign: "left", width: "100%" }}
                 >
                   {stock.stockName}
                 </button>
                 {/* Favorite Button */}
+                {userId ? (
                 <button
                   onClick={() => handleFavorite(stock.stockId)}
-                  className="btn btn-danger btn-sm ml-2 d-flex align-items-center justify-content-center"
-                  style={{ width: "15%" }}
+                  // className="btn btn-outline-danger btn-sm ml-2 d-flex align-items-center justify-content-center"
+                  className="favorite-stock-button"
+                  // style={{ width: "15%" }}
                 >
                   <i className="fas fa-heart"></i>
                 </button>
+
+                ) : (
+                  null
+                )}
               </li>
             ))}
-          </>
+          </ul>
         )}
       </ul>
     </div>

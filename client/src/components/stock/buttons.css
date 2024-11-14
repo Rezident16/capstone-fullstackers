@@ -1,0 +1,46 @@
+.stock-item-button {
+    background-color: #0d6efd;
+    border: 1px solid #0d6efd;
+    color: #f5f5f5;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 5px;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    width: 12rem;
+}
+
+.stock-item-button:hover {
+    background-color: #f5f5f5;
+    border-color: #0d6efd;
+    color: #0d6efd;
+}
+
+.favorite-stock-button {
+    border: none;
+    background-color: transparent;
+    color: red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.favorite-stock-button:hover {
+    color: #0d6efd;
+}
+
+.stock-list-main {
+    width: 15rem;
+}
+
+.fas {
+    font-size: 1.2rem;
+    transition: color 0.3s;
+}
