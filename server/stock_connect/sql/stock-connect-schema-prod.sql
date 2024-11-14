@@ -103,8 +103,8 @@ insert into roles (role_id, role_name) values
         (7, 'Netflix is adding more original content.', '2024-11-12 08:20:00', 7, 1),
         (8, 'NVIDIA is leading in GPU technology.', '2024-11-12 09:50:00', 8, 2),
         (9, 'PayPal is expanding its services.', '2024-11-12 11:10:00', 9, 3),
-        (10, 'Adobe is launching new creative tools.', '2024-11-12 12:40:00', 10, 1);
-        (11, 'What do yall think about Apple', '2024-11-10 10:16:00', 1, 2)
+        (10, 'Adobe is launching new creative tools.', '2024-11-12 12:40:00', 10, 1),
+        (11, 'What do yall think about Apple', '2024-11-10 10:16:00', 1, 2);
     
     -- User Stocks
     insert into user_stocks (user_stock_id, user_id, stock_id) values
