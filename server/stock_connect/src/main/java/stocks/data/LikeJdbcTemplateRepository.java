@@ -31,7 +31,8 @@ public class LikeJdbcTemplateRepository implements LikeRepository {
     @Override
     public Like findById(int likeId) {
         final String sql = "SELECT like_id, isliked, user_id, message_id FROM likes WHERE like_id = ?;";
-        return jdbcTemplate.query(sql, new LikeMapper(), likeId).stream().findAny().orElse(null);
+        //return jdbcTemplate.query(sql, new LikeMapper(), likeId).stream().findAny().orElse(null);
+        return jdbcTemplate.query(sql, new LikeMapper(), likeId).stream().findFirst().orElse(null);
     }
 
     @Override
