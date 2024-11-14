@@ -8,7 +8,7 @@ function StockList({ onSelectStock }) {
   const [favoritedStocks, setFavoritedStocks] = useState([]);
   const [admin, setAdmin] = useState(false);
 
-  const allStocksUrl = `http://localhost:8080/api/stocks`;
+  const url = `http://localhost:8080/api/stocks`;
   const favoritesUrl = `http://localhost:8080/api/user-stocks/favorites/${userId}`;
   const favoriteStockUrl = `http://localhost:8080/api/user-stocks`;
   const unfavoriteStockUrl = `http://localhost:8080/api/user-stocks`;
@@ -26,10 +26,11 @@ function StockList({ onSelectStock }) {
         .catch(console.error);
     }
   }, [userId]);
-
+    
+    console.log(admin)
   // Fetch all stocks
   useEffect(() => {
-    fetch(allStocksUrl)
+    fetch(url)
       .then((response) => response.json())
       .then((data) => setStocks(data))
       .catch(console.error);
@@ -125,7 +126,7 @@ function StockList({ onSelectStock }) {
             {favoritedStocks.map(stock => (
               <li key={stock.stockId} className="list-group-item d-flex justify-content-between align-items-center">
                 <button
-                  onClick={() => onSelectStock(stock.stockId)}
+                  onClick={() => navigate(`/stock/${stock.stockId}`)}
                   className="btn btn-primary btn-block text-left"
                   style={{ textAlign: 'left', width: '80%' }}
                 >
@@ -151,7 +152,7 @@ function StockList({ onSelectStock }) {
             {nonFavoritedStocks.map(stock => (
               <li key={stock.stockId} className="list-group-item d-flex justify-content-between align-items-center">
                 <button
-                  onClick={() => onSelectStock(stock.stockId)}
+                  onClick={() => navigate(`/stock/${stock.stockId}`)}
                   className="btn btn-primary btn-block text-left"
                   style={{ textAlign: 'left', width: '80%' }}
                 >
@@ -173,5 +174,6 @@ function StockList({ onSelectStock }) {
     </div>
   );
 }
+
 
 export default StockList;
