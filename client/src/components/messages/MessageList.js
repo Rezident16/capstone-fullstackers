@@ -272,6 +272,24 @@ const MessageList = ({ stockId }) => {
               {isUpdate & (message.messageId == updateMessageId) ? (
                 <div className="message-input-container p-3">
                   {/* Update form code */}
+                  <form onSubmit={handleUpdate}>
+                    <div className="form-group">
+                      <textarea
+                        className="form-control"
+                        placeholder="Post your thoughts here..."
+                        value={messageContent}
+                        onChange={handleChange}
+                        rows="4"
+                        required
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="btn btn-primary mb-5 pl-4 pr-4"
+                    >
+                      Update
+                    </button>
+                  </form>
                 </div>
               ) : (
                 <>
