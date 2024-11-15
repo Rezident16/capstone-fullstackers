@@ -120,16 +120,16 @@ function StockList({ onSelectStock }) {
     <div className="stock-list-main"
     style={{height: "100%"}}
     >
+      <ul className="list-group nav nav-pills mb-auto stock-list-inner"
+      >
       {admin && (
-        <div className="list-group-item nav-item">
-          <Link to="/stock/add" className="btn btn-info btn-block text-left">
+        <div className="list-group-item d-flex justify-content-between align-items-center mb-3 ">
+          <Link to="/stock/add" className="add-stock-button">
             Add Stock
           </Link>
         </div>
       )}
 
-      <ul className="list-group nav nav-pills mb-auto stock-list-inner"
-      >
         {/* Favorited Stocks - Displayed Above All Stocks */}
         {favoritedStocks.length > 0 && userId ? (
           <>
