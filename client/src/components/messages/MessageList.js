@@ -18,6 +18,7 @@ const MessageList = ({ stockId }) => {
   const [messageContent, setMessageContent] = useState("");
   const navigate = useNavigate();
 
+  
   const { userId, jwtToken } = useUser();
 
   // Fetch messages only if stockId is provided

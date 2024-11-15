@@ -12,6 +12,7 @@ function MessageInput({ stockId, onMessagePosted }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    
   
     if (messageContent.trim() && userId) {
       const newMessage = {

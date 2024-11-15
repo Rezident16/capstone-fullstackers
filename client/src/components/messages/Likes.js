@@ -8,6 +8,7 @@ const DEFAULT_LIKE = {
     
 }
 
+
 function Likes({ message }) {
     const [likes, setLikes] = useState(message.likes);
     const [liked, setLiked] = useState(false);

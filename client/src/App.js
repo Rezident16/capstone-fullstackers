@@ -14,6 +14,7 @@ import AddStockForm from "./components/stock/AddStockForm";
 import { useEffect, useState } from "react";
 
 function App() {
+  
 
   return (
     <UserContextProvider>

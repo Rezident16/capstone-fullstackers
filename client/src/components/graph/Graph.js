@@ -11,6 +11,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+
 function Graph({ stock }) {
   const [bars, setBars] = useState([]);
   const [time, setTime] = useState("1D");

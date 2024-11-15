@@ -11,6 +11,7 @@ const DEFAULT_USER = {
   confirmPassword: "",
 };
 
+
 function SignUp() {
   const [user, setUser] = useState(DEFAULT_USER);
   const [errors, setErrors] = useState({});

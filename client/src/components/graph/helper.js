@@ -11,6 +11,7 @@ function getSecrets() {
     return [apiKey, apiSecret];
 }
 
+
 async function getStockInfo(stock, barTime) {
     const timeframes = {
         '1D': '1Min',
