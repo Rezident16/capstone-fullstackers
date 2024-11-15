@@ -6,6 +6,14 @@ public class Stock {
     private String stock_description;
     private String ticker;
 
+    public Stock(int stockId, String stockName, String stock_description, String ticker) {
+        this.stockId = stockId;
+        this.stockName = stockName;
+        this.stock_description = stock_description;
+        this.ticker = ticker;
+    }
+
+    public Stock(){}
 
     public int getStockId() {
         return stockId;

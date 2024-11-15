@@ -10,6 +10,7 @@ const Home = () => {
 
   // Method to handle stock selection
   const onSelectStock = (stockId) => {
+    
     setSelectedStockId(stockId);
   };
 

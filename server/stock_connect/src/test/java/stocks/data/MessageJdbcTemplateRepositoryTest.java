@@ -60,18 +60,18 @@ public class MessageJdbcTemplateRepositoryTest {
         newMessage.setUserId(1);   // John Doe
         newMessage.setDateOfPost(new Timestamp(System.currentTimeMillis()));
 
-        boolean added = messageRepository.add(newMessage);
-        assertTrue(added, "Message should be added successfully.");
+        Message added = messageRepository.add(newMessage);
+        assertNotNull(added);
     }
 
     @Test
     public void shouldDeleteMessage() {
         // Test deleting a message
-        boolean deleted = messageRepository.deleteById(3);
+        boolean deleted = messageRepository.deleteById(2);
         assertTrue(deleted, "Message should be deleted.");
 
         // Verify that the message no longer exists
-        var message = messageRepository.findById(3);
+        var message = messageRepository.findById(2);
         assertNull(message, "Message should not be found after deletion.");
     }
 }

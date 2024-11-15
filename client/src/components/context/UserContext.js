@@ -6,6 +6,7 @@ export const useUser = () => {
   return useContext(UserContext);
 };
 
+
 export const UserContextProvider = ({ children }) => {
   const [userId, setUserId] = useState(null); 
   const [jwtToken, setJwtToken] = useState(null); 

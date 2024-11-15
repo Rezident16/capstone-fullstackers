@@ -3,6 +3,7 @@ package stocks.models;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 public class Message {
     private int messageId;
@@ -10,8 +11,6 @@ public class Message {
     private int stockId;
     private String content;
     private Timestamp dateOfPost;
-<<<<<<< HEAD
-=======
     private AppUser appUser;
     
     
@@ -27,7 +26,6 @@ public class Message {
     }
 
     private List<Like> likes;
->>>>>>> ccc62f791f13e9925773795a2887f8746d198a43
 
     public int getMessageId() {
         return messageId;
@@ -68,8 +66,6 @@ public class Message {
     public void setDateOfPost(Timestamp dateOfPost) {
         this.dateOfPost = dateOfPost;
     }
-<<<<<<< HEAD
-=======
 
     public List<Like> getLikes() {
         return likes;
@@ -86,5 +82,4 @@ public class Message {
     public void setAppUser(AppUser appUser) {
         this.appUser = appUser;
     }
->>>>>>> ccc62f791f13e9925773795a2887f8746d198a43
 }

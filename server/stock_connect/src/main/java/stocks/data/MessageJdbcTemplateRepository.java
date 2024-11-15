@@ -1,10 +1,9 @@
 package stocks.data;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-<<<<<<< HEAD
-import stocks.data.mappers.MessageMapper;
-=======
 import org.springframework.transaction.annotation.Transactional;
 
 import stocks.data.mappers.LikeMapper;
@@ -12,9 +11,10 @@ import stocks.data.mappers.MessageMapper;
 import stocks.data.mappers.UserMapper;
 import stocks.models.AppUser;
 import stocks.models.Like;
->>>>>>> ccc62f791f13e9925773795a2887f8746d198a43
 import stocks.models.Message;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -52,9 +52,6 @@ public class MessageJdbcTemplateRepository implements MessageRepository {
                 + "from message "
                 + "where stock_id = ?;";
 
-<<<<<<< HEAD
-        return jdbcTemplate.query(sql, new MessageMapper(), stockId);
-=======
         List<Message> messages = jdbcTemplate.query(sql, new MessageMapper(), stockId);
 
         if (!messages.isEmpty()) {
@@ -65,19 +62,29 @@ public class MessageJdbcTemplateRepository implements MessageRepository {
         }
 
         return messages;
->>>>>>> ccc62f791f13e9925773795a2887f8746d198a43
     }
 
     @Override
-    public boolean add(Message message) {
+    public Message add(Message message) {
         final String sql = "insert into message (content, date_of_post, stock_id, user_id) values "
                 + "(?,?,?,?);";
 
-        return jdbcTemplate.update(sql,
-                message.getContent(),
-                message.getDateOfPost(),
-                message.getStockId(),
-                message.getUserId()) > 0;
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int rowsAffected = jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, message.getContent());
+            ps.setTimestamp(2, message.getDateOfPost());
+            ps.setInt(3, message.getStockId());
+            ps.setInt(4, message.getUserId());
+            return ps;
+        }, keyHolder);
+
+        if (rowsAffected <= 0) {
+            return null;
+        }
+
+        message.setMessageId(keyHolder.getKey().intValue());
+        return message;
     }
 
     @Override
@@ -103,8 +110,6 @@ public class MessageJdbcTemplateRepository implements MessageRepository {
         // Finally, delete the message
         return jdbcTemplate.update("DELETE FROM message WHERE message_id = ?", messageId) > 0;
     }
-<<<<<<< HEAD
-=======
 
     // Need to add likes to the messages
     private void addLikes(Message message) {
@@ -127,5 +132,4 @@ public class MessageJdbcTemplateRepository implements MessageRepository {
                 .findAny().orElse(null);
         message.setAppUser(messageUser);
     }
->>>>>>> ccc62f791f13e9925773795a2887f8746d198a43
 }

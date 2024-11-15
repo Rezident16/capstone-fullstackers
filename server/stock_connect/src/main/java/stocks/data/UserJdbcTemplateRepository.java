@@ -1,11 +1,20 @@
 package stocks.data;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import stocks.data.mappers.UserMapper;
-import stocks.models.User;
 
+import stocks.data.mappers.StockMapper;
+import stocks.data.mappers.UserMapper;
+import stocks.data.mappers.UserStocksMapper;
+import stocks.models.AppUser;
+import stocks.models.Stock;
+import stocks.models.UserStock;
+
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -17,31 +26,39 @@ public class UserJdbcTemplateRepository implements UserRepository{
     }
 
     @Override
-    public List<User> findAll() {
-        // The SQL query now needs to include all columns mapped by the UserMapper.
+    public List<AppUser> findAll() {
+
         final String sql = "SELECT user_id, first_name, last_name, password, username, email, role_id FROM user LIMIT ?";
 
-        int limit = 1000;  // Default limit (this can be adjusted or parameterized)
+        int limit = 1000;
 
         return jdbcTemplate.query(sql, new UserMapper(), limit);
     }
 
 
     @Override
-    public User findById(int userId) {
+    public AppUser findById(int userId) {
 
         final String sql = "SELECT user_id, first_name, last_name, password, username, email, role_id "
                 + "FROM user "
                 + "WHERE user_id = ?;";
 
-        return jdbcTemplate.query(sql, new UserMapper(), userId).stream()
+        
+
+        AppUser user =  jdbcTemplate.query(sql, new UserMapper(), userId).stream()
                 .findAny().orElse(null);
+
+        if (user != null) {
+            addUserStock(user);
+        }
+
+        return user;
     }
 
 
 
     @Override
-    public User findByUsername(String username) {
+    public AppUser findByUsername(String username) {
 
         final String sql = "select user_id, first_name, last_name, username, password, email, role_id from user where username = ?;";
 
@@ -51,7 +68,7 @@ public class UserJdbcTemplateRepository implements UserRepository{
 
 
     @Override
-    public User findByEmail(String email) {
+    public AppUser findByEmail(String email) {
 
         final String sql = "SELECT user_id, first_name, last_name, password, username, email, role_id "
                 + "FROM user "
@@ -63,21 +80,31 @@ public class UserJdbcTemplateRepository implements UserRepository{
 
 
     @Override
-    public boolean add(User user) {
+    public AppUser add(AppUser user) {
         final String sql = "insert into user (first_name, last_name, password, username, email, role_id) values "
                 + "(?,?,?,?,?,?);";
 
-        return jdbcTemplate.update(sql,
-                user.getFirstName(),
-                user.getLastName(),
-                user.getPassword(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRoleId()) > 0;
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int rowsAffected = jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getUsername());
+            ps.setString(5, user.getEmail());
+            ps.setInt(6, user.getRoleId());
+            return ps;
+        }, keyHolder);
+
+        if (rowsAffected <= 0) {
+            return null;
+        }
+        user.setUserId(keyHolder.getKey().intValue());
+        return user;
     }
 
     @Override
-    public boolean update(User user) {
+    public boolean update(AppUser user) {
 
         final String sql = "update user set "
                 + "first_name = ?, "
@@ -99,21 +126,27 @@ public class UserJdbcTemplateRepository implements UserRepository{
     }
 
     @Override
+    @Transactional
     public boolean deleteById(int userId) {
-        // First, delete all dependent records in related tables
+        jdbcTemplate.update("DELETE FROM likes WHERE user_id = ?;", userId);
 
-        // Delete likes associated with the user
-        jdbcTemplate.update("DELETE FROM likes WHERE user_id = ?", userId);
+        jdbcTemplate.update("DELETE FROM user_stocks WHERE user_id = ?;", userId);
 
-        // Delete user_stocks associated with the user
-        jdbcTemplate.update("DELETE FROM user_stocks WHERE user_id = ?", userId);
+        jdbcTemplate.update("DELETE FROM message WHERE user_id = ?;", userId);
 
-        // Delete messages associated with the user
-        jdbcTemplate.update("DELETE FROM message WHERE user_id = ?", userId);
-
-        // Finally, delete the user
-        return jdbcTemplate.update("DELETE FROM user WHERE user_id = ?", userId) > 0;
+        return jdbcTemplate.update("DELETE FROM user WHERE user_id = ?;", userId) > 0;
     }
 
 
+    // update to include user stocks
+
+    private void addUserStock(AppUser user) {
+        final String sql = "SELECT s.stock_id, s.stock_name, s.stock_description, s.ticker " +
+                           "FROM stock s " +
+                           "INNER JOIN user_stocks us ON s.stock_id = us.stock_id " +
+                           "WHERE us.user_id = ?;";
+
+        List<Stock> userStocks = jdbcTemplate.query(sql, new StockMapper(), user.getUserId());
+        user.setUserStocks(userStocks);
+    }
 }

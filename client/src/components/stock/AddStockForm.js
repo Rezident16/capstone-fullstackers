@@ -11,6 +11,7 @@ const AddStockForm = () => {
     stockName: '',
     description: '',
     ticker: ''
+    
   });
 
   const {userId} = useUser();

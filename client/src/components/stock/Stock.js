@@ -17,6 +17,7 @@ function Stock() {
     const {userId} = useUser();
     const [admin, setAdmin] = useState(false);
 
+    
 
   useEffect(() => {
     if (userId) {

@@ -18,6 +18,7 @@ function StockList({ onSelectStock }) {
   const navigate = useNavigate();
 
   // Fetch user role for admin privileges
+  
 
   useEffect(() => {
     if (userId) {

@@ -11,6 +11,7 @@ function Navbar() {
   const handleSignOut = () => {
     logout(); 
     navigate("/login"); 
+    
   };
 
   return (
