@@ -1,0 +1,56 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  /* -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; */
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+nav{
+  display: flex;
+  justify-content: space-between;
+  background-color: grey;
+  width: 100%;
+  position: sticky;
+}
+
+nav a{
+  text-decoration: none;
+  color: white;  
+  transition: 2s;
+  padding: 1% 2%; 
+}
+
+nav a:hover{
+  color:#61dafb;
+  text-decoration: none;  
+}
+
+
+.dropdown-toggle-custom {
+  min-width: 150px; 
+}
+
+.dropdown-menu-custom {
+  min-width: 150px; 
+  text-align: center; 
+}
+
+header{
+  height:85vh;
+  text-align: center;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('https://images.unsplash.com/photo-1535320903710-d993d3d77d29?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Zm9yZXglMjB0cmFkaW5nfGVufDB8fDB8fHww');
+  background-size:cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color:white;
+}

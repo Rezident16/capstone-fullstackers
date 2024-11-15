@@ -10,6 +10,24 @@ public class Message {
     private int stockId;
     private String content;
     private Timestamp dateOfPost;
+<<<<<<< HEAD
+=======
+    private AppUser appUser;
+    
+    
+    public Message() {
+    }
+
+    public Message(int messageId, int userId, int stockId, String content, Date dateOfPost) {
+        this.messageId = messageId;
+        this.userId = userId;
+        this.stockId = stockId;
+        this.content = content;
+        this.dateOfPost = (Timestamp) dateOfPost;
+    }
+
+    private List<Like> likes;
+>>>>>>> ccc62f791f13e9925773795a2887f8746d198a43
 
     public int getMessageId() {
         return messageId;
@@ -50,4 +68,23 @@ public class Message {
     public void setDateOfPost(Timestamp dateOfPost) {
         this.dateOfPost = dateOfPost;
     }
+<<<<<<< HEAD
+=======
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
+>>>>>>> ccc62f791f13e9925773795a2887f8746d198a43
 }
