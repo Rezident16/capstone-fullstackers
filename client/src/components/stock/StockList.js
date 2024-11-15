@@ -8,6 +8,7 @@ function StockList({ onSelectStock }) {
   const [stocks, setStocks] = useState([]);
   const [favoritedStocks, setFavoritedStocks] = useState([]);
   const [admin, setAdmin] = useState(false);
+  const [favoritesChanged, setFavoritesChanged] = useState(false);
 
   const url = `http://localhost:8080/api/stocks`;
   const favoritesUrl = `http://localhost:8080/api/user-stocks/favorites/${userId}`;
@@ -23,7 +24,6 @@ function StockList({ onSelectStock }) {
       fetch(`http://localhost:8080/api/user/${userId}`)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           if (data.roleId == 1) {
             setAdmin(true);
           }
@@ -39,7 +39,6 @@ function StockList({ onSelectStock }) {
       .catch(console.error);
   }, []);
 
-  // Fetch favorited stocks for the logged-in user
   useEffect(() => {
     if (userId) {
       fetch(favoritesUrl)
@@ -56,7 +55,7 @@ function StockList({ onSelectStock }) {
         })
         .catch(console.error);
     }
-  }, [userId]);
+  }, [userId, favoritesChanged]);
 
   // Handle favoriting a stock
   const handleFavorite = (stockId) => {
@@ -76,20 +75,19 @@ function StockList({ onSelectStock }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        setFavoritedStocks((prev) => [...prev, data]); // Add to favorited stocks
+        setFavoritedStocks((prev) => [...prev, data]);
         setStocks((prevStocks) =>
           prevStocks.map((stock) =>
             stock.stockId === data.stockId
               ? { ...stock, isFavorited: true }
               : stock
           )
-        ); // Mark stock as favorited in all stocks
+        );
+        setFavoritesChanged((prev) => !prev);
       })
       .catch(console.error);
-    window.location.reload();
   };
 
-  // Handle unfavoriting a stock
   const handleUnfavorite = (userStockId) => {
     fetch(`${unfavoriteStockUrl}/${userStockId}`, {
       method: "DELETE",
@@ -98,23 +96,22 @@ function StockList({ onSelectStock }) {
         if (response.ok) {
           setFavoritedStocks((prev) =>
             prev.filter((stock) => stock.userStockId !== userStockId)
-          ); // Remove from favorited stocks
+          );
           setStocks((prevStocks) =>
             prevStocks.map((stock) =>
               stock.userStockId === userStockId
                 ? { ...stock, isFavorited: false }
                 : stock
             )
-          ); // Mark stock as unfavorited in all stocks
+          );
+          setFavoritesChanged((prev) => !prev);
         } else {
           console.error("Error unfavoriting stock");
         }
       })
       .catch(console.error);
-    window.location.reload();
   };
 
-  // Combine favorited stocks with all stocks but make sure non-favorited stocks only appear in the "All Stocks" section
   const nonFavoritedStocks = stocks.filter(
     (stock) => !favoritedStocks.some((fav) => fav.stockId === stock.stockId)
   );
@@ -123,16 +120,16 @@ function StockList({ onSelectStock }) {
     <div className="stock-list-main"
     style={{height: "100%"}}
     >
+      <ul className="list-group nav nav-pills mb-auto stock-list-inner"
+      >
       {admin && (
-        <div className="list-group-item nav-item">
-          <Link to="/stock/add" className="btn btn-info btn-block text-left">
+        <div className="list-group-item d-flex justify-content-between align-items-center mb-3 ">
+          <Link to="/stock/add" className="add-stock-button">
             Add Stock
           </Link>
         </div>
       )}
 
-      <ul className="list-group nav nav-pills mb-auto stock-list-inner"
-      >
         {/* Favorited Stocks - Displayed Above All Stocks */}
         {favoritedStocks.length > 0 && userId ? (
           <>
