@@ -8,6 +8,7 @@ function StockList({ onSelectStock }) {
   const [stocks, setStocks] = useState([]);
   const [favoritedStocks, setFavoritedStocks] = useState([]);
   const [admin, setAdmin] = useState(false);
+  const [favoritesChanged, setFavoritesChanged] = useState(false);
 
   const url = `http://localhost:8080/api/stocks`;
   const favoritesUrl = `http://localhost:8080/api/user-stocks/favorites/${userId}`;
@@ -23,7 +24,6 @@ function StockList({ onSelectStock }) {
       fetch(`http://localhost:8080/api/user/${userId}`)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           if (data.roleId == 1) {
             setAdmin(true);
           }
@@ -55,7 +55,7 @@ function StockList({ onSelectStock }) {
         })
         .catch(console.error);
     }
-  }, [userId, favoritedStocks]);
+  }, [userId, favoritesChanged]);
 
   // Handle favoriting a stock
   const handleFavorite = (stockId) => {
@@ -83,6 +83,7 @@ function StockList({ onSelectStock }) {
               : stock
           )
         );
+        setFavoritesChanged((prev) => !prev);
       })
       .catch(console.error);
   };
@@ -103,6 +104,7 @@ function StockList({ onSelectStock }) {
                 : stock
             )
           );
+          setFavoritesChanged((prev) => !prev);
         } else {
           console.error("Error unfavoriting stock");
         }
