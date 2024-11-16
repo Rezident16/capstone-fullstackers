@@ -25,6 +25,8 @@ const MessageList = ({ stockId }) => {
   useEffect(() => {
     if (stockId) {
       const url = `${baseUrl}/api/message/stocks/${stockId}`;
+      console.log(baseUrl)
+      console.log(url)
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
