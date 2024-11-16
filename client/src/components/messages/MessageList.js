@@ -78,7 +78,7 @@ const MessageList = ({ stockId }) => {
   };
 
   useEffect(() => {
-    const client = process.env.NODE_ENV === "production" ? new W3CWebSocket(`ws://stockconnect.onrender.com/stocks`) : new W3CWebSocket(`ws://localhost:8080/stocks`);
+    const client = process.env.NODE_ENV === "production" ? new W3CWebSocket(`wss://stockconnect.onrender.com/stocks`) : new W3CWebSocket(`ws://localhost:8080/stocks`);
 
     client.onopen = () => {
       console.log("Connected to the WebSocket server");
