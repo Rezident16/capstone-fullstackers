@@ -2,6 +2,7 @@ package stocks.domain;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -17,6 +18,9 @@ public class DatabaseInitializer {
         createTables();
         seedData();
     }
+
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    String hashedPassword = passwordEncoder.encode("password123");
 
     private void createTables() {
         jdbcTemplate.execute("DROP DATABASE IF EXISTS stock_connect;");
@@ -74,12 +78,15 @@ public class DatabaseInitializer {
         jdbcTemplate.update("INSERT INTO roles (role_id, role_name) VALUES (2, 'Admin') ON DUPLICATE KEY UPDATE role_name='Admin'");
 
         jdbcTemplate.update("INSERT INTO user (user_id, first_name, last_name, password, username, email, role_id) VALUES " +
-                "(1, 'John', 'Doe', 'password123', 'johndoe', 'johndoe@example.com', 1) " +
-                "ON DUPLICATE KEY UPDATE first_name='John', last_name='Doe', password='password123', username='johndoe', email='johndoe@example.com', role_id=1");
+                "(1, 'John', 'Doe', ?, 'johndoe', 'johndoe@example.com', 1) " +
+                "ON DUPLICATE KEY UPDATE first_name='John', last_name='Doe', password=?, username='johndoe', email='johndoe@example.com', role_id=1",
+                hashedPassword, hashedPassword);
 
+        
         jdbcTemplate.update("INSERT INTO user (user_id, first_name, last_name, password, username, email, role_id) VALUES " +
-                "(2, 'Jane', 'Smith', 'password456', 'janesmith', 'janesmith@example.com', 2) " +
-                "ON DUPLICATE KEY UPDATE first_name='Jane', last_name='Smith', password='password456', username='janesmith', email='janesmith@example.com', role_id=2");
+                "(2, 'Jane', 'Smith', ?, 'janesmith', 'janesmith@example.com', 2) " +
+                "ON DUPLICATE KEY UPDATE first_name='Jane', last_name='Smith', password=?, username='janesmith', email='janesmith@example.com', role_id=2",
+                hashedPassword, hashedPassword);
 
         jdbcTemplate.update("INSERT INTO user (user_id, first_name, last_name, password, username, email, role_id) VALUES " +
                 "(3, 'Alice', 'Brown', 'password789', 'alicebrown', 'alicebrown@example.com', 1) " +
