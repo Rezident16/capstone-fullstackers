@@ -27,6 +27,8 @@ public class MessageService {
     }
 
     public List<Message> findByStockId(int stockId) {
+        List<Message> messages = repository.findByStockId(stockId);
+        System.out.print(messages.toString() + " in service");
         return repository.findByStockId(stockId);
     }
 

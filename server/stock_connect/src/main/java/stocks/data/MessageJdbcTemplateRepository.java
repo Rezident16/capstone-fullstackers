@@ -53,6 +53,11 @@ public class MessageJdbcTemplateRepository implements MessageRepository {
                 + "where stock_id = ?;";
 
         List<Message> messages = jdbcTemplate.query(sql, new MessageMapper(), stockId);
+        System.out.print(messages.toString() + " in jdbc template repository");
+
+        final String sql2 = "select * from message where stock_id = ?;";
+        List<Message> messages2 = jdbcTemplate.query(sql2, new MessageMapper(), stockId);
+        System.out.print(messages2.toString() + " in jdbc template repository with *");
 
         if (!messages.isEmpty()) {
             for (Message message : messages) {
