@@ -1,6 +1,6 @@
-drop database if exists stonks;
-create database stonks;
-use stonks;
+drop database if exists stock_connect;
+create database stock_connect;
+use stock_connect;
 
 create table roles (
 	role_id int primary key auto_increment,
