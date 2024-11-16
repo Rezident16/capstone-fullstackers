@@ -24,14 +24,14 @@ public class DatabaseInitializer {
         jdbcTemplate.execute("DROP TABLE IF EXISTS user_stocks");
         jdbcTemplate.execute("DROP TABLE IF EXISTS message");
         jdbcTemplate.execute("DROP TABLE IF EXISTS stock");
-        jdbcTemplate.execute("DROP TABLE IF EXISTS user");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS \"user\"");
         jdbcTemplate.execute("DROP TABLE IF EXISTS roles");
 
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS roles (" +
                 "role_id INT PRIMARY KEY, " +
                 "role_name VARCHAR(50) NOT NULL)");
 
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS user (" +
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS \"user\" (" +
                 "user_id INT PRIMARY KEY, " +
                 "first_name VARCHAR(30), " +
                 "last_name VARCHAR(30), " +
@@ -54,12 +54,12 @@ public class DatabaseInitializer {
                 "stock_id INT, " +
                 "CONSTRAINT fk_message_stock_id FOREIGN KEY (stock_id) REFERENCES stock(stock_id), " +
                 "user_id INT, " +
-                "CONSTRAINT fk_message_user_id FOREIGN KEY (user_id) REFERENCES user(user_id))");
+                "CONSTRAINT fk_message_user_id FOREIGN KEY (user_id) REFERENCES \"user\"(user_id))");
 
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS user_stocks (" +
                 "user_stock_id INT PRIMARY KEY, " +
                 "user_id INT, " +
-                "CONSTRAINT fk_user_stock_user_id FOREIGN KEY (user_id) REFERENCES user(user_id), " +
+                "CONSTRAINT fk_user_stock_user_id FOREIGN KEY (user_id) REFERENCES \"user\"(user_id), " +
                 "stock_id INT, " +
                 "CONSTRAINT fk_user_stock_stock_id FOREIGN KEY (stock_id) REFERENCES stock(stock_id))");
 
@@ -67,7 +67,7 @@ public class DatabaseInitializer {
                 "like_id INT PRIMARY KEY, " +
                 "isliked BOOLEAN NOT NULL, " +
                 "user_id INT, " +
-                "CONSTRAINT fk_likes_user_id FOREIGN KEY (user_id) REFERENCES user(user_id), " +
+                "CONSTRAINT fk_likes_user_id FOREIGN KEY (user_id) REFERENCES \"user\"(user_id), " +
                 "message_id INT, " +
                 "CONSTRAINT fk_likes_message_id FOREIGN KEY (message_id) REFERENCES message(message_id), " +
                 "CONSTRAINT unique_user_message UNIQUE (user_id, message_id))");
@@ -82,17 +82,17 @@ public class DatabaseInitializer {
         jdbcTemplate.update("INSERT INTO roles (role_id, role_name) VALUES (1, 'Chatter') ON DUPLICATE KEY UPDATE role_name='Chatter'");
         jdbcTemplate.update("INSERT INTO roles (role_id, role_name) VALUES (2, 'Admin') ON DUPLICATE KEY UPDATE role_name='Admin'");
 
-        jdbcTemplate.update("INSERT INTO user (user_id, first_name, last_name, password, username, email, role_id) VALUES " +
+        jdbcTemplate.update("INSERT INTO \"user\" (user_id, first_name, last_name, password, username, email, role_id) VALUES " +
                 "(1, 'John', 'Doe', ?, 'johndoe', 'johndoe@example.com', 1) " +
                 "ON DUPLICATE KEY UPDATE first_name='John', last_name='Doe', password=?, username='johndoe', email='johndoe@example.com', role_id=1",
                 hashedPassword1, hashedPassword1);
 
-        jdbcTemplate.update("INSERT INTO user (user_id, first_name, last_name, password, username, email, role_id) VALUES " +
+        jdbcTemplate.update("INSERT INTO \"user\" (user_id, first_name, last_name, password, username, email, role_id) VALUES " +
                 "(2, 'Jane', 'Smith', ?, 'janesmith', 'janesmith@example.com', 2) " +
                 "ON DUPLICATE KEY UPDATE first_name='Jane', last_name='Smith', password=?, username='janesmith', email='janesmith@example.com', role_id=2",
                 hashedPassword2, hashedPassword2);
 
-        jdbcTemplate.update("INSERT INTO user (user_id, first_name, last_name, password, username, email, role_id) VALUES " +
+        jdbcTemplate.update("INSERT INTO \"user\" (user_id, first_name, last_name, password, username, email, role_id) VALUES " +
                 "(3, 'Alice', 'Brown', ?, 'alicebrown', 'alicebrown@example.com', 1) " +
                 "ON DUPLICATE KEY UPDATE first_name='Alice', last_name='Brown', password=?, username='alicebrown', email='alicebrown@example.com', role_id=1",
                 hashedPassword3, hashedPassword3);
