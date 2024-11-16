@@ -33,6 +33,7 @@ public class MessageController {
 
     @GetMapping("/stock/{stockId}")
     public ResponseEntity<List<Message>> findByStockId(@PathVariable int stockId) {
+        System.out.println("stockId: " + stockId);
         List<Message> messages = service.findByStockId(stockId);
         if (messages == null || messages.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
