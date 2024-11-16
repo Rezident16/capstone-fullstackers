@@ -35,6 +35,7 @@ public class MessageController {
     public ResponseEntity<List<Message>> findByStockId(@PathVariable int stockId) {
         System.out.println("stockId: " + stockId);
         List<Message> messages = service.findByStockId(stockId);
+        System.out.println(messages.size() + " in controller");
         if (messages == null || messages.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

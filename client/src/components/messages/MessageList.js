@@ -24,7 +24,7 @@ const MessageList = ({ stockId }) => {
   // Fetch messages only if stockId is provided
   useEffect(() => {
     if (stockId) {
-      const url = `${baseUrl}/api/message/stocks/${stockId}`;
+      const url = `${baseUrl}/api/message/stock/${stockId}`;
       console.log(baseUrl)
       console.log(url)
       fetch(url)
