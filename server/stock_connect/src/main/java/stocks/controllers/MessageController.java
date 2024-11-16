@@ -31,7 +31,7 @@ public class MessageController {
         return ResponseEntity.ok(message);
     }
 
-    @GetMapping("/stock/{stockId}")
+    @GetMapping("/stocks/{stockId}")
     public List<Message> findByStockId(@PathVariable int stockId) {
         System.out.println("stockId: " + stockId);
         List<Message> messages = service.findByStockId(stockId);

@@ -45,7 +45,7 @@ const MessageList = ({ stockId }) => {
   // Fetch user likes on component mount
   useEffect(() => {
     if (userId) {
-      const url = `${baseUrl}/api/message/like/user/${userId}`;
+      const url = `${baseUrl}/api/like/user/${userId}`;
       fetch(url, {
         headers: { Authorization: `Bearer ${jwtToken}` },
       })
@@ -61,7 +61,7 @@ const MessageList = ({ stockId }) => {
       const likesData = {};
       for (const message of messages) {
         const response = await fetch(
-          `${baseUrl}/api/message/like/${message.messageId}`
+          `${baseUrl}/api/like/${message.messageId}`
         );
         if (response.ok) {
           const data = await response.json();
@@ -180,7 +180,7 @@ const MessageList = ({ stockId }) => {
         if (existingLike.liked === true) {
           // If message is liked, and user clicks like again, delete the like
           const response = await fetch(
-            `${baseUrl}/api/message/like/id/${existingLike.likeId}`,
+            `${baseUrl}/api/like/id/${existingLike.likeId}`,
             {
               method: "DELETE",
               headers: {
@@ -200,7 +200,7 @@ const MessageList = ({ stockId }) => {
           const updatedLike = { ...existingLike, liked: true };
 
           const response = await fetch(
-            `${baseUrl}/api/message/like/id/${existingLike.likeId}`,
+            `${baseUrl}/api/like/id/${existingLike.likeId}`,
             {
               method: "PUT",
               headers: {
@@ -227,7 +227,7 @@ const MessageList = ({ stockId }) => {
         if (existingLike.liked === false) {
           // If message is disliked, and user clicks dislike again, delete the dislike
           const response = await fetch(
-            `${baseUrl}/api/message/like/id/${existingLike.likeId}`,
+            `${baseUrl}/api/like/id/${existingLike.likeId}`,
             {
               method: "DELETE",
               headers: {
@@ -247,7 +247,7 @@ const MessageList = ({ stockId }) => {
           const updatedLike = { ...existingLike, liked: false };
 
           const response = await fetch(
-            `${baseUrl}/api/message/like/id/${existingLike.likeId}`,
+            `${baseUrl}/api/like/id/${existingLike.likeId}`,
             {
               method: "PUT",
               headers: {
@@ -279,7 +279,7 @@ const MessageList = ({ stockId }) => {
         liked: likedStatus === "like" ? true : false,
       };
 
-      const response = await fetch(`${baseUrl}/api/message/like`, {
+      const response = await fetch(`${baseUrl}/api/like`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
