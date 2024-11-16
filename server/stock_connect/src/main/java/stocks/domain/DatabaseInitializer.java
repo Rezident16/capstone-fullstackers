@@ -19,20 +19,20 @@ public class DatabaseInitializer {
         seedData();
     }
 
-    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    String hashedPassword = passwordEncoder.encode("password123");
-
     private void createTables() {
-        jdbcTemplate.execute("DROP DATABASE IF EXISTS stock_connect;");
-        jdbcTemplate.execute("CREATE DATABASE stock_connect;");
-        jdbcTemplate.execute("USE stock_connect;");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS likes");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS user_stocks");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS message");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS stock");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS user");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS roles");
 
-        jdbcTemplate.execute("CREATE TABLE roles (" +
-                "role_id INT PRIMARY KEY AUTO_INCREMENT, " +
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS roles (" +
+                "role_id INT PRIMARY KEY, " +
                 "role_name VARCHAR(50) NOT NULL)");
 
-        jdbcTemplate.execute("CREATE TABLE user (" +
-                "user_id INT PRIMARY KEY AUTO_INCREMENT, " +
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS user (" +
+                "user_id INT PRIMARY KEY, " +
                 "first_name VARCHAR(30), " +
                 "last_name VARCHAR(30), " +
                 "password VARCHAR(100) NOT NULL, " +
@@ -41,30 +41,30 @@ public class DatabaseInitializer {
                 "role_id INT, " +
                 "CONSTRAINT fk_user_role_id FOREIGN KEY (role_id) REFERENCES roles(role_id))");
 
-        jdbcTemplate.execute("CREATE TABLE stock (" +
-                "stock_id INT PRIMARY KEY AUTO_INCREMENT, " +
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS stock (" +
+                "stock_id INT PRIMARY KEY, " +
                 "stock_name VARCHAR(50), " +
                 "stock_description VARCHAR(255), " +
                 "ticker VARCHAR(10))");
 
-        jdbcTemplate.execute("CREATE TABLE message (" +
-                "message_id INT PRIMARY KEY AUTO_INCREMENT, " +
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS message (" +
+                "message_id INT PRIMARY KEY, " +
                 "content VARCHAR(255), " +
-                "date_of_post DATETIME, " +
+                "date_of_post TIMESTAMP, " +
                 "stock_id INT, " +
                 "CONSTRAINT fk_message_stock_id FOREIGN KEY (stock_id) REFERENCES stock(stock_id), " +
                 "user_id INT, " +
                 "CONSTRAINT fk_message_user_id FOREIGN KEY (user_id) REFERENCES user(user_id))");
 
-        jdbcTemplate.execute("CREATE TABLE user_stocks (" +
-                "user_stock_id INT PRIMARY KEY AUTO_INCREMENT, " +
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS user_stocks (" +
+                "user_stock_id INT PRIMARY KEY, " +
                 "user_id INT, " +
                 "CONSTRAINT fk_user_stock_user_id FOREIGN KEY (user_id) REFERENCES user(user_id), " +
                 "stock_id INT, " +
                 "CONSTRAINT fk_user_stock_stock_id FOREIGN KEY (stock_id) REFERENCES stock(stock_id))");
 
-        jdbcTemplate.execute("CREATE TABLE likes (" +
-                "like_id INT PRIMARY KEY AUTO_INCREMENT, " +
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS likes (" +
+                "like_id INT PRIMARY KEY, " +
                 "isliked BOOLEAN NOT NULL, " +
                 "user_id INT, " +
                 "CONSTRAINT fk_likes_user_id FOREIGN KEY (user_id) REFERENCES user(user_id), " +
@@ -74,23 +74,28 @@ public class DatabaseInitializer {
     }
 
     private void seedData() {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword1 = passwordEncoder.encode("password123");
+        String hashedPassword2 = passwordEncoder.encode("password123");
+        String hashedPassword3 = passwordEncoder.encode("password789");
+
         jdbcTemplate.update("INSERT INTO roles (role_id, role_name) VALUES (1, 'Chatter') ON DUPLICATE KEY UPDATE role_name='Chatter'");
         jdbcTemplate.update("INSERT INTO roles (role_id, role_name) VALUES (2, 'Admin') ON DUPLICATE KEY UPDATE role_name='Admin'");
 
         jdbcTemplate.update("INSERT INTO user (user_id, first_name, last_name, password, username, email, role_id) VALUES " +
                 "(1, 'John', 'Doe', ?, 'johndoe', 'johndoe@example.com', 1) " +
                 "ON DUPLICATE KEY UPDATE first_name='John', last_name='Doe', password=?, username='johndoe', email='johndoe@example.com', role_id=1",
-                hashedPassword, hashedPassword);
+                hashedPassword1, hashedPassword1);
 
-        
         jdbcTemplate.update("INSERT INTO user (user_id, first_name, last_name, password, username, email, role_id) VALUES " +
                 "(2, 'Jane', 'Smith', ?, 'janesmith', 'janesmith@example.com', 2) " +
                 "ON DUPLICATE KEY UPDATE first_name='Jane', last_name='Smith', password=?, username='janesmith', email='janesmith@example.com', role_id=2",
-                hashedPassword, hashedPassword);
+                hashedPassword2, hashedPassword2);
 
         jdbcTemplate.update("INSERT INTO user (user_id, first_name, last_name, password, username, email, role_id) VALUES " +
-                "(3, 'Alice', 'Brown', 'password789', 'alicebrown', 'alicebrown@example.com', 1) " +
-                "ON DUPLICATE KEY UPDATE first_name='Alice', last_name='Brown', password='password789', username='alicebrown', email='alicebrown@example.com', role_id=1");
+                "(3, 'Alice', 'Brown', ?, 'alicebrown', 'alicebrown@example.com', 1) " +
+                "ON DUPLICATE KEY UPDATE first_name='Alice', last_name='Brown', password=?, username='alicebrown', email='alicebrown@example.com', role_id=1",
+                hashedPassword3, hashedPassword3);
 
         jdbcTemplate.update("INSERT INTO stock (stock_id, stock_name, stock_description, ticker) VALUES " +
                 "(1, 'Apple Inc.', 'Technology Company', 'AAPL') " +
