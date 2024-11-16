@@ -35,6 +35,12 @@ public class MessageController {
     public List<Message> findByStockId(@PathVariable int stockId) {
         System.out.println("stockId: " + stockId);
         List<Message> messages = service.findByStockId(stockId);
+        if (messages.size() == 0 || messages == null) {
+            System.out.println("No messages found");
+        }
+        for (Message message : messages) {
+            System.out.println(message.getContent());
+        }
         return messages;
     }
 
