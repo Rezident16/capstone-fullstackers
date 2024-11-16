@@ -1,8 +1,10 @@
 import { DateTime } from 'luxon';
 
 function getSecrets() {
-    const apiKey = process.env.REACT_APP_API_KEY;
-    const apiSecret = process.env.REACT_APP_API_SECRET;
+    // const apiKey = process.env.REACT_APP_API_KEY;
+    const apiKey = "PKBIEOVWET060VAXZ7IX";
+    // const apiSecret = process.env.REACT_APP_API_SECRET;
+    const apiSecret = "Etlv9sHc2Kv3bmcJHsTw5ahpQEvWvVwHRthsJV8T"
 
     if (!apiKey || !apiSecret) {
         throw new Error('REACT_APP_API_KEY or REACT_APP_API_SECRET is not defined in the environment variables');
