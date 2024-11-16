@@ -51,6 +51,7 @@ public class AuthenticateController {
 
         Result<AppUser> result = userService.add(appUser);
         if (result.isSuccess()) {
+            System.out.println(result.getPayload());
             return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
         }
         System.out.println(result.getMessages().toString());

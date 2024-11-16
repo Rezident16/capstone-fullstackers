@@ -24,10 +24,11 @@ const MessageList = ({ stockId }) => {
   // Fetch messages only if stockId is provided
   useEffect(() => {
     if (stockId) {
-      const url = `${baseUrl}/api/message/stock/${stockId}`;
+      const url = `${baseUrl}/api/message/stocks/${stockId}`;
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
+          console.log(data)
           if (data && data.length) {
           const sortedMessages = data.sort(
             (a, b) => new Date(b.dateOfPost) - new Date(a.dateOfPost)
