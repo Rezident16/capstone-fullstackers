@@ -10,19 +10,19 @@ function StockList({ onSelectStock }) {
   const [admin, setAdmin] = useState(false);
   const [favoritesChanged, setFavoritesChanged] = useState(false);
 
-  const url = `http://localhost:8080/api/stocks`;
-  const favoritesUrl = `http://localhost:8080/api/user-stocks/favorites/${userId}`;
-  const favoriteStockUrl = `http://localhost:8080/api/user-stocks`;
-  const unfavoriteStockUrl = `http://localhost:8080/api/user-stocks`;
+  const baseUrl = process.env.NODE_ENV === "production" ? "https://stockconnect.onrender.com" : "http://localhost:8080";
+
+  const url = `${baseUrl}/api/stocks`;
+  const favoritesUrl = `${baseUrl}/api/user-stocks/favorites/${userId}`;
+  const favoriteStockUrl = `${baseUrl}/api/user-stocks`;
+  const unfavoriteStockUrl = `${baseUrl}/api/user-stocks`;
 
   const navigate = useNavigate();
-
-  // Fetch user role for admin privileges
   
 
   useEffect(() => {
     if (userId) {
-      fetch(`http://localhost:8080/api/user/${userId}`)
+      fetch(`${baseUrl}/api/user/${userId}`)
         .then((response) => response.json())
         .then((data) => {
           if (data.roleId == 1) {

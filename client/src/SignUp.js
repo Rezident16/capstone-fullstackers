@@ -17,8 +17,9 @@ function SignUp() {
   const [errors, setErrors] = useState({});
   
   const { login } = useUser(); // Get the login function from UserContext
-  const url = "http://localhost:8080/api/user/signup";
-  const authUrl = "http://localhost:8080/api/user/authenticate";
+  const baseUrl = process.env.NODE_ENV === "production" ? "https://stockconnect.onrender.com" : "http://localhost:8080";
+  const url = `${baseUrl}/api/user/signup`;
+  const authUrl = `${baseUrl}/api/user/authenticate`;
   const navigate = useNavigate();
 
   const handleChange = (e) => {

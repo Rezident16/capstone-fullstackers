@@ -16,6 +16,7 @@ function Likes({ message }) {
     const [likeColor, setLikeColor] = useState("grey");
     const [dislikeColor, setDislikeColor] = useState("grey");
     const [curr, setCurr] = useState(DEFAULT_LIKE);
+    const baseUrl = process.env.NODE_ENV === "production" ? "https://stockconnect.onrender.com" : "http://localhost:8080";
 
 
   const { userId, jwtToken } = useUser();
@@ -61,7 +62,7 @@ function Likes({ message }) {
 
       console.log("Request Body:", requestBody); // Log the request body
 
-    fetch(`http://localhost:8080/api/message/like`, {
+    fetch(`${baseUrl}/api/message/like`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -79,7 +80,7 @@ function Likes({ message }) {
 
   const handleUpdateLike = (isLiked) => {
     console.log("Updating like");
-    fetch(`http://localhost:8080/api/message/${message.messageId}/like/${userId}`, {
+    fetch(`${baseUrl}/api/message/${message.messageId}/like/${userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -98,7 +99,7 @@ function Likes({ message }) {
 
   const handleDelete = () => {
     console.log("Delete like");
-    fetch(`http://localhost:8080/api/message/${message.messageId}/like/${userId}`, {
+    fetch(`${baseUrl}/api/message/${message.messageId}/like/${userId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

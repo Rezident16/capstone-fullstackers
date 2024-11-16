@@ -4,7 +4,7 @@ import { useUser } from "../context/UserContext";
 function MessageInput({ stockId, onMessagePosted }) {
   const [messageContent, setMessageContent] = useState("");
   const { userId, jwtToken } = useUser(); 
-
+  const baseUrl = process.env.NODE_ENV === "production" ? "https://stockconnect.onrender.com" : "http://localhost:8080";
 
   const handleChange = (event) => {
     setMessageContent(event.target.value);
@@ -21,7 +21,7 @@ function MessageInput({ stockId, onMessagePosted }) {
         userId, 
         dateOfPost: new Date().toISOString(), 
       };
-      fetch("http://localhost:8080/api/message", {
+      fetch(`${baseUrl}/api/message`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

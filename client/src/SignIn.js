@@ -4,7 +4,8 @@ import { useUser } from "./components/context/UserContext";
 import { Link } from "react-router-dom";
 
 const SignIn = () => {
-  const url = "http://localhost:8080/api/user/authenticate";
+  const baseUrl = process.env.NODE_ENV === "production" ? "https://stockconnect.onrender.com" : "http://localhost:8080";
+  const url = `${baseUrl}/api/user/authenticate`;
   const navigate = useNavigate();
   const { login } = useUser(); // Get the login function from UserContext
   const [errors, setErrors] = useState({});

@@ -17,14 +17,14 @@ const MessageList = ({ stockId }) => {
   const [updateMessageId, setupdateMessageId] = useState(0);
   const [messageContent, setMessageContent] = useState("");
   const navigate = useNavigate();
-
+  const baseUrl = process.env.NODE_ENV === "production" ? "https://stockconnect.onrender.com" : "http://localhost:8080";
   
   const { userId, jwtToken } = useUser();
 
   // Fetch messages only if stockId is provided
   useEffect(() => {
     if (stockId) {
-      const url = `http://localhost:8080/api/message/stock/${stockId}`;
+      const url = `${baseUrl}/api/message/stock/${stockId}`;
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
@@ -40,7 +40,7 @@ const MessageList = ({ stockId }) => {
   // Fetch user likes on component mount
   useEffect(() => {
     if (userId) {
-      const url = `http://localhost:8080/api/message/like/user/${userId}`;
+      const url = `${baseUrl}/api/message/like/user/${userId}`;
       fetch(url, {
         headers: { Authorization: `Bearer ${jwtToken}` },
       })
@@ -56,7 +56,7 @@ const MessageList = ({ stockId }) => {
       const likesData = {};
       for (const message of messages) {
         const response = await fetch(
-          `http://localhost:8080/api/message/like/${message.messageId}`
+          `${baseUrl}/api/message/like/${message.messageId}`
         );
         if (response.ok) {
           const data = await response.json();
@@ -115,7 +115,7 @@ const MessageList = ({ stockId }) => {
     };
 
     const response = await fetch(
-      `http://localhost:8080/api/message/${messageId}`,
+      `${baseUrl}/api/message/${messageId}`,
       init
     );
     if (response.ok) {
@@ -148,7 +148,7 @@ const MessageList = ({ stockId }) => {
     };
 
     const response = await fetch(
-      `http://localhost:8080/api/message/${updateMessageId}`,
+      `${baseUrl}/api/message/${updateMessageId}`,
       init
     );
     if (response.ok) {
@@ -175,7 +175,7 @@ const MessageList = ({ stockId }) => {
         if (existingLike.liked === true) {
           // If message is liked, and user clicks like again, delete the like
           const response = await fetch(
-            `http://localhost:8080/api/message/like/id/${existingLike.likeId}`,
+            `${baseUrl}/api/message/like/id/${existingLike.likeId}`,
             {
               method: "DELETE",
               headers: {
@@ -195,7 +195,7 @@ const MessageList = ({ stockId }) => {
           const updatedLike = { ...existingLike, liked: true };
 
           const response = await fetch(
-            `http://localhost:8080/api/message/like/id/${existingLike.likeId}`,
+            `${baseUrl}/api/message/like/id/${existingLike.likeId}`,
             {
               method: "PUT",
               headers: {
@@ -222,7 +222,7 @@ const MessageList = ({ stockId }) => {
         if (existingLike.liked === false) {
           // If message is disliked, and user clicks dislike again, delete the dislike
           const response = await fetch(
-            `http://localhost:8080/api/message/like/id/${existingLike.likeId}`,
+            `${baseUrl}/api/message/like/id/${existingLike.likeId}`,
             {
               method: "DELETE",
               headers: {
@@ -242,7 +242,7 @@ const MessageList = ({ stockId }) => {
           const updatedLike = { ...existingLike, liked: false };
 
           const response = await fetch(
-            `http://localhost:8080/api/message/like/id/${existingLike.likeId}`,
+            `${baseUrl}/api/message/like/id/${existingLike.likeId}`,
             {
               method: "PUT",
               headers: {
@@ -274,7 +274,7 @@ const MessageList = ({ stockId }) => {
         liked: likedStatus === "like" ? true : false,
       };
 
-      const response = await fetch(`http://localhost:8080/api/message/like`, {
+      const response = await fetch(`${baseUrl}/api/message/like`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

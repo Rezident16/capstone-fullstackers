@@ -10,9 +10,10 @@ function Stock() {
 
     const navigate = useNavigate();
     const stockId = useParams().stockId;
+    const baseUrl = process.env.NODE_ENV === "production" ? "https://stockconnect.onrender.com" : "http://localhost:8080";
 
     const [stock, setStock] = useState(null);
-    const url = `http://localhost:8080/api/stocks/${stockId}`;
+    const url = `${baseUrl}/api/stocks/${stockId}`;
 
     const {userId} = useUser();
     const [admin, setAdmin] = useState(false);
@@ -21,7 +22,7 @@ function Stock() {
 
   useEffect(() => {
     if (userId) {
-      fetch(`http://localhost:8080/api/user/${userId}`)
+      fetch(`${baseUrl}/api/user/${userId}`)
         .then((response) => response.json())
         .then((data) => {
           console.log(data)
@@ -45,7 +46,7 @@ function Stock() {
     const handleDeleteStock = () => {
       const isConfirmed = window.confirm("Are you sure you want to delete this stock?");
       if (isConfirmed) {
-          fetch(`http://localhost:8080/api/stocks/${stockId}`, {
+          fetch(`${baseUrl}/api/stocks/${stockId}`, {
               method: 'DELETE',
           })
               .then((response) => {
@@ -74,7 +75,7 @@ function Stock() {
             method: 'DELETE',
         }
 
-        const response = await fetch(`http://localhost:8080/api/stocks/${stockId}`, init);
+        const response = await fetch(`${baseUrl}/api/stocks/${stockId}`, init);
         if (response.ok) {
             navigate("/stock");
         }

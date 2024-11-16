@@ -14,13 +14,14 @@ const AddStockForm = () => {
     
   });
 
+  const baseUrl = process.env.NODE_ENV === "production" ? "https://stockconnect.onrender.com" : "http://localhost:8080";
   const {userId} = useUser();
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
     if (userId) {
-      fetch(`http://localhost:8080/api/user/${userId}`)
+      fetch(`${baseUrl}/api/user/${userId}`)
         .then((response) => response.json())
         .then((data) => {
           if (data.roleId != 1) {
@@ -36,7 +37,7 @@ const AddStockForm = () => {
 
     useEffect(() => {
         if (stockId) {
-            fetch(`http://localhost:8080/api/stocks/${stockId}`)
+            fetch(`${baseUrl}/api/stocks/${stockId}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
@@ -62,7 +63,7 @@ const AddStockForm = () => {
         body: JSON.stringify(stock),
     }
 
-    const response = await fetch('http://localhost:8080/api/stocks', init);
+    const response = await fetch('${baseUrl}/api/stocks', init);
     if (response.ok) {
         setStock({
             stockName: '',
@@ -86,7 +87,7 @@ const updateStock = async () => {
         body: JSON.stringify(stock),
     }
 
-    const response = await fetch(`http://localhost:8080/api/stocks/${stockId}`, init);
+    const response = await fetch(`${baseUrl}/api/stocks/${stockId}`, init);
     if (response.ok) {
         setStock({
             stockName: '',
