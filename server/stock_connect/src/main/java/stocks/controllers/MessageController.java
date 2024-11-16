@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import stocks.data.MessageRepository;
 import stocks.domain.MessageService;
 import stocks.models.AppUser;
 import stocks.models.Message;
@@ -17,9 +19,11 @@ import java.util.List;
 public class MessageController {
 
     private final MessageService service;
+    private final MessageRepository repository;
 
-    public MessageController(MessageService service) {
+    public MessageController(MessageService service, MessageRepository repository) {
         this.service = service;
+        this.repository = repository;
     }
 
     @GetMapping("/{messageId}")
@@ -33,15 +37,16 @@ public class MessageController {
 
     @GetMapping("/stocks/{stockId}")
     public List<Message> findByStockId(@PathVariable int stockId) {
-        System.out.println("stockId: " + stockId);
-        List<Message> messages = service.findByStockId(stockId);
-        if (messages.size() == 0 || messages == null) {
-            System.out.println("No messages found");
-        }
-        for (Message message : messages) {
-            System.out.println(message.getContent());
-        }
-        return messages;
+        // System.out.println("stockId: " + stockId);
+        // List<Message> messages = service.findByStockId(stockId);
+        // if (messages.size() == 0 || messages == null) {
+        //     System.out.println("No messages found");
+        // }
+        // for (Message message : messages) {
+        //     System.out.println(message.getContent());
+        // }
+        // return messages;
+        return repository.findByStockId(stockId);
     }
 
     @PostMapping
