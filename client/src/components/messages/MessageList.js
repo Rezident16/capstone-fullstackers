@@ -28,10 +28,12 @@ const MessageList = ({ stockId }) => {
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
+          if (data && data.length) {
           const sortedMessages = data.sort(
             (a, b) => new Date(b.dateOfPost) - new Date(a.dateOfPost)
-          );
+          )
           setMessages(sortedMessages);
+        };
         })
         .catch(console.error);
     }
