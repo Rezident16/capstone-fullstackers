@@ -22,6 +22,19 @@ const MessageList = ({ stockId }) => {
   const { userId, jwtToken } = useUser();
 
   // Fetch messages only if stockId is provided
+
+  // const fetchMessages = async () => {
+  //   const url = `${baseUrl}/api/message/stocks/${stockId}`;
+  //   const response = await fetch(url);
+  //   if (response.ok) {
+  //     const data = await response.json();
+  //     const sortedMessages = data.sort(
+  //       (a, b) => new Date(b.dateOfPost) - new Date(a.dateOfPost)
+  //     );
+  //     setMessages(sortedMessages);
+  //   }
+  // }
+
   useEffect(() => {
     if (stockId) {
       const url = `${baseUrl}/api/message/stocks/${stockId}`;

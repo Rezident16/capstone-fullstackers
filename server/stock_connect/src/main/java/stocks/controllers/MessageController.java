@@ -33,7 +33,6 @@ public class MessageController {
 
     @GetMapping("/stocks/{stockId}")
     public List<Message> findByStockId(@PathVariable int stockId) {
-        System.out.println("stockId: " + stockId);
         List<Message> messages = service.findByStockId(stockId);
         return messages;
     }

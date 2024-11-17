@@ -60,8 +60,7 @@ public class MessageJdbcTemplateRepository implements MessageRepository {
                 // addLikes(message);
                 addUser(message);
                 for (Message m : messages) {
-                    System.out.println(m.getAppUser().getUsername());
-                    // System.out.println(m.getLikes().size());
+                    System.out.println(m.getContent());
                 }
             }
         }
