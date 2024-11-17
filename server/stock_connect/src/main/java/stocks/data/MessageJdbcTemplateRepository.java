@@ -55,7 +55,7 @@ public class MessageJdbcTemplateRepository implements MessageRepository {
         List<Message> messages = jdbcTemplate.query(sql, new MessageMapper(), stockId);
 
         System.out.println(messages.size());
-        if (!messages.isEmpty()) {
+        if (messages.size() > 0) {
             for (Message message : messages) {
                 // addLikes(message);
                 addUser(message);
