@@ -54,13 +54,13 @@ public class MessageJdbcTemplateRepository implements MessageRepository {
 
         List<Message> messages = jdbcTemplate.query(sql, new MessageMapper(), stockId);
 
-        // if (messages.size() > 0) {
-        //     for (Message message : messages) {
-        //         addLikes(message);
-        //         addUser(message);
+        if (messages.size() > 0) {
+            for (Message message : messages) {
+                addLikes(message);
+                addUser(message);
 
-        //     }
-        // }
+            }
+        }
 
         return messages;
     }
