@@ -57,11 +57,11 @@ public class MessageJdbcTemplateRepository implements MessageRepository {
         System.out.println(messages.size());
         if (!messages.isEmpty()) {
             for (Message message : messages) {
-                addLikes(message);
+                // addLikes(message);
                 addUser(message);
                 for (Message m : messages) {
                     System.out.println(m.getAppUser().getUsername());
-                    System.out.println(m.getLikes().size());
+                    // System.out.println(m.getLikes().size());
                 }
             }
         }
@@ -117,15 +117,15 @@ public class MessageJdbcTemplateRepository implements MessageRepository {
     }
 
     // Need to add likes to the messages
-    private void addLikes(Message message) {
-        final String sql = "select l.like_id, l.isliked, l.user_id, l.message_id " +
-                "from likes l " +
-                "inner join message m on m.message_id = l.message_id " +
-                "where m.message_id = ?;";
+    // private void addLikes(Message message) {
+    //     final String sql = "select l.like_id, l.isliked, l.user_id, l.message_id " +
+    //             "from likes l " +
+    //             "inner join message m on m.message_id = l.message_id " +
+    //             "where m.message_id = ?;";
 
-        List<Like> messageLikes = jdbcTemplate.query(sql, new LikeMapper(), message.getMessageId());
-        message.setLikes(messageLikes);
-    }
+    //     List<Like> messageLikes = jdbcTemplate.query(sql, new LikeMapper(), message.getMessageId());
+    //     message.setLikes(messageLikes);
+    // }
 
     private void addUser(Message message) {
         final String sql = "select u.user_id, u.username, u.password, u.first_name, u.last_name, u.email, u.role_id " +
