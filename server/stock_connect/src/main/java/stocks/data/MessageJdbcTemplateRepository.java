@@ -54,16 +54,13 @@ public class MessageJdbcTemplateRepository implements MessageRepository {
 
         List<Message> messages = jdbcTemplate.query(sql, new MessageMapper(), stockId);
 
-        System.out.println(messages.size());
-        if (messages.size() > 0) {
-            for (Message message : messages) {
-                // addLikes(message);
-                addUser(message);
-                for (Message m : messages) {
-                    System.out.println(m.getContent());
-                }
-            }
-        }
+        // if (messages.size() > 0) {
+        //     for (Message message : messages) {
+        //         addLikes(message);
+        //         addUser(message);
+
+        //     }
+        // }
 
         return messages;
     }
@@ -116,15 +113,15 @@ public class MessageJdbcTemplateRepository implements MessageRepository {
     }
 
     // Need to add likes to the messages
-    // private void addLikes(Message message) {
-    //     final String sql = "select l.like_id, l.isliked, l.user_id, l.message_id " +
-    //             "from likes l " +
-    //             "inner join message m on m.message_id = l.message_id " +
-    //             "where m.message_id = ?;";
+    private void addLikes(Message message) {
+        final String sql = "select l.like_id, l.isliked, l.user_id, l.message_id " +
+                "from likes l " +
+                "inner join message m on m.message_id = l.message_id " +
+                "where m.message_id = ?;";
 
-    //     List<Like> messageLikes = jdbcTemplate.query(sql, new LikeMapper(), message.getMessageId());
-    //     message.setLikes(messageLikes);
-    // }
+        List<Like> messageLikes = jdbcTemplate.query(sql, new LikeMapper(), message.getMessageId());
+        message.setLikes(messageLikes);
+    }
 
     private void addUser(Message message) {
         final String sql = "select u.user_id, u.username, u.password, u.first_name, u.last_name, u.email, u.role_id " +
@@ -134,6 +131,7 @@ public class MessageJdbcTemplateRepository implements MessageRepository {
 
         AppUser messageUser = jdbcTemplate.query(sql, new UserMapper(), message.getMessageId()).stream()
                 .findAny().orElse(null);
+        System.out.println(messageUser.getUsername());
         message.setAppUser(messageUser);
     }
 }
