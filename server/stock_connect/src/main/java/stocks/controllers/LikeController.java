@@ -10,7 +10,7 @@ import stocks.models.Like;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/like")
 public class LikeController {
     private final LikeService service;
